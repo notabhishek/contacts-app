@@ -1,7 +1,14 @@
 import './App.css';
-import ContactCard from './Components/Contact/ContactCard';
-import ContactList from './Components/Contact/ContactList';
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import LeftPanel from './Components/Home/DrawerPanel';
+import Login from './Pages/Login/';
+import Register from './Pages/Register';
+import HomeView from './Pages/Home/HomeView';
 
 function App() {
   const contact1 = {
@@ -24,10 +31,13 @@ function App() {
   }
   const contacts = [contact1, contact2, contact1, contact2, contact1, contact2];
   return (
-    <div className="App">
-      {/* <ContactCard contact = {contact1}/> */}
-      <ContactList contacts = {contacts}/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path = '/login' element = {<Login/>}/>
+        <Route path = '/register' element = {<Register/>}/>
+        <Route path = '/' element = {<HomeView/>}/>
+      </Routes>
+    </Router>
   );
 }
 
