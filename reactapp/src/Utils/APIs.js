@@ -21,6 +21,10 @@ function makeGetRequest(endpoint , params , auth = false){
     })
 }
 
-export function fetchContactsAPI(){
-    return makeGetRequest('/contacts/getAll')
+export function fetchContactsAPI(payload){
+    return makeGetRequest('/contacts/search', payload)
+}
+
+export function searchContactAPI() {
+
 }
