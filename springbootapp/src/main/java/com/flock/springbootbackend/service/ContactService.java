@@ -12,6 +12,7 @@ public interface ContactService {
     public List<Contact> searchPrefix(String prefix, String orderby, Boolean desc);
 
     public String updateScore(int cid);
+    public String deleteContact(int cid);
 //    public List<Contact> startsWithName(String namePrefix);
 //    public List<Contact> endsWithName(String nameSuffix);
 //    public List<Contact> containsName(String name);

@@ -54,7 +54,19 @@ public class ContactServiceImpl implements ContactService {
         contactRepository.updateScore(cid);
         return "Score updated!";
     }
-//    @Override
+
+    @Override
+    public String deleteContact(int cid) {
+        Boolean validCid = true;
+        // check if cid is valid
+        if(!validCid) {
+            return "Invalid Contact Id";
+        }
+        contactRepository.deleteContact(cid);
+        return "Contact deleted";
+    }
+
+    //    @Override
 //    public List<Student> startsWithName(String namePrefix) {
 //        return studentRepository.startsWithName(namePrefix);
 //    }

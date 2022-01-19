@@ -43,6 +43,11 @@ public class ContactsController {
     public String updateScore(@RequestBody Contact contact) {
         return ContactService.updateScore(contact.getCid());
     }
+
+    @PostMapping("/deleteContact")
+    public String deleteContact(@RequestBody Contact contact) {
+        return ContactService.deleteContact(contact.getCid());
+    }
 //
 //    @GetMapping("/endswith")
 //    public List<Contact> getContactsEndsWith(@Param("name") String name) {
