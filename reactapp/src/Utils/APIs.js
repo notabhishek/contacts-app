@@ -25,6 +25,6 @@ export function fetchContactsAPI(payload){
     return makeGetRequest('/contacts/search', payload)
 }
 
-export function searchContactAPI() {
-
+export function addContactAPI(payload){
+    return makePostRequest('/contacts/add' , payload)
 }

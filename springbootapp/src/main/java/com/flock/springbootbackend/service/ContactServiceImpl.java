@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.dto.ContactDto;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,12 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact saveContact(Contact contact) {
         return contactRepository.save(contact);
+    }
+
+    @Override
+    public String saveContactDto(ContactDto contactDto){
+        contactRepository.saveAll(contactDto.getContactList());
+        return "All contacts saved";
     }
 
     @Override

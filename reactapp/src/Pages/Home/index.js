@@ -4,7 +4,7 @@ import HomeView from './HomeView'
 
 export default function Home(){
     const [contacts , setContacts] = useState([])
-    const [searchKey, setSearchKey] = useState("x");
+    const [searchKey, setSearchKey] = useState("");
     const [orderby, setOrderBy] = useState("name");
     const [desc, setDesc] = useState(false);
 
@@ -20,14 +20,10 @@ export default function Home(){
     }
 
     useEffect(()=>{
-        fetchContacts({"prefix" : "x", "orderby" : "name", "desc" : false})
-    },[])
-
-    useEffect(()=>{
         fetchContacts({"prefix" : searchKey, "orderby" : orderby, "desc" : desc})
     },[searchKey]);
 
     return(
-        <HomeView contacts = {contacts} />
+        <HomeView contacts = {contacts} setContacts = {setContacts} />
     )
 }

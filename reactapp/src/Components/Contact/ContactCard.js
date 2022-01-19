@@ -11,6 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -22,6 +23,7 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
 
 export default function ContactCard(props) {
   const [expanded, setExpanded] = React.useState(false);
@@ -35,7 +37,6 @@ export default function ContactCard(props) {
     <Card
       sx={
         {
-          // maxWidth: 345
           m:1
         }
       }

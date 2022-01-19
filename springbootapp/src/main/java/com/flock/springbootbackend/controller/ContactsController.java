@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.controller;
 
+import com.flock.springbootbackend.dto.ContactDto;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class ContactsController {
     public String add(@RequestBody Contact contact) {
         ContactService.saveContact(contact);
         return "New Contact is added";
+    }
+
+    @PostMapping("/addMultipleContact")
+    public String addMultiple(@RequestBody ContactDto contactDto){
+        ContactService.saveContactDto(contactDto);
+        return "All contacts are added";
     }
 
     @PostMapping("/update")
