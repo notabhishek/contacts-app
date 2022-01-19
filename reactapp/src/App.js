@@ -8,7 +8,7 @@ import {
 import LeftPanel from './Components/Home/DrawerPanel';
 import Login from './Pages/Login/';
 import Register from './Pages/Register';
-import HomeView from './Pages/Home/HomeView';
+import Home from './Pages/Home';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path = '/login' element = {<Login/>}/>
         <Route path = '/register' element = {<Register/>}/>
-        <Route path = '/' element = {<HomeView/>}/>
+        <Route path = '/' element = {<Home/>}/>
       </Routes>
     </Router>
   );
