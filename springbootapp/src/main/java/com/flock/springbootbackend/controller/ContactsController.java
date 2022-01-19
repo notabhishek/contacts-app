@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/contacts")
@@ -26,11 +27,17 @@ public class ContactsController {
         return ContactService.getAllContacts();
     }
 
-//    @GetMapping("/startswith")
-//    public List<Contact> getContactsStartsWith(@Param("name") String name) {
-//        System.out.println("namePrfix :" + name);
-//        return ContactService.startsWithName(name);
-//    }
+    @GetMapping("/search") // find records with matching prefix in name/email
+    public List<Contact> searchPrefix(@Param("prefix") String prefix, @Param("orderby") String orderby, @Param("desc") Boolean desc) {
+        System.out.println("prefix :" + prefix + ", orderby: " + orderby);
+        // check for validity of order by here
+        return ContactService.searchPrefix(prefix, orderby, desc);
+    }
+
+    @PostMapping("/updateScore")
+    public String updateScore(@RequestBody Contact contact) {
+        return ContactService.updateScore(contact.getCid());
+    }
 //
 //    @GetMapping("/endswith")
 //    public List<Contact> getContactsEndsWith(@Param("name") String name) {

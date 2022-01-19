@@ -23,6 +23,31 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.findAll();
     }
 
+    @Override
+    public List<Contact> searchPrefix(String prefix, String orderby, Boolean desc) {
+        if(orderby.equals("score")) {
+            if(desc) {
+                return contactRepository.searchPrefixOrderByScoreDESC(prefix);
+            } else {
+                return contactRepository.searchPrefixOrderByScoreASC(prefix);
+            }
+        } else {
+            if (desc) {
+                return contactRepository.searchPrefixOrderByNameDESC(prefix);
+            } else {
+                return contactRepository.searchPrefixOrderByNameASC(prefix);
+            }
+        }
+    }
+
+    @Override
+    public String updateScore(int cid) {
+        Boolean validCid = true;
+        // check if cid is valid
+        if(!validCid) return "invalid contact id";
+        contactRepository.updateScore(cid);
+        return "Score updated!";
+    }
 //    @Override
 //    public List<Student> startsWithName(String namePrefix) {
 //        return studentRepository.startsWithName(namePrefix);

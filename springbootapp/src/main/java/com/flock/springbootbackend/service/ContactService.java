@@ -7,6 +7,9 @@ import java.util.List;
 public interface ContactService {
     public Contact saveContact(Contact contact);
     public List<Contact> getAllContacts();
+    public List<Contact> searchPrefix(String prefix, String orderby, Boolean desc);
+
+    public String updateScore(int cid);
 //    public List<Contact> startsWithName(String namePrefix);
 //    public List<Contact> endsWithName(String nameSuffix);
 //    public List<Contact> containsName(String name);

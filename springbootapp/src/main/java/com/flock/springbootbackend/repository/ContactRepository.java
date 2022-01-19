@@ -13,6 +13,24 @@ import java.util.List;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
+
+    @Query("Select c FROM Contact c WHERE (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.name ASC")
+    public List<Contact> searchPrefixOrderByNameASC(@Param("prefix") String prefix);
+
+    @Query("Select c FROM Contact c WHERE c.name LIKE :prefix% or c.email LIKE :prefix% ORDER BY c.name DESC")
+    public List<Contact> searchPrefixOrderByNameDESC(@Param("prefix") String prefix);
+
+    @Query("Select c FROM Contact c WHERE (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.score ASC")
+    public List<Contact> searchPrefixOrderByScoreASC(@Param("prefix") String prefix);
+
+    @Query("Select c FROM Contact c WHERE c.name LIKE :prefix% or c.email LIKE :prefix% ORDER BY c.score DESC")
+    public List<Contact> searchPrefixOrderByScoreDESC(@Param("prefix") String prefix);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Contact c SET c.score = c.score + 1 WHERE c.cid = :cid")
+    public void updateScore(@Param("cid") int cid);
+
 //    @Query("SELECT s FROM Contact s WHERE s.name LIKE :name%")
 //    public List<Contact> startsWithName(@Param("name") String namePrefix);
 //

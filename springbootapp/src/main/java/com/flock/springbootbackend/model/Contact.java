@@ -18,9 +18,14 @@ public class Contact {
     private String email;
     private String phone;
     private String address;
+    private int score;
 
     public Contact() {
 
+    }
+
+    public Contact(int cid) {
+        this.cid = cid;
     }
 
     public Contact(int uid, String name, String email, String phone, String address) {
@@ -29,6 +34,7 @@ public class Contact {
         this.email = email;
         this.phone = phone;
         this.address = address;
+        this.score = 0;
     }
 
     public int getUid() {
@@ -79,15 +85,24 @@ public class Contact {
         this.address = address;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "Contact{" +
-                "uid=" + uid +
-                ", cid=" + cid +
+                "cid=" + cid +
+                ", uid=" + uid +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", score=" + score +
                 '}';
     }
 }
