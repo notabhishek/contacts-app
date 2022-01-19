@@ -19,6 +19,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public String updateContact(Contact c) {
+        contactRepository.updateContact(c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());
+        return "Contact updated!";
+    }
+
+    @Override
     public List<Contact> getAllContacts() {
         return contactRepository.findAll();
     }

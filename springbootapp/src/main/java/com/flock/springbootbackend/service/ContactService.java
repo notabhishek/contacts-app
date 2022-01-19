@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ContactService {
     public Contact saveContact(Contact contact);
+    public String updateContact(Contact contact);
+
     public List<Contact> getAllContacts();
     public List<Contact> searchPrefix(String prefix, String orderby, Boolean desc);
 

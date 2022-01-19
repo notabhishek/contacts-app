@@ -22,6 +22,11 @@ public class ContactsController {
         return "New Contact is added";
     }
 
+    @PostMapping("/update")
+    public String update(@RequestBody Contact contact) {
+        return ContactService.updateContact(contact);
+    }
+
     @GetMapping("/getAll")
     public List<Contact> getAllContacts() {
         return ContactService.getAllContacts();

@@ -31,7 +31,13 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     @Query("UPDATE Contact c SET c.score = c.score + 1 WHERE c.cid = :cid")
     public void updateScore(@Param("cid") int cid);
 
-//    @Query("SELECT s FROM Contact s WHERE s.name LIKE :name%")
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Contact c SET c.name=:name, c.email=:email, c.phone=:phone, c.address=:address WHERE c.cid = :cid")
+    public void updateContact(@Param("cid") int cid, @Param("name") String name, @Param("email") String email, @Param("phone") String phone, @Param("address") String address);
+
+    //    @Query("SELECT s FROM Contact s WHERE s.name LIKE :name%")
 //    public List<Contact> startsWithName(@Param("name") String namePrefix);
 //
 //    @Query("SELECT s FROM Contact s WHERE s.name LIKE %:name")
