@@ -12,11 +12,12 @@ export default function ContactList(props) {
 
   const allContacts = useLiveQuery(() => db.contacts.toArray(), []);
   if (!allContacts) return null;
+
   console.log("all contacts",allContacts);
 
   return (
     <ul className="list-unstyled">
-      {allContacts.map((contact) => (
+      {props.contacts.map((contact) => (
         <ContactCard key={contact.cid} contact={contact} />
       ))}
     </ul>
