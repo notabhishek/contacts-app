@@ -11,7 +11,6 @@ function makePostRequest(endpoint , payload , auth = false){
           },
           data: payload,
         })
-
 }
 
 function makeGetRequest(endpoint , params , auth = false){
@@ -25,6 +24,6 @@ export function fetchContactsAPI(payload){
     return makeGetRequest('/contacts/search', payload)
 }
 
-export function searchContactAPI() {
-
+export function updateScoreAPI(payload){
+    return makePostRequest('/contacts/updateScore', payload)
 }

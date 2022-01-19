@@ -28,6 +28,11 @@ export default function ContactCard(props) {
 
   const handleExpandClick = () => {
     console.log(props.contact);
+    if(!expanded) { // update score of contact
+      props.updateScore({
+        "cid": props.contact.cid
+      });
+    }
     setExpanded(!expanded);
   };
 

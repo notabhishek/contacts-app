@@ -6,7 +6,7 @@ import AppBarComponent from '../../Components/Home/AppMenuComponent';
 import DrawerPanel , {DrawerHeader} from '../../Components/Home/DrawerPanel';
 import ContactList from '../../Components/Contact/ContactList';
 
-export default function HomeView({contacts}){
+export default function HomeView({contacts, searchKey, setSearchKey, updateScore}){
     const theme = createTheme()
     const darkTheme = createTheme({
         palette : {
@@ -27,11 +27,13 @@ export default function HomeView({contacts}){
         <ThemeProvider theme = {darkTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBarComponent open = {open} handleDrawerOpen = {handleDrawerOpen}/>
+                <AppBarComponent open = {open} handleDrawerOpen = {handleDrawerOpen} 
+                searchKey = {searchKey}
+                setSearchKey = {setSearchKey}/>
                 <DrawerPanel theme = {theme} open = {open} handleDrawerClose = {handleDrawerClose}/>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
-                    <ContactList contacts = {contacts}/>
+                    <ContactList contacts = {contacts} updateScore = {updateScore}/>
                 </Box>
             </Box>
         </ThemeProvider>
