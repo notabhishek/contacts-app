@@ -31,3 +31,7 @@ export function addContactAPI(payload){
 export function updateScoreAPI(payload){
     return makePostRequest('/contacts/updateScore', payload)
 }
+
+export function updateContactAPI(payload) {
+    return makePostRequest('/contacts/update', payload)
+}
