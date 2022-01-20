@@ -47,7 +47,7 @@ export default function ContactCard(props) {
 
   const DeleteContact = () => {
     setModalOpen(false)
-    deleteContactAPI({ contactId: props.contact.cid })
+    deleteContactAPI({ cid: props.contact.cid })
       .then(response => {
         if (response.status === 200) {
           removeContactFromChecklist()

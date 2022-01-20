@@ -29,7 +29,7 @@ export default function CreateContactCard({contacts , setContacts}){
     }
 
     function createContact(){
-        addContactAPI({...contactData , uid : 24})
+        addContactAPI({...contactData})
             .then(response=>{
                 console.log(response)
             })

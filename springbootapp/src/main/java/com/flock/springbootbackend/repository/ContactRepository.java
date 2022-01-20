@@ -43,8 +43,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     public void deleteContact(@Param("uid") int uid, @Param("cid") int cid);
 
 
-//    @Transactional
-//    @Modifying
-//    @Query("DELETE FROM Contact c WHERE c.uid = :uid AND c.cid in ?2")
-//    public void deleteContacts(@Param("uid") int uid, List<Integer> ids);
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Contact c WHERE c.uid = :uid AND c.cid in :ids")
+    public void deleteContacts(@Param("uid") int uid,@Param("ids") List<Integer> ids);
 }

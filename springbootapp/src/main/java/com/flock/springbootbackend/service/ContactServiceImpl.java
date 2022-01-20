@@ -86,15 +86,15 @@ public class ContactServiceImpl implements ContactService {
             return "Invalid Contact Id";
         }
         int uid = getCurrentUser().getUid();
+        System.out.println(String.valueOf(cid) + " delete for user " + getCurrentUser());
         contactRepository.deleteContact(uid, cid);
         return "Contact deleted";
     }
 
     @Override
     public String deleteContacts(ContactBulkReq contactBulkReq){
-        // check if cids are valid
         int uid = getCurrentUser().getUid();
-//        contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
+        contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
         return "Contacts deleted";
     }
 
