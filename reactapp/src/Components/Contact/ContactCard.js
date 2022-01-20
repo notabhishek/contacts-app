@@ -14,6 +14,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ModalComponent } from "../ModalComponent";
 import { deleteContactAPI, updateContactAPI } from "../../Utils/APIs";
+import { Avatar, Checkbox } from "@mui/material";
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,24 +31,37 @@ const ExpandMore = styled((props) => {
 export default function ContactCard(props) {
   const [expanded, setExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [contactData , setContactData] = useState(props.contact)
+  const [contactData, setContactData] = useState(props.contact)
+  const [checkBoxVisible , setCheckBoxVisible] = useState(false)
+  const [checked , setChecked] = useState(false)
+
+  const removeContactFromChecklist = () =>{
+    const index = props.contactsDelete.indexOf(props.contact.cid);
+      if(index > -1){
+        props.setContactsDelete(prevContact=>{
+          let newDeleteContact = prevContact.filter(contactId=> contactId !== props.contact.cid)
+          return newDeleteContact
+        })
+      }
+  }
 
   const DeleteContact = () => {
     setModalOpen(false)
-    deleteContactAPI({contactId : props.contact.cid})
-      .then(response=>{
-        if(response.status===200){
-          props.setContacts(prevContact=>{
-            let newContacts = prevContact.filter(contact=>contact.cid !== props.contact.cid)
+    deleteContactAPI({ contactId: props.contact.cid })
+      .then(response => {
+        if (response.status === 200) {
+          removeContactFromChecklist()
+          props.setContacts(prevContact => {
+            let newContacts = prevContact.filter(contact => contact.cid !== props.contact.cid)
             return newContacts
           })
           console.log(response)
         }
-        else{
+        else {
           console.log('error from server while deleting contact')
         }
       })
-      .catch(error=>console.log(error))
+      .catch(error => console.log(error))
   }
 
   const handleExpandClick = () => {
@@ -66,7 +81,6 @@ export default function ContactCard(props) {
   }
 
   const handleUpdate = () => {
-    // fetcj
     updateContactAPI(contactData)
       .then((response) => {
         if (response.status === 200) {
@@ -86,21 +100,36 @@ export default function ContactCard(props) {
       .catch((error) => console.log(error));
   };
 
+  const checkHandler = (event) =>{
+    setChecked(event.target.checked)
+    if(event.target.checked){
+      if(!props.contactsDelete.includes(props.contact.cid)){
+        props.setContactsDelete(prevContact=>[...prevContact , props.contact.cid])
+      }
+    }
+    else{
+      removeContactFromChecklist()
+    }
+  }
+
   return (
     <Card
       sx={{
         m: 1,
       }}
+      onMouseEnter={()=>setCheckBoxVisible(true)}
+      onMouseLeave={()=>setCheckBoxVisible(false)}
     >
-      <ModalComponent 
-          open={modalOpen} 
-          title={"Confirm Delete"} 
-          text={"Delete this contact are you damn sure!!"} 
-          yesHandler={DeleteContact}
-          noHandler={()=>setModalOpen(false)}
-        />
+      <ModalComponent
+        open={modalOpen}
+        title={"Confirm Delete"}
+        text={"Delete this contact are you damn sure!!"}
+        yesHandler={DeleteContact}
+        noHandler={() => setModalOpen(false)}
+      />
       <CardActions disableSpacing>
-        
+        <Avatar sx = {{width : '30px' , height : '30px', display : !(!checkBoxVisible && !checked) && "none"}}>{props.contact.name[0]}</Avatar>
+        <Checkbox checked = {checked} onChange={checkHandler} sx={{display : !checkBoxVisible && !checked && "none"}}/>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>
@@ -115,7 +144,7 @@ export default function ContactCard(props) {
           <IconButton aria-label="add to favorites">
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="share" onClick={()=>setModalOpen(true)}>
+          <IconButton aria-label="delete" onClick={() => setModalOpen(true)}>
             <DeleteIcon />
           </IconButton>
           <ExpandMore

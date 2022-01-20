@@ -98,9 +98,9 @@ export default function AppBarComponent({open , handleDrawerOpen, searchKey, set
               value={searchKey}
             />
           </Search>
-          <Typography variant="h6" noWrap component="div">
+          {/* <Typography variant="h6" noWrap component="div">
             Search
-          </Typography>
+          </Typography> */}
         </Toolbar>
       </AppBar>
     )

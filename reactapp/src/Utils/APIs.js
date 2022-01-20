@@ -40,3 +40,8 @@ export function deleteContactAPI(payload){
 export function updateContactAPI(payload) {
     return makePostRequest('/contacts/update', payload)
 }
+
+
+export function deleteContactsAPI(payload){
+    return makePostRequest('/contacts/deleteContactList', payload)
+}
