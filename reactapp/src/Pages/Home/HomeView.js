@@ -22,6 +22,7 @@ export default function HomeView({
   searchKey,
   setSearchKey,
   updateScore,
+  fetchContacts
 }) {
   const theme = createTheme();
   const darkTheme = createTheme({
@@ -73,6 +74,7 @@ export default function HomeView({
                   contacts={contacts}
                   setContacts={setContacts}
                   updateScore={updateScore}
+                  fetchContacts = {fetchContacts}
                 />
               </TabPanel>
               <TabPanel value="2">

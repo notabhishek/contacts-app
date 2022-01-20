@@ -14,6 +14,7 @@ export default function ContactList({
   setContacts,
   updateScore,
   updateContact,
+  fetchContacts
 }) {
 
   const [contactsDelete, setContactsDelete] = useState([])
@@ -80,8 +81,8 @@ export default function ContactList({
         {contactsDelete.length > 0 && <IconButton aria-label="delete" onClick={()=>setModalOpen(true)}>
             <DeleteIcon />
           </IconButton>}
-        <IconButton aria-label="delete">
-          <RefreshIcon />
+        <IconButton onClick={fetchContacts} aria-label="delete">
+          <RefreshIcon/>
         </IconButton>
       </Box>
       {contacts.map((contact) => {

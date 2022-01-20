@@ -11,7 +11,8 @@ export default function Home() {
   const [orderby, setOrderBy] = useState("name");
   const [desc, setDesc] = useState(false);
 
-  function fetchContacts(payload) {
+  function fetchContacts() {
+    const payload= { prefix: searchKey, orderby: orderby, desc: desc }
     fetchContactsAPI(payload)
       .then((response) => {
         if (response.status === 200) setContacts(response.data);
@@ -32,7 +33,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    fetchContacts({ prefix: searchKey, orderby: orderby, desc: desc });
+    fetchContacts();
   }, [searchKey]);
 
   return (
@@ -42,6 +43,7 @@ export default function Home() {
       searchKey={searchKey}
       setSearchKey={setSearchKey}
       updateScore={updateScore}
+      fetchContacts = {fetchContacts}
     />
   );
 }
