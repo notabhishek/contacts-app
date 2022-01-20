@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import RegisterView from './RegisterView';
 import { createTheme } from '@mui/material/styles';
 import {
     registerUserAPI
   } from "../../Utils/APIs";
+import { Navigate } from 'react-router-dom';
 
 const theme = createTheme();
 const darkTheme = createTheme({
@@ -14,6 +15,8 @@ const darkTheme = createTheme({
 )
 
 export default function Register(){
+
+    const [login, setLogin] = useState(false)
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -31,10 +34,16 @@ export default function Register(){
             if (response.status === 200) {
                 console.log(response.data);
                 localStorage.setItem('jwt-token', response.data['jwt-token']);
+                setLogin(true)
             } else console.log("server error");
           })
           .catch((error) => console.log(error));
     };
+
+    if(login)
+    return(
+        <Navigate to='/'/>
+    )
 
     return (
         <RegisterView handleSubmit = {handleSubmit} currentTheme={darkTheme}/>

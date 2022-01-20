@@ -1,9 +1,11 @@
-import React from 'react'
+import React , {useState} from 'react'
 import LoginView from './LoginView'
 import { createTheme } from '@mui/material/styles';
 import {
     loginUserAPI
   } from "../../Utils/APIs";
+
+import {Navigate} from 'react-router-dom'
 
 const theme = createTheme();
 const darkTheme = createTheme({
@@ -14,6 +16,8 @@ const darkTheme = createTheme({
 )
 
 export default function  Login(){
+
+    const [login , setLogin] = useState(false)
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -29,10 +33,15 @@ export default function  Login(){
             if (response.status === 200) {
                 console.log(response.data);
                 localStorage.setItem('jwt-token', response.data['jwt-token']);
+                setLogin(true)
             } else console.log("server error");
           })
           .catch((error) => console.log(error));
     };
+
+    if(login){
+        return <Navigate to='/'/>
+    }
 
     return (
         <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme}/>
