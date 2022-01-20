@@ -36,6 +36,10 @@ export default function ContactCard(props) {
     deleteContactAPI({contactId : props.contact.cid})
       .then(response=>{
         if(response.status===200){
+          props.setContacts(prevContact=>{
+            let newContacts = prevContact.filter(contact=>contact.cid !== props.contact.cid)
+            return newContacts
+          })
           console.log(response)
         }
         else{
