@@ -11,7 +11,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CreateContactCard from '../../Components/Contact/CreateContactCard';
 
-export default function HomeView({contacts ,setContacts}){
+export default function HomeView({contacts, searchKey, setSearchKey, updateScore}){
     const theme = createTheme()
     const darkTheme = createTheme({
         palette : {
@@ -33,7 +33,9 @@ export default function HomeView({contacts ,setContacts}){
         <ThemeProvider theme = {darkTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBarComponent open = {open} handleDrawerOpen = {handleDrawerOpen}/>
+                <AppBarComponent open = {open} handleDrawerOpen = {handleDrawerOpen} 
+                searchKey = {searchKey}
+                setSearchKey = {setSearchKey}/>
                 <DrawerPanel theme = {theme} open = {open} handleDrawerClose = {handleDrawerClose}/>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
@@ -46,7 +48,7 @@ export default function HomeView({contacts ,setContacts}){
                             </TabList>
                             </Box>
                             <TabPanel value="1">
-                                <ContactList contacts = {contacts}/>
+                                <ContactList contacts = {contacts} updateScore = {updateScore}/>
                             </TabPanel>
                             <TabPanel value="2">
                                 <CreateContactCard contacts={contacts} setContacts={setContacts}/>    
