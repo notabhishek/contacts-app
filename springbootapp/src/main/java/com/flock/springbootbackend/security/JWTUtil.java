@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-    public static final String CONTACTSAPP = "fcontactsapp";
+    public static final String CONTACTSAPP = "contactsapp";
 
     @Value("${jwt-secret}")
     private String secret;
