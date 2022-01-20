@@ -1,11 +1,9 @@
 package com.flock.springbootbackend.model;
 
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -15,6 +13,7 @@ public class User {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
     private String password;
     private String phone;
