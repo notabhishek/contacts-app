@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ModalComponent } from "../ModalComponent";
-import { deleteContactAPI } from "../../Utils/APIs";
+import { deleteContactAPI, updateContactAPI } from "../../Utils/APIs";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -26,11 +26,10 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-
 export default function ContactCard(props) {
   const [expanded, setExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
+  const [contactData , setContactData] = useState(props.contact)
 
   const DeleteContact = () => {
     setModalOpen(false)
@@ -50,19 +49,44 @@ export default function ContactCard(props) {
     console.log(props.contact);
     if (!expanded) { // update score of contact
       props.updateScore({
-        "cid": props.contact.cid
+        cid: props.contact.cid,
       });
     }
     setExpanded(!expanded);
   };
 
+  function inputHandler(event, type) {
+    setContactData((prevcontact) => {
+      return { ...prevcontact, [type]: event.target.value };
+    });
+  }
+
+  const handleUpdate = () => {
+    // fetcj
+    updateContactAPI(contactData)
+      .then((response) => {
+        if (response.status === 200) {
+
+          props.setContacts((prevContacts) => {
+            let temp = prevContacts.map((contact) => {
+              if ((contact.cid === props.contact.cid)) {
+                return contactData;
+              } else return contact;
+            });
+            return temp;
+          });
+
+          console.log("contact updated!");
+        } else console.log("server error");
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <Card
-      sx={
-        {
-          m: 1
-        }
-      }
+      sx={{
+        m: 1,
+      }}
     >
       <ModalComponent 
           open={modalOpen} 
@@ -115,30 +139,30 @@ export default function ContactCard(props) {
               label="Name"
               fullWidth
               defaultValue={props.contact.name}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => inputHandler(e, "name")}
             />
             <TextField
               id="outlined-name"
               label="Email"
               fullWidth
               defaultValue={props.contact.email}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => inputHandler(e, "email")}
             />
             <TextField
               id="outlined-name"
               label="Phone"
               fullWidth
               defaultValue={props.contact.phone}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => inputHandler(e, "phone")}
             />
             <TextField
               id="outlined-name"
               label="Address"
               fullWidth
               defaultValue={props.contact.address}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => inputHandler(e, "address")}
             />
-            <Button variant="contained" color="success">
+            <Button variant="contained" color="success" onClick={handleUpdate}>
               Update
             </Button>
           </Box>
