@@ -4,7 +4,7 @@ import com.flock.springbootbackend.model.Contact;
 
 import java.util.List;
 
-public class ContactDto {
+public class ContactBulkReq {
     private List<Contact> contactList;
 
     public List<Contact> getContactList() {
