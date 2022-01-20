@@ -11,7 +11,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CreateContactCard from '../../Components/Contact/CreateContactCard';
 
-export default function HomeView({contacts, searchKey, setSearchKey, updateScore}){
+export default function HomeView({contacts, setContacts, searchKey, setSearchKey, updateScore}){
     const theme = createTheme()
     const darkTheme = createTheme({
         palette : {

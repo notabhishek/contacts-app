@@ -37,10 +37,12 @@ export default function Home(){
     },[searchKey]);
 
     return(
-        <HomeView contacts = {contacts} 
-        searchKey = {searchKey} 
-        setSearchKey = {setSearchKey}
-        updateScore={updateScore}
+        <HomeView 
+            contacts = {contacts} 
+            setContacts = {setContacts}
+            searchKey = {searchKey} 
+            setSearchKey = {setSearchKey}
+            updateScore={updateScore}
         />
     )
 }
