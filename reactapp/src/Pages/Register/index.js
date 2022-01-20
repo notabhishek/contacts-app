@@ -27,7 +27,13 @@ export default function Register(){
         };
 
         registerUserAPI(user)
-        .then((response) => console.log(response));
+        .then((response) => {
+            if (response.status === 200) {
+                console.log(response.data);
+                localStorage.setItem('jwt-token', response.data['jwt-token']);
+            } else console.log("server error");
+          })
+          .catch((error) => console.log(error));
     };
 
     return (
