@@ -17,8 +17,13 @@ public class UserService {
     }
 
     public String updateUser(User user) {
-        user.setUid(getCurrentUser().getUid());
-        userRepo.save(user);
+        User curUser = getCurrentUser();
+
+        curUser.setName(user.getName());
+        curUser.setPhone(user.getPhone());
+        curUser.setAddress(user.getAddress());
+
+        userRepo.save(curUser);
         return "User data updated!";
     }
 }
