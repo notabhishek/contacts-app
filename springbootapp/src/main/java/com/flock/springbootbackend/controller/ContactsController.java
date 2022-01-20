@@ -24,7 +24,7 @@ public class ContactsController {
 
     @PostMapping("/addMultipleContact")
     public String addMultiple(@RequestBody ContactBulkReq contactDto){
-        ContactService.saveContactDto(contactDto);
+        ContactService.saveContacts(contactDto);
         return "All contacts are added";
     }
 
@@ -54,6 +54,12 @@ public class ContactsController {
     public String deleteContact(@RequestBody Contact contact) {
         return ContactService.deleteContact(contact.getCid());
     }
+
+    @PostMapping("/deleteContactList")
+    public String deleteContactList(@RequestBody ContactBulkReq contactBulkReq ){
+        return ContactService.deleteContacts(contactBulkReq);
+    }
+
 //
 //    @GetMapping("/endswith")
 //    public List<Contact> getContactsEndsWith(@Param("name") String name) {

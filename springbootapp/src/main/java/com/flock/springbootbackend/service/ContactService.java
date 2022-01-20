@@ -15,7 +15,8 @@ public interface ContactService {
     public String updateScore(int cid);
     public String deleteContact(int cid);
 
-    public String saveContactDto(ContactBulkReq contactDto);
+    public String saveContacts(ContactBulkReq contactBulkReq);
+    public String deleteContacts(ContactBulkReq contactBulkReq);
 //    public List<Contact> startsWithName(String namePrefix);
 //    public List<Contact> endsWithName(String nameSuffix);
 //    public List<Contact> containsName(String name);

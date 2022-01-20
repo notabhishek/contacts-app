@@ -6,6 +6,17 @@ import java.util.List;
 
 public class ContactBulkReq {
     private List<Contact> contactList;
+    private List<Integer> contactCid;
+
+    public ContactBulkReq(){}
+
+    public List<Integer> getContactCid() {
+        return contactCid;
+    }
+
+    public void setContactCid(List<Integer> contactCid) {
+        this.contactCid = contactCid;
+    }
 
     public List<Contact> getContactList() {
         return contactList;

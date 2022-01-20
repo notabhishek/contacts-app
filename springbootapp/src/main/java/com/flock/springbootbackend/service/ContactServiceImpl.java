@@ -20,8 +20,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public String saveContactDto(ContactBulkReq contactDto){
-        contactRepository.saveAll(contactDto.getContactList());
+    public String saveContacts(ContactBulkReq contactBulkReq){
+        contactRepository.saveAll(contactBulkReq.getContactList());
         return "All contacts saved";
     }
 
@@ -71,6 +71,14 @@ public class ContactServiceImpl implements ContactService {
         }
         contactRepository.deleteContact(cid);
         return "Contact deleted";
+    }
+
+    @Override
+    public String deleteContacts(ContactBulkReq contactBulkReq){
+        // check if cids are valid
+
+        contactRepository.deleteContacts(contactBulkReq.getContactCid());
+        return "Contacts deleted";
     }
 
     //    @Override
