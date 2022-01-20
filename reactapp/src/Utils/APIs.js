@@ -45,3 +45,7 @@ export function updateContactAPI(payload) {
 export function deleteContactsAPI(payload){
     return makePostRequest('/contacts/deleteContactList', payload)
 }
+
+export function registerUserAPI(payload) {
+    return makePostRequest('/auth/register', payload);
+}
