@@ -17,9 +17,4 @@ public interface ContactService {
 
     public String saveContacts(ContactBulkReq contactBulkReq);
     public String deleteContacts(ContactBulkReq contactBulkReq);
-//    public List<Contact> startsWithName(String namePrefix);
-//    public List<Contact> endsWithName(String nameSuffix);
-//    public List<Contact> containsName(String name);
-//    public String deleteContactId(int cid);
-//    public String updateContact(int uid, int cid, String name, String email, String phone, String address);
 }

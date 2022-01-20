@@ -18,16 +18,11 @@ public class ContactServiceImpl implements ContactService {
     private ContactRepository contactRepository;
 
     @Autowired
-    private UserRepo userRepo;
-
-    private User getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepo.findByEmail(principal.toString()).get();
-    }
+    private UserService userService;
 
     @Override
     public Contact saveContact(Contact contact) {
-        int uid = getCurrentUser().getUid();
+        int uid = userService.getCurrentUser().getUid();
         contact.setUid(uid);
         return contactRepository.save(contact);
     }
@@ -40,7 +35,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public String updateContact(Contact c) {
-        int uid = getCurrentUser().getUid();
+        int uid = userService.getCurrentUser().getUid();
         contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());
         return "Contact updated!";
     }
@@ -52,7 +47,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<Contact> searchPrefix(String prefix, String orderby, Boolean desc) {
-        int uid = getCurrentUser().getUid();
+        int uid = userService.getCurrentUser().getUid();
         if(orderby.equals("score")) {
             if(desc) {
                 return contactRepository.searchPrefixOrderByScoreDESC(uid, prefix);
@@ -71,9 +66,8 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public String updateScore(int cid) {
         Boolean validCid = true;
-        // check if cid is valid
         if(!validCid) return "invalid contact id";
-        int uid = getCurrentUser().getUid();
+        int uid = userService.getCurrentUser().getUid();
         contactRepository.updateScore(uid, cid);
         return "Score updated!";
     }
@@ -81,47 +75,19 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public String deleteContact(int cid) {
         Boolean validCid = true;
-        // check if cid is valid
         if(!validCid) {
             return "Invalid Contact Id";
         }
-        int uid = getCurrentUser().getUid();
-        System.out.println(String.valueOf(cid) + " delete for user " + getCurrentUser());
+        int uid = userService.getCurrentUser().getUid();
+        System.out.println(String.valueOf(cid) + " delete for user " + userService.getCurrentUser());
         contactRepository.deleteContact(uid, cid);
         return "Contact deleted";
     }
 
     @Override
     public String deleteContacts(ContactBulkReq contactBulkReq){
-        int uid = getCurrentUser().getUid();
+        int uid = userService.getCurrentUser().getUid();
         contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
         return "Contacts deleted";
     }
-
-    //    @Override
-//    public List<Student> startsWithName(String namePrefix) {
-//        return studentRepository.startsWithName(namePrefix);
-//    }
-//
-//    @Override
-//    public List<Student> endsWithName(String nameSuffix) {
-//        return studentRepository.endsWithName(nameSuffix);
-//    }
-
-//    @Override
-//    public List<Student> containsName(String name) {
-//        return studentRepository.containsName(name);
-//    }
-//
-//    @Override
-//    public String deleteStudentId(int id) {
-//        studentRepository.deleteStudentId(id);
-//        return "Student " + String.valueOf(id) + " deleted!";
-//    }
-//
-//    @Override
-//    public String updateStudent(int id, String name, String address) {
-//        studentRepository.updateStudent(id, name, address);
-//        return "Student " + String.valueOf(id) + " updated!";
-//    }
 }
