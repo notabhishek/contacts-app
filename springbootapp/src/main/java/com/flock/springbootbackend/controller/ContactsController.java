@@ -7,46 +7,45 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/contacts")
 @CrossOrigin
 public class ContactsController {
     @Autowired
-    private ContactService ContactService;
+    private ContactService contactService;
 
     @PostMapping("/add")
     public String add(@RequestBody Contact contact) {
-        ContactService.saveContact(contact);
+        contactService.saveContact(contact);
         return "New Contact is added";
     }
 
     @PostMapping("/update")
     public String update(@RequestBody Contact contact) {
-        return ContactService.updateContact(contact);
+        return contactService.updateContact(contact);
     }
 
     @GetMapping("/getAll")
     public List<Contact> getAllContacts() {
-        return ContactService.getAllContacts();
+        return contactService.getAllContacts();
     }
 
     @GetMapping("/search") // find records with matching prefix in name/email
     public List<Contact> searchPrefix(@Param("prefix") String prefix, @Param("orderby") String orderby, @Param("desc") Boolean desc) {
         System.out.println("prefix :" + prefix + ", orderby: " + orderby);
         // check for validity of order by here
-        return ContactService.searchPrefix(prefix, orderby, desc);
+        return contactService.searchPrefix(prefix, orderby, desc);
     }
 
     @PostMapping("/updateScore")
     public String updateScore(@RequestBody Contact contact) {
-        return ContactService.updateScore(contact.getCid());
+        return contactService.updateScore(contact.getCid());
     }
 
-    @PostMapping("/deleteContact")
+    @DeleteMapping("/deleteContact")
     public String deleteContact(@RequestBody Contact contact) {
-        return ContactService.deleteContact(contact.getCid());
+        return contactService.deleteContact(contact.getCid());
     }
 //
 //    @GetMapping("/endswith")
