@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -6,12 +6,14 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+// import ShareIcon from "@mui/icons-material/Share";
+import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { ModalComponent } from "../ModalComponent";
+import { deleteContactAPI } from "../../Utils/APIs";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -26,11 +28,27 @@ const ExpandMore = styled((props) => {
 
 
 export default function ContactCard(props) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+
+  const DeleteContact = () => {
+    setModalOpen(false)
+    deleteContactAPI({contactId : props.contact.cid})
+      .then(response=>{
+        if(response.status===200){
+          console.log(response)
+        }
+        else{
+          console.log('error from server while deleting contact')
+        }
+      })
+      .catch(error=>console.log(error))
+  }
 
   const handleExpandClick = () => {
     console.log(props.contact);
-    if(!expanded) { // update score of contact
+    if (!expanded) { // update score of contact
       props.updateScore({
         "cid": props.contact.cid
       });
@@ -42,17 +60,20 @@ export default function ContactCard(props) {
     <Card
       sx={
         {
-          m:1
+          m: 1
         }
       }
     >
+      <ModalComponent 
+          open={modalOpen} 
+          title={"Confirm Delete"} 
+          text={"Delete this contact are you damn sure!!"} 
+          yesHandler={DeleteContact}
+          noHandler={()=>setModalOpen(false)}
+        />
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        
+
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>
         </Box>
@@ -62,14 +83,22 @@ export default function ContactCard(props) {
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.phone}</div>
         </Box>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
+        <Box sx={{ ml: 'auto' }}>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share" onClick={()=>setModalOpen(true)}>
+            <DeleteIcon />
+          </IconButton>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </Box>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>

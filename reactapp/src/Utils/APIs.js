@@ -31,3 +31,7 @@ export function addContactAPI(payload){
 export function updateScoreAPI(payload){
     return makePostRequest('/contacts/updateScore', payload)
 }
+
+export function deleteContactAPI(payload){
+    return makePostRequest('/contacts/deleteContact', payload)
+}

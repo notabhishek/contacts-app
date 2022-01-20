@@ -18,7 +18,7 @@ export default function ContactList(props) {
   return (
     <ul className="list-unstyled">
       {props.contacts.map((contact) => (
-        <ContactCard key={contact.cid} contact={contact} updateScore = {props.updateScore} />
+        <ContactCard key={contact.cid} contact={contact} setContact = {props.setContacts} updateScore = {props.updateScore} />
       ))}
     </ul>
   );

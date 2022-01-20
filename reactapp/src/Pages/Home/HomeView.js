@@ -48,7 +48,7 @@ export default function HomeView({contacts, setContacts, searchKey, setSearchKey
                             </TabList>
                             </Box>
                             <TabPanel value="1">
-                                <ContactList contacts = {contacts} updateScore = {updateScore}/>
+                                <ContactList contacts = {contacts} setContacts = {setContacts} updateScore = {updateScore}/>
                             </TabPanel>
                             <TabPanel value="2">
                                 <CreateContactCard contacts={contacts} setContacts={setContacts}/>    
