@@ -15,50 +15,44 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.http.HttpServletResponse;
 
-@Configuration // Marks this as a configuration file
-@EnableWebSecurity // Enables security for this application
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // Injecting Dependencies
     @Autowired
     private UserRepo userRepo;
     @Autowired private JWTFilter filter;
     @Autowired private MyUserDetailsService uds;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception { // Method to configure your app security
-        http.csrf().disable() // Disabling csrf
-                .httpBasic().disable() // Disabling http basic
-                .cors() // Enabling cors
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .httpBasic().disable()
+                .cors()
                 .and()
-                .authorizeHttpRequests() // Authorizing incoming requests
-                .antMatchers("/auth/**").permitAll() // Allows auth requests to be made without authentication of any sort
-                .antMatchers("/contacts/**").hasRole("USER") // Allows only users with the "USER" role to make requests to the user routes
+                .authorizeHttpRequests()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/contacts/**").hasRole("USER")
                 .and()
-                .userDetailsService(uds) // Setting the user details service to the custom implementation
+                .userDetailsService(uds)
                 .exceptionHandling()
                 .authenticationEntryPoint(
-                        // Rejecting request as unauthorized when entry point is reached
-                        // If this point is reached it means that the current request requires authentication
-                        // and no JWT token was found attached to the Authorization header of the current request.
+
                         (request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                 )
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Setting Session to be stateless
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // Adding the JWT filter
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    // Creating a bean for the password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Exposing the bean of the authentication manager which will be used to run the authentication process
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
