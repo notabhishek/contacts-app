@@ -7,7 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-
+import { Avatar } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person'
+import { Link } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -54,54 +56,56 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-  })(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
+  }),
+}));
 
-export default function AppBarComponent({open , handleDrawerOpen, searchKey, setSearchKey}){
-    return(
+export default function AppBarComponent({ open, handleDrawerOpen, searchKey, setSearchKey }) {
+  return (
     <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={(e)=>setSearchKey(e.target.value)}
-              value={searchKey}
-            />
-          </Search>
-          {/* <Typography variant="h6" noWrap component="div">
-            Search
-          </Typography> */}
-        </Toolbar>
-      </AppBar>
-    )
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            marginRight: '36px',
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+            onChange={(e) => setSearchKey(e.target.value)}
+            value={searchKey}
+          />
+        </Search>
+        <IconButton component={Link} to='/updateProfile' sx={{ ml: 'auto' }} aria-label='userIcon'>
+          <Avatar>
+            <PersonIcon />
+          </Avatar>
+        </IconButton>
+      </Toolbar>
+    </AppBar>
+  )
 }

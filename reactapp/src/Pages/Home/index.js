@@ -3,11 +3,13 @@ import {
   fetchContactsAPI,
   updateScoreAPI,
 } from "../../Utils/APIs";
+import { useAppConsumer } from "../../Utils/AppContext/AppContext";
 import HomeView from "./HomeView";
 
 export default function Home() {
-  const [contacts, setContacts] = useState([]);
-  const [searchKey, setSearchKey] = useState("");
+  const {contactsContext} = useAppConsumer();
+  const [contacts , setContacts] = contactsContext;
+  const [searchKey ,setSearchKey] = useState('')
   const [orderby, setOrderBy] = useState("name");
   const [desc, setDesc] = useState(false);
 
@@ -21,16 +23,6 @@ export default function Home() {
       .catch((error) => console.log(error));
   }
 
-  function updateScore(payload) {
-    updateScoreAPI(payload)
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("score updated!");
-        } else console.log("server error");
-      })
-      .catch((error) => console.log(error));
-  }
-
 
   useEffect(() => {
     fetchContacts();
@@ -38,12 +30,8 @@ export default function Home() {
 
   return (
     <HomeView
-      contacts={contacts}
-      setContacts={setContacts}
       searchKey={searchKey}
       setSearchKey={setSearchKey}
-      updateScore={updateScore}
-      fetchContacts = {fetchContacts}
     />
   );
 }

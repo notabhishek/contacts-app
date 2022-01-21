@@ -15,14 +15,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CreateContactCard from "../../Components/Contact/CreateContactCard";
+import { Outlet } from "react-router-dom";
 
 export default function HomeView({
-  contacts,
-  setContacts,
   searchKey,
   setSearchKey,
-  updateScore,
-  fetchContacts
 }) {
   const theme = createTheme();
   const darkTheme = createTheme({
@@ -59,31 +56,7 @@ export default function HomeView({
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
           <Box sx={{ width: "100%", typography: "body1" }}>
-            <TabContext value={currentTab}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList
-                  onChange={(event, newvalue) => setCurrentTab(newvalue)}
-                  aria-label="lab API tabs example"
-                >
-                  <Tab label="Contacts" value="1" />
-                  <Tab label="New Contact" value="2" />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                <ContactList
-                  contacts={contacts}
-                  setContacts={setContacts}
-                  updateScore={updateScore}
-                  fetchContacts = {fetchContacts}
-                />
-              </TabPanel>
-              <TabPanel value="2">
-                <CreateContactCard
-                  contacts={contacts}
-                  setContacts={setContacts}
-                />
-              </TabPanel>
-            </TabContext>
+            <Outlet/>
           </Box>
         </Box>
       </Box>

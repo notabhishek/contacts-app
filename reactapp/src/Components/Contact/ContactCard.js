@@ -128,7 +128,7 @@ export default function ContactCard(props) {
         noHandler={() => setModalOpen(false)}
       />
       <CardActions disableSpacing>
-        <Avatar sx = {{width : '30px' , height : '30px', display : !(!checkBoxVisible && !checked) && "none"}}>{props.contact.name[0]}</Avatar>
+        <Avatar sx = {{width : '30px' , height : '30px', ml : '10px', display : !(!checkBoxVisible && !checked) && "none"}}>{props.contact.name[0]}</Avatar>
         <Checkbox checked = {checked} onChange={checkHandler} sx={{display : !checkBoxVisible && !checked && "none"}}/>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>

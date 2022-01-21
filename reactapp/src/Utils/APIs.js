@@ -4,13 +4,19 @@ const BASE_URL = 'http://localhost:8080'
 
 const storageKey = 'jwt-token';
 
+export function getAuthTokenFromLocalStorage(){
+    const jwt = localStorage.getItem(storageKey)
+    if(jwt) return jwt;
+    return null;
+}
+
 
 function makePostRequest(endpoint , payload , auth = false){
     let headers = {
         'content-type': 'application/json', // whatever you want
       }
     if(auth){
-        const jwt = localStorage.getItem(storageKey);
+        const jwt = getAuthTokenFromLocalStorage()
         if(jwt) headers['Authorization'] =   `Bearer ${jwt}`
     }
     const url = BASE_URL + endpoint
@@ -26,8 +32,7 @@ function makeGetRequest(endpoint , params , auth = false){
         'content-type': 'application/json', // whatever you want
       }
     if(auth){
-        const jwt = localStorage.getItem(storageKey);
-        console.log(jwt)
+        const jwt = getAuthTokenFromLocalStorage()
         if(jwt) headers['Authorization'] =   `Bearer ${jwt}`
     }
     console.log(headers)
@@ -70,4 +75,12 @@ export function registerUserAPI(payload) {
 
 export function loginUserAPI(payload) {
     return makePostRequest('/auth/login', payload);
+}
+
+export function getUserAPI(){
+    return makeGetRequest('/contacts/getUser' , {} , true)
+}
+
+export function updateUserAPI(payload){
+    return makePostRequest('/contacts/updateUser', payload , true)
 }

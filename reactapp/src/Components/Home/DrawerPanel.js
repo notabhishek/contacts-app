@@ -17,6 +17,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import PersonIcon from '@mui/icons-material/Person'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { Link } from 'react-router-dom';
+import { ListItemButton } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -69,6 +74,9 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function DrawerPanel({theme , open , handleDrawerClose}){
+    const location = useLocation();
+    console.log(location.pathname)
+
     return(
     <Drawer variant="permanent" open={open}>
         <DrawerHeader>
@@ -78,26 +86,16 @@ export default function DrawerPanel({theme , open , handleDrawerClose}){
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItemButton selected = {location.pathname === '/contacts'} component = {Link} to='/contacts' key={'Contacts'}>
+            <ListItemIcon><PersonIcon/></ListItemIcon>
+            <ListItemText primary = {'Contacts'}/>
+          </ListItemButton>
+          <ListItemButton selected = {location.pathname === '/newContact'} component = {Link} to='/newContact' key={'New Contact'}>
+            <ListItemIcon><AddCircleIcon/></ListItemIcon>
+            <ListItemText primary = {'New Contact'}/>
+          </ListItemButton>
         </List>
         <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
     )
 }

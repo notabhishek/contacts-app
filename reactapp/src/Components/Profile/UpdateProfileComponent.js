@@ -1,44 +1,43 @@
 import React , {useEffect, useState} from 'react'
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { addContactAPI } from '../../Utils/APIs';
+import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 
-export default function CreateContactCard(){
-    const [contactData , setContactData] = useState({
+export default function UpdateProfileComponent(){
+    const {userContext} = useAppConsumer();
+    const [userData , setUserData] = userContext;
+
+    const [tempUserData , setTempUserData] = useState({
         name : '',
         email : '',
         phone : '',
         address : '',
     })
 
+
+    useEffect(()=>{
+        if(userData)
+        setTempUserData(userData)
+    },[userData])
+
+    console.log(tempUserData)
+
     function inputHandler(event , type){
-        setContactData(prevcontact=>{
-            return {...prevcontact , [type] : event.target.value}
+        setTempUserData(prevUserData=>{
+            return {...prevUserData , [type] : event.target.value}
         })
     }
 
-    function createContact(){
-        addContactAPI({...contactData})
+    function UpdateUserData(){
+        addContactAPI(tempUserData)
             .then(response=>{
                 console.log(response)
             })
             .catch(error=>console.log(error))
     }
 
-    useEffect(()=>{
-        console.log(contactData)
-    },[contactData])
 
     return(
         <Box
@@ -53,28 +52,33 @@ export default function CreateContactCard(){
               id="outlined-name"
               label="Name"
               fullWidth
+              value = {tempUserData.name}
               onChange={(e)=>inputHandler(e , 'name')}
             />
             <TextField
               id="outlined-name"
               label="Email"
               fullWidth
+              value = {tempUserData.email}
+              disabled
               onChange={(e)=>inputHandler(e , 'email')}
             />
             <TextField
               id="outlined-name"
               label="Phone"
               fullWidth
+              value = {tempUserData.phone}
               onChange={(e)=>inputHandler(e , 'phone')}
             />
             <TextField
               id="outlined-name"
               label="Address"
               fullWidth
+              value = {tempUserData.address}
               onChange={(e)=>inputHandler(e , 'address')}
             />
-            <Button variant="contained" color="success" onClick={createContact}>
-              Create
+            <Button variant="contained" color="success" onClick={UpdateUserData}>
+              Update
             </Button>
           </Box>
     )

@@ -7,19 +7,27 @@ import { Box, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { ModalComponent } from "../ModalComponent";
-import { deleteContactsAPI } from "../../Utils/APIs";
+import { deleteContactsAPI , updateScoreAPI} from "../../Utils/APIs";
+import { useAppConsumer } from "../../Utils/AppContext/AppContext";
 
-export default function ContactList({
-  contacts,
-  setContacts,
-  updateScore,
-  updateContact,
-  fetchContacts
-}) {
+export default function ContactList() {
 
+  const {contactsContext} = useAppConsumer()
+  const [contacts , setContacts] = contactsContext
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen , setModalOpen] = useState(false)
   const [loading , setLoading] = useState(false)
+
+
+  function updateScore(payload) {
+    updateScoreAPI(payload)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("score updated!");
+        } else console.log("server error");
+      })
+      .catch((error) => console.log(error));
+  }
 
   useEffect(() => {
     console.log(contactsDelete)
@@ -81,7 +89,7 @@ export default function ContactList({
         {contactsDelete.length > 0 && <IconButton aria-label="delete" onClick={()=>setModalOpen(true)}>
             <DeleteIcon />
           </IconButton>}
-        <IconButton onClick={fetchContacts} aria-label="delete">
+        <IconButton aria-label="delete">
           <RefreshIcon/>
         </IconButton>
       </Box>
@@ -94,7 +102,6 @@ export default function ContactList({
           contactsDelete={contactsDelete}
           setContactsDelete={setContactsDelete}
           updateScore={updateScore}
-          updateContact={updateContact}
         />
       })}
     </ul>
