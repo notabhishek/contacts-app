@@ -18,7 +18,8 @@ const darkTheme = createTheme({
 )
 
 export default function  Login(){
-
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const {userContext} = useAppConsumer();
@@ -35,16 +36,23 @@ export default function  Login(){
         loginUserAPI(user)
         .then((response) => {
             if (response.status === 200) {
-                console.log(response.data);
-                localStorage.setItem('jwt-token', response.data['jwt-token']);
-                loginHandler(userContext)
-                navigate('/contacts')
+                if(response.data['Error'] === undefined) {
+                    localStorage.setItem('jwt-token', response.data['jwt-token']);
+                    loginHandler(userContext)
+                    navigate('/contacts')
+                } else {
+                    setErrorMessage(response.data['Error']);
+                    setAlertOpen(true);
+                }
             } else console.log("server error");
           })
           .catch((error) => console.log(error));
     };
 
     return (
-        <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme}/>
+        <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme}
+        alertOpen={alertOpen}
+        setAlertOpen={setAlertOpen}
+        errorMessage={errorMessage} />
     )
 }
