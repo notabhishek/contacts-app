@@ -2,6 +2,9 @@ package com.flock.springbootbackend;
 
 public interface Utils {
 
+    String INCREMENTED_MAX_CID = "Incremented max cid!";
+    String INCREMENT_MAXCID = "UPDATE User u SET u.maxcid = u.maxcid + 1 WHERE u.uid = :uid";
+
     interface UrlConstants {
 
         String AUTH_URL = "/auth/**";

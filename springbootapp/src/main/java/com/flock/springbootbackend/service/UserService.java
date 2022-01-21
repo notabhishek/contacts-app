@@ -35,4 +35,9 @@ public class UserService {
         userRepo.save(curUser);
         return Utils.UserConstants.USER_DATA_UPDATED;
     }
+
+    public String incrementMaxCid(int uid) {
+        userRepo.incrementMaxCid(uid);
+        return Utils.INCREMENTED_MAX_CID;
+    }
 }

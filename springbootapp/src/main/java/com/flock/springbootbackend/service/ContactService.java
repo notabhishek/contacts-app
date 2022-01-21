@@ -1,6 +1,7 @@
 package com.flock.springbootbackend.service;
 
 import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.SearchContactsReq;
@@ -20,8 +21,12 @@ public class ContactService {
     private UserService userService;
 
     public Contact saveContact(Contact contact) {
-        int uid = userService.getCurrentUser().getUid();
-        contact.setUid(uid);
+        User user = userService.getCurrentUser();
+        contact.setUid(user.getUid());
+        contact.setCid(user.getMaxcid() + 1);
+
+        userService.incrementMaxCid(user.getUid());
+
         return contactRepository.save(contact);
     }
 

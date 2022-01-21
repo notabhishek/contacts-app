@@ -18,6 +18,7 @@ public class User {
     private String password;
     private String phone;
     private String address;
+    private int maxcid;
 
     public User() {
 
@@ -29,6 +30,7 @@ public class User {
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.maxcid = 0;
     }
 
     public int getUid() {
@@ -79,15 +81,11 @@ public class User {
         this.address = address;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "uid=" + uid +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+    public int getMaxcid() {
+        return maxcid;
+    }
+
+    public void setMaxcid(int maxcid) {
+        this.maxcid = maxcid;
     }
 }
