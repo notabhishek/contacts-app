@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.security;
 
+import com.flock.springbootbackend.Utils;
 import com.flock.springbootbackend.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,15 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/contacts/**").hasRole("USER")
+                .antMatchers(Utils.UrlConstants.AUTH_URL).permitAll()
+                .antMatchers(Utils.UrlConstants.CONTACTS_URL).hasRole(Utils.UserConstants.USER)
                 .and()
                 .userDetailsService(uds)
                 .exceptionHandling()
                 .authenticationEntryPoint(
 
                         (request, response, authException) ->
-                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Utils.AuthContants.UNAUTHORIZED)
                 )
                 .and()
                 .sessionManagement()

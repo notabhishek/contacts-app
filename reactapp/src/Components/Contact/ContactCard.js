@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,15 +7,14 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 // import ShareIcon from "@mui/icons-material/Share";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { ModalComponent } from "../ModalComponent";
-import { deleteContactAPI, updateContactAPI } from "../../Utils/APIs";
+import { deleteContactAPI, updateContactAPI, updateFavAPI } from "../../Utils/APIs";
 import { Avatar, Checkbox } from "@mui/material";
-
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,44 +28,50 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function ContactCard(props) {
+  const COLOR_FAV = "red";
+
   const [expanded, setExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [contactData, setContactData] = useState(props.contact)
-  const [checkBoxVisible , setCheckBoxVisible] = useState(false)
-  const [checked , setChecked] = useState(false)
+  const [contactData, setContactData] = useState(props.contact);
+  const [checkBoxVisible, setCheckBoxVisible] = useState(false);
+  const [checked, setChecked] = useState(false);
 
-  const removeContactFromChecklist = () =>{
+  const removeContactFromChecklist = () => {
     const index = props.contactsDelete.indexOf(props.contact.cid);
-      if(index > -1){
-        props.setContactsDelete(prevContact=>{
-          let newDeleteContact = prevContact.filter(contactId=> contactId !== props.contact.cid)
-          return newDeleteContact
-        })
-      }
-  }
+    if (index > -1) {
+      props.setContactsDelete((prevContact) => {
+        let newDeleteContact = prevContact.filter(
+          (contactId) => contactId !== props.contact.cid
+        );
+        return newDeleteContact;
+      });
+    }
+  };
 
   const DeleteContact = () => {
-    setModalOpen(false)
+    setModalOpen(false);
     deleteContactAPI({ cid: props.contact.cid })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) {
-          removeContactFromChecklist()
-          props.setContacts(prevContact => {
-            let newContacts = prevContact.filter(contact => contact.cid !== props.contact.cid)
-            return newContacts
-          })
-          console.log(response)
-        }
-        else {
-          console.log('error from server while deleting contact')
+          removeContactFromChecklist();
+          props.setContacts((prevContact) => {
+            let newContacts = prevContact.filter(
+              (contact) => contact.cid !== props.contact.cid
+            );
+            return newContacts;
+          });
+          console.log(response);
+        } else {
+          console.log("error from server while deleting contact");
         }
       })
-      .catch(error => console.log(error))
-  }
+      .catch((error) => console.log(error));
+  };
 
   const handleExpandClick = () => {
     console.log(props.contact);
-    if (!expanded) { // update score of contact
+    if (!expanded) {
+      // update score of contact
       props.updateScore({
         cid: props.contact.cid,
       });
@@ -84,10 +89,9 @@ export default function ContactCard(props) {
     updateContactAPI(contactData)
       .then((response) => {
         if (response.status === 200) {
-
           props.setContacts((prevContacts) => {
             let temp = prevContacts.map((contact) => {
-              if ((contact.cid === props.contact.cid)) {
+              if (contact.cid === props.contact.cid) {
                 return contactData;
               } else return contact;
             });
@@ -100,25 +104,59 @@ export default function ContactCard(props) {
       .catch((error) => console.log(error));
   };
 
-  const checkHandler = (event) =>{
-    setChecked(event.target.checked)
-    if(event.target.checked){
-      if(!props.contactsDelete.includes(props.contact.cid)){
-        props.setContactsDelete(prevContact=>[...prevContact , props.contact.cid])
+  const checkHandler = (event) => {
+    setChecked(event.target.checked);
+    if (event.target.checked) {
+      if (!props.contactsDelete.includes(props.contact.cid)) {
+        props.setContactsDelete((prevContact) => [
+          ...prevContact,
+          props.contact.cid,
+        ]);
       }
+    } else {
+      removeContactFromChecklist();
     }
-    else{
-      removeContactFromChecklist()
+  };
+
+  const toggleFav = (event) => {
+    const updFavPayload = {
+      cid : contactData.cid,
+      fav : contactData.fav,
     }
-  }
+    setContactData((prevcontact) => {
+      updFavPayload.fav = !prevcontact.fav;
+      return { ...prevcontact, fav: !prevcontact.fav };
+    });
+
+  
+    updateFavAPI(updFavPayload)
+      .then((response) => {
+        if (response.status === 200) {
+          props.setContacts((prevContacts) => {
+            let temp = prevContacts.map((contact) => {
+              if (contact.cid === props.contact.cid) {
+                return contactData;
+              } else return contact;
+            });
+            return temp;
+          });
+
+          console.log("fav updated!");
+        } else console.log("server error");
+      })
+      .catch((error) => console.log(error));
+  };
+  useEffect(() => {
+    console.log(contactData);
+  }, [contactData]);
 
   return (
     <Card
       sx={{
         m: 1,
       }}
-      onMouseEnter={()=>setCheckBoxVisible(true)}
-      onMouseLeave={()=>setCheckBoxVisible(false)}
+      onMouseEnter={() => setCheckBoxVisible(true)}
+      onMouseLeave={() => setCheckBoxVisible(false)}
     >
       <ModalComponent
         open={modalOpen}
@@ -128,8 +166,20 @@ export default function ContactCard(props) {
         noHandler={() => setModalOpen(false)}
       />
       <CardActions disableSpacing>
-        <Avatar sx = {{width : '30px' , height : '30px', ml : '10px', display : !(!checkBoxVisible && !checked) && "none"}}>{props.contact.name[0]}</Avatar>
-        <Checkbox checked = {checked} onChange={checkHandler} sx={{display : !checkBoxVisible && !checked && "none"}}/>
+        <Avatar
+          sx={{
+            width: "30px",
+            height: "30px",
+            display: !(!checkBoxVisible && !checked) && "none",
+          }}
+        >
+          {props.contact.name[0]}
+        </Avatar>
+        <Checkbox
+          checked={checked}
+          onChange={checkHandler}
+          sx={{ display: !checkBoxVisible && !checked && "none" }}
+        />
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>
@@ -140,9 +190,13 @@ export default function ContactCard(props) {
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.phone}</div>
         </Box>
-        <Box sx={{ ml: 'auto' }}>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+        <Box sx={{ ml: "auto" }}>
+          <IconButton aria-label="add to favorites" onClick={() => toggleFav()}>
+            {contactData.fav ? (
+              <FavoriteIcon style={{ color: COLOR_FAV }} />
+            ) : (
+              <FavoriteIcon />
+            )}
           </IconButton>
           <IconButton aria-label="delete" onClick={() => setModalOpen(true)}>
             <DeleteIcon />

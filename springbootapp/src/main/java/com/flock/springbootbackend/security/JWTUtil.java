@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.flock.springbootbackend.Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,27 +15,25 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-    public static final String CONTACTSAPP = "contactsapp";
-
-    @Value("${jwt-secret}")
+    @Value(Utils.AuthContants.JWT_SECRET)
     private String secret;
 
     public String generateToken(String email) throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
-                .withSubject("User Details")
-                .withClaim("email", email)
+                .withSubject(Utils.AuthContants.USER_DETAILS)
+                .withClaim(Utils.CommonConstants.EMAIL, email)
                 .withIssuedAt(new Date())
-                .withIssuer(CONTACTSAPP)
+                .withIssuer(Utils.CommonConstants.CONTACTSAPP)
                 .sign(Algorithm.HMAC256(secret));
     }
 
     public String validateTokenAndRetrieveSubject(String token)throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-                .withSubject("User Details")
-                .withIssuer(CONTACTSAPP)
+                .withSubject(Utils.AuthContants.USER_DETAILS)
+                .withIssuer(Utils.CommonConstants.CONTACTSAPP)
                 .build();
         DecodedJWT jwt = verifier.verify(token);
-        return jwt.getClaim("email").asString();
+        return jwt.getClaim(Utils.CommonConstants.EMAIL).asString();
     }
 
 }

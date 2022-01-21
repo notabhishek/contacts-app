@@ -1,11 +1,6 @@
 package com.flock.springbootbackend.model;
 
-import com.flock.springbootbackend.service.ContactService;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Contact {
@@ -20,21 +15,25 @@ public class Contact {
     private String address;
     private int score;
 
+    private boolean fav;
+
     public Contact() {
-
+        this.fav = false;
     }
 
-    public Contact(int cid) {
+    public Contact(int cid, int uid, String name, String email, String phone, String address) {
         this.cid = cid;
-    }
-
-    public Contact(int uid, String name, String email, String phone, String address) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.score = 0;
+        this.fav = false;
+    }
+
+    public Contact(int cid) {
+        this.cid = cid;
     }
 
     public int getUid() {
@@ -93,16 +92,12 @@ public class Contact {
         this.score = score;
     }
 
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "cid=" + cid +
-                ", uid=" + uid +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", score=" + score +
-                '}';
+    public boolean getFav() {
+        return fav;
     }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.repository;
 
+import com.flock.springbootbackend.Utils;
 import com.flock.springbootbackend.model.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,37 +15,42 @@ import java.util.List;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
-    @Query("Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.name ASC")
+    @Query(Utils.ContactQueryConstants.SELECT_CONTACTS_NAME_ASC)
     public List<Contact> searchPrefixOrderByNameASC(@Param("uid") int uid, @Param("prefix") String prefix);
 
-    @Query("Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.name DESC")
+    @Query(Utils.ContactQueryConstants.SELECT_CONTACTS_NAME_DESC)
     public List<Contact> searchPrefixOrderByNameDESC(@Param("uid") int uid, @Param("prefix") String prefix);
 
-    @Query("Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.score ASC")
+    @Query(Utils.ContactQueryConstants.SELECT_CONTACTS_SCORE_ASC)
     public List<Contact> searchPrefixOrderByScoreASC(@Param("uid") int uid, @Param("prefix") String prefix);
 
-    @Query("Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.score DESC")
+    @Query(Utils.ContactQueryConstants.SELECT_CONTACTS_SCORE_DESC)
     public List<Contact> searchPrefixOrderByScoreDESC(@Param("uid") int uid, @Param("prefix") String prefix);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Contact c SET c.score = c.score + 1 WHERE c.uid = :uid AND c.cid = :cid")
+    @Query(Utils.ContactQueryConstants.UPDATE_SCORE)
     public void updateScore(@Param("uid") int uid, @Param("cid") int cid);
 
 
     @Transactional
     @Modifying
-    @Query("UPDATE Contact c SET c.name=:name, c.email=:email, c.phone=:phone, c.address=:address WHERE c.uid = :uid AND c.cid = :cid")
+    @Query(Utils.ContactQueryConstants.UPDATE_CONTACT)
     public void updateContact(@Param("uid") int uid, @Param("cid") int cid, @Param("name") String name, @Param("email") String email, @Param("phone") String phone, @Param("address") String address);
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Contact c WHERE c.uid = :uid AND c.cid = :cid")
+    @Query(Utils.ContactQueryConstants.DELETE_CONTACT)
     public void deleteContact(@Param("uid") int uid, @Param("cid") int cid);
 
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Contact c WHERE c.uid = :uid AND c.cid in :ids")
+    @Query(Utils.ContactQueryConstants.DELETE_CONTACTS)
     public void deleteContacts(@Param("uid") int uid,@Param("ids") List<Integer> ids);
+
+    @Transactional
+    @Modifying
+    @Query(Utils.ContactQueryConstants.UPDATE_FAV)
+    public void updateFav(@Param("uid") int uid, @Param("cid") int cid, @Param("fav") boolean fav);
 }

@@ -1,12 +1,14 @@
 package com.flock.springbootbackend.controller;
 
-import com.flock.springbootbackend.dto.ContactBulkReq;
+import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
+import com.flock.springbootbackend.requestObjects.SearchContactsReq;
 import com.flock.springbootbackend.model.User;
+import com.flock.springbootbackend.requestObjects.UserReq;
 import com.flock.springbootbackend.service.ContactService;
 import com.flock.springbootbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +26,12 @@ public class ContactsController {
     @PostMapping("/add")
     public String add(@RequestBody Contact contact) {
         contactService.saveContact(contact);
-        return "New Contact is added";
+        return Utils.ContactMsgConstants.NEW_CONTACT_IS_ADDED;
     }
 
     @PostMapping("/addMultipleContact")
     public String addMultiple(@RequestBody ContactBulkReq contactDto){
-        contactService.saveContacts(contactDto);
-        return "All contacts are added";
+        return contactService.saveContacts(contactDto);
     }
 
     @PostMapping("/update")
@@ -43,10 +44,9 @@ public class ContactsController {
         return contactService.getAllContacts();
     }
 
-    @GetMapping("/search")
-    public List<Contact> searchPrefix(@Param("prefix") String prefix, @Param("orderby") String orderby, @Param("desc") Boolean desc) {
-        System.out.println("prefix :" + prefix + ", orderby: " + orderby);
-        return contactService.searchPrefix(prefix, orderby, desc);
+    @PostMapping("/search")
+    public List<Contact> search(@RequestBody SearchContactsReq searchContactsReq) {
+        return contactService.searchPrefix(searchContactsReq);
     }
 
     @PostMapping("/updateScore")
@@ -65,12 +65,17 @@ public class ContactsController {
     }
 
     @GetMapping("/getUser")
-    public User getUser() {
-        return userService.getCurrentUser();
+    public UserReq getUser() {
+        return userService.getCurrentUserReq();
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestBody User user) {
+    public String updateUser(@RequestBody UserReq user) {
         return userService.updateUser(user);
+    }
+
+    @PostMapping("/updateFav")
+    public String updateFav(@RequestBody Contact contact) {
+        return contactService.updateFav(contact.getCid(), contact.getFav());
     }
 }
