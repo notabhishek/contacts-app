@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { logoutHandler } from '../../Utils/logoutHandler';
 import { useAppConsumer } from '../../Utils/AppContext/AppContext';
+import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
 
 
 const drawerWidth = 240;
@@ -77,8 +78,10 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function AppBarComponent({ open, handleDrawerOpen, searchKey, setSearchKey }) {
+export default function AppBarComponent({ open, handleDrawerOpen }) {
+  const {searchContext} = useHomeConsumer();
   const {userContext} = useAppConsumer();
+  const [searchKey , setSearchKey] = searchContext
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const menuOpen = Boolean(anchorEl);

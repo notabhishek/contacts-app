@@ -13,8 +13,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { addContactAPI } from '../../Utils/APIs';
+import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
 
 export default function CreateContactCard(){
+    const {contactsContext , searchContext} = useHomeConsumer();
+    const [contacts , setContacts] = contactsContext
+    const [searchKey , setSearchKey] = searchContext
+
     const [contactData , setContactData] = useState({
         name : '',
         email : '',
@@ -29,9 +34,12 @@ export default function CreateContactCard(){
     }
 
     function createContact(){
-        addContactAPI({...contactData})
+        addContactAPI(contactData)
             .then(response=>{
-                console.log(response)
+              if(response.status===200){
+                if(contactData.name.startsWith(searchKey) || contactData.email.startsWith(searchKey))
+                  setContacts(prevContacts=>[...prevContacts , contactData])
+              }
             })
             .catch(error=>console.log(error))
     }

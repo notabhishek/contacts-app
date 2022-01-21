@@ -8,11 +8,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { ModalComponent } from "../ModalComponent";
 import { deleteContactsAPI , updateScoreAPI} from "../../Utils/APIs";
-import { useAppConsumer } from "../../Utils/AppContext/AppContext";
+import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 
 export default function ContactList() {
 
-  const {contactsContext} = useAppConsumer()
+  const {contactsContext} = useHomeConsumer()
   const [contacts , setContacts] = contactsContext
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen , setModalOpen] = useState(false)
@@ -28,10 +28,6 @@ export default function ContactList() {
       })
       .catch((error) => console.log(error));
   }
-
-  useEffect(() => {
-    console.log(contactsDelete)
-  }, [contactsDelete])
 
   const DeleteAllContacts = () =>{
     if(contactsDelete.length === 0){
@@ -89,9 +85,9 @@ export default function ContactList() {
         {contactsDelete.length > 0 && <IconButton aria-label="delete" onClick={()=>setModalOpen(true)}>
             <DeleteIcon />
           </IconButton>}
-        <IconButton aria-label="delete">
+        {/* <IconButton aria-label="delete">
           <RefreshIcon/>
-        </IconButton>
+        </IconButton> */}
       </Box>
       {contacts.map((contact) => {
         // console.log(contact)

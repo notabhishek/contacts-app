@@ -11,10 +11,7 @@ import AppBarComponent from "../../Components/Home/AppMenuComponent";
 import DrawerPanel, { DrawerHeader } from "../../Components/Home/DrawerPanel";
 import { Outlet } from "react-router-dom";
 
-export default function HomeView({
-  searchKey,
-  setSearchKey,
-}) {
+export default function HomeView() {
   const theme = createTheme();
   const darkTheme = createTheme({
     palette: {
@@ -39,8 +36,6 @@ export default function HomeView({
         <AppBarComponent
           open={open}
           handleDrawerOpen={handleDrawerOpen}
-          searchKey={searchKey}
-          setSearchKey={setSearchKey}
         />
         <DrawerPanel
           theme={theme}

@@ -3,13 +3,13 @@ import {
   fetchContactsAPI,
   updateScoreAPI,
 } from "../../Utils/APIs";
-import { useAppConsumer } from "../../Utils/AppContext/AppContext";
+import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 import HomeView from "./HomeView";
 
 export default function Home() {
-  const {contactsContext} = useAppConsumer();
+  const {contactsContext , searchContext} = useHomeConsumer();
   const [contacts , setContacts] = contactsContext;
-  const [searchKey ,setSearchKey] = useState('')
+  const [searchKey ,setSearchKey] = searchContext
   const [orderby, setOrderBy] = useState("name");
   const [desc, setDesc] = useState(false);
 
@@ -29,9 +29,6 @@ export default function Home() {
   }, [searchKey]);
 
   return (
-    <HomeView
-      searchKey={searchKey}
-      setSearchKey={setSearchKey}
-    />
+    <HomeView/>
   );
 }

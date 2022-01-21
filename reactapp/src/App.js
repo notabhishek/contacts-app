@@ -14,6 +14,7 @@ import ContactList from './Components/Contact/ContactList';
 import CreateContactCard from './Components/Contact/CreateContactCard';
 import UpdateProfileComponent from './Components/Profile/UpdateProfileComponent';
 import ProtectedRoute from './HOC/ProtectedRoute';
+import { HomeProvider } from './Utils/HomeContext/HomeContext';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route element = {<ProtectedRoute/>}>
-          <Route path='/' element={<Home />} >
+          <Route path='/' element={<HomeProvider><Home /></HomeProvider>} >
             <Route path = '/contacts' element = {<ContactList/>}/>
             <Route path = '/newContact' element = {<CreateContactCard/>}/>
             <Route path = '/updateProfile' element = {<UpdateProfileComponent/>}/>
