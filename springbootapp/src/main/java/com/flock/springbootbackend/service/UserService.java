@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.Utils;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,6 @@ public class UserService {
         curUser.setAddress(user.getAddress());
 
         userRepo.save(curUser);
-        return "User data updated!";
+        return Utils.UserConstants.USER_DATA_UPDATED;
     }
 }

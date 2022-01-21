@@ -1,6 +1,7 @@
 package com.flock.springbootbackend.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.flock.springbootbackend.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +26,12 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(Utils.AuthContants.AUTHORIZATION);
 
-        if(authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")){
+        if(authHeader != null && !authHeader.isBlank() && authHeader.startsWith(Utils.AuthContants.BEARER_)){
             String jwt = authHeader.substring(7);
             if(jwt == null || jwt.isBlank()){
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token in Bearer Header");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, Utils.AuthContants.INVALID_JWT_TOKEN_IN_BEARER_HEADER);
             }else {
                 try{
                     String email = jwtUtil.validateTokenAndRetrieveSubject(jwt);
@@ -45,12 +46,11 @@ public class JWTFilter extends OncePerRequestFilter {
                     }
                 }catch(JWTVerificationException exc){
 
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token");
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, Utils.AuthContants.INVALID_JWT_TOKEN);
                 }
             }
         }
 
-        // Continuing the execution of the filter chain
         filterChain.doFilter(request, response);
     }
 }

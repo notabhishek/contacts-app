@@ -39,7 +39,7 @@ function makeGetRequest(endpoint , params , auth = false){
 }
 
 export function fetchContactsAPI(payload){
-    return makeGetRequest('/contacts/search', payload , true)
+    return makePostRequest('/contacts/search', payload , true)
 }
 
 export function addContactAPI(payload){

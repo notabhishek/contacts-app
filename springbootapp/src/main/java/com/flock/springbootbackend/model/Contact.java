@@ -1,7 +1,5 @@
 package com.flock.springbootbackend.model;
 
-import com.flock.springbootbackend.service.ContactService;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
