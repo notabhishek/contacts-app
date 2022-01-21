@@ -70,7 +70,7 @@ public class ContactsController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestBody UserReq user) {
+    public UserReq updateUser(@RequestBody UserReq user) {
         return userService.updateUser(user);
     }
 
