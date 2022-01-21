@@ -24,13 +24,13 @@ function AppProvider({children}){
     useEffect(()=>{
         const jwt = getAuthTokenFromLocalStorage();
         if(jwt) fetchUser()
-        
+
     },[])
     
     const globalStateAndMethods = {
         userContext : [userData , setUserData],
         themeContext : [theme , setTheme],
-        contactsContext : [contacts , setContacts]
+        contactsContext : [contacts , setContacts],
     }
 
     return <AppContext.Provider value = {globalStateAndMethods}>{children}</AppContext.Provider>

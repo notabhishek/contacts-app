@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { spacing } from '@mui/system';
-import Link from '@mui/material/Link';
+import { Link } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -96,7 +96,7 @@ export default function RegisterView({handleSubmit , currentTheme}) {
             </Button>
             <Grid container justifyContent={'center'}>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href='/login' variant="body2">
                   {"Already have an account? Login"}
                 </Link>
               </Grid>

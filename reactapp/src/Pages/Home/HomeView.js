@@ -9,12 +9,6 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBarComponent from "../../Components/Home/AppMenuComponent";
 import DrawerPanel, { DrawerHeader } from "../../Components/Home/DrawerPanel";
-import ContactList from "../../Components/Contact/ContactList";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import CreateContactCard from "../../Components/Contact/CreateContactCard";
 import { Outlet } from "react-router-dom";
 
 export default function HomeView({

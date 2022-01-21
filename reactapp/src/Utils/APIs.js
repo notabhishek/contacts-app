@@ -81,9 +81,9 @@ export function loginUserAPI(payload) {
 }
 
 export function getUserAPI(){
-    return makeGetRequest('/contacts/getUser' , {} , true)
+    return makeGetRequest('/user/profile' , {} , true)
 }
 
 export function updateUserAPI(payload){
-    return makePostRequest('/contacts/updateUser', payload , true)
+    return makePostRequest('/user/update', payload , true)
 }

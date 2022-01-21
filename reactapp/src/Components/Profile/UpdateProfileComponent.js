@@ -31,9 +31,13 @@ export default function UpdateProfileComponent(){
     }
 
     function UpdateUserData(){
-        updateUserAPI(tempUserData)
+        let payload = {...tempUserData}
+        delete payload.email
+        updateUserAPI(payload)
             .then(response=>{
-                console.log(response)
+                if(response.status === 200){
+                    setUserData(tempUserData)
+                }
             })
             .catch(error=>console.log(error))
     }
