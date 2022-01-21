@@ -1,9 +1,9 @@
 package com.flock.springbootbackend.service;
 
 import com.flock.springbootbackend.Utils;
-import com.flock.springbootbackend.dto.ContactBulkReq;
+import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
-import com.flock.springbootbackend.model.SearchContactsReq;
+import com.flock.springbootbackend.requestObjects.SearchContactsReq;
 import com.flock.springbootbackend.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

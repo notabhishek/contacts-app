@@ -1,10 +1,11 @@
 package com.flock.springbootbackend.controller;
 
 import com.flock.springbootbackend.Utils;
-import com.flock.springbootbackend.dto.ContactBulkReq;
+import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
-import com.flock.springbootbackend.model.SearchContactsReq;
+import com.flock.springbootbackend.requestObjects.SearchContactsReq;
 import com.flock.springbootbackend.model.User;
+import com.flock.springbootbackend.requestObjects.UserReq;
 import com.flock.springbootbackend.service.ContactService;
 import com.flock.springbootbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +65,12 @@ public class ContactsController {
     }
 
     @GetMapping("/getUser")
-    public User getUser() {
-        return userService.getCurrentUser();
+    public UserReq getUser() {
+        return userService.getCurrentUserReq();
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@RequestBody User user) {
+    public String updateUser(@RequestBody UserReq user) {
         return userService.updateUser(user);
     }
 

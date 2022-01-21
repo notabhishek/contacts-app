@@ -1,4 +1,4 @@
-package com.flock.springbootbackend.dto;
+package com.flock.springbootbackend.requestObjects;
 
 import com.flock.springbootbackend.model.Contact;
 

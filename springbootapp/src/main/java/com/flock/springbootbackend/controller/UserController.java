@@ -1,7 +1,7 @@
 package com.flock.springbootbackend.controller;
 
 import com.flock.springbootbackend.Utils;
-import com.flock.springbootbackend.model.LoginCredentials;
+import com.flock.springbootbackend.requestObjects.LoginCredentials;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.security.JWTUtil;
