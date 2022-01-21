@@ -25,14 +25,20 @@ public class UserService {
         return userReq;
     }
 
-    public String updateUser(UserReq user) {
+    public UserReq updateUser(UserReq user) {
         User curUser = getCurrentUser();
 
         curUser.setName(user.getName());
         curUser.setPhone(user.getPhone());
         curUser.setAddress(user.getAddress());
-
         userRepo.save(curUser);
-        return Utils.UserConstants.USER_DATA_UPDATED;
+
+        user.setEmail(curUser.getEmail());
+        return user;
+    }
+
+    public String incrementMaxCid(int uid) {
+        userRepo.incrementMaxCid(uid);
+        return Utils.INCREMENTED_MAX_CID;
     }
 }

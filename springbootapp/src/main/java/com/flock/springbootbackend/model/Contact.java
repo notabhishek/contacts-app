@@ -3,12 +3,14 @@ package com.flock.springbootbackend.model;
 import javax.persistence.*;
 
 @Entity
+@IdClass(UidCidKey.class)
 public class Contact {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int uid;
+    @Id
     private int cid;
 
-    private int uid;
     private String name;
     private String email;
     private String phone;

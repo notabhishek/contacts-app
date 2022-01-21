@@ -2,14 +2,18 @@ package com.flock.springbootbackend;
 
 public interface Utils {
 
+    String INCREMENTED_MAX_CID = "Incremented max cid!";
+    String INCREMENT_MAXCID = "UPDATE User u SET u.maxcid = u.maxcid + 1 WHERE u.uid = :uid";
+
     interface UrlConstants {
 
         String AUTH_URL = "/auth/**";
         String CONTACTS_URL = "/contacts/**";
+        String USER_URL = "/user/**";
     }
     interface CommonConstants {
 
-        String CONTACTSAPP = "contactsapp";
+        String CONTACTS_APP = "contactsApp";
         String EMAIL = "email";
         String SCORE = "score";
     }
@@ -58,5 +62,6 @@ public interface Utils {
         String UPDATE_CONTACT = "UPDATE Contact c SET c.name=:name, c.email=:email, c.phone=:phone, c.address=:address WHERE c.uid = :uid AND c.cid = :cid";
         String DELETE_CONTACT = "DELETE FROM Contact c WHERE c.uid = :uid AND c.cid = :cid";
         String UPDATE_FAV = "UPDATE Contact c SET c.fav = :fav WHERE c.uid = :uid AND c.cid = :cid";
+        String SELECT_FAVOURITES = "Select c FROM Contact c WHERE c.uid = :uid AND c.fav <> 0 ORDER BY c.name ASC";
     }
 }
