@@ -9,7 +9,11 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { Avatar } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { logoutHandler } from '../../Utils/logoutHandler';
+import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 
 
 const drawerWidth = 240;
@@ -74,6 +78,30 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function AppBarComponent({ open, handleDrawerOpen, searchKey, setSearchKey }) {
+  const {userContext} = useAppConsumer();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const menuOpen = Boolean(anchorEl);
+
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const GotoUpdateProfile = () =>{
+    handleClose();
+    navigate('/updateProfile')
+  }
+
+  const Logout = () =>{
+    logoutHandler(userContext)
+    navigate('/login')
+  }
+  
   return (
     <AppBar position="fixed" open={open}>
       <Toolbar>
@@ -100,11 +128,23 @@ export default function AppBarComponent({ open, handleDrawerOpen, searchKey, set
             value={searchKey}
           />
         </Search>
-        <IconButton component={Link} to='/updateProfile' sx={{ ml: 'auto' }} aria-label='userIcon'>
+        <IconButton onClick={handleClick} sx={{ ml: 'auto' }} aria-label='userIcon'>
           <Avatar>
             <PersonIcon />
           </Avatar>
         </IconButton>
+        <Menu
+          id="profile-menu"
+          anchorEl={anchorEl}
+          open={menuOpen}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick = {GotoUpdateProfile}>Profile</MenuItem>
+          <MenuItem onClick = {Logout}>Logout</MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   )

@@ -11,9 +11,9 @@ import Register from './Pages/Register';
 import Home from './Pages/Home';
 import { AppProvider } from './Utils/AppContext/AppContext';
 import ContactList from './Components/Contact/ContactList';
-import ContactCard from './Components/Contact/ContactCard';
 import CreateContactCard from './Components/Contact/CreateContactCard';
 import UpdateProfileComponent from './Components/Profile/UpdateProfileComponent';
+import ProtectedRoute from './HOC/ProtectedRoute';
 
 function App() {
   return (
@@ -22,10 +22,12 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route element = {<ProtectedRoute/>}>
           <Route path='/' element={<Home />} >
             <Route path = '/contacts' element = {<ContactList/>}/>
             <Route path = '/newContact' element = {<CreateContactCard/>}/>
             <Route path = '/updateProfile' element = {<UpdateProfileComponent/>}/>
+          </Route>
           </Route>
         </Routes>
       </Router>
