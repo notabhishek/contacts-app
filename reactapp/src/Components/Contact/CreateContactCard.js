@@ -14,12 +14,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { addContactAPI } from '../../Utils/APIs';
 import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 export default function CreateContactCard(){
-    const {contactsContext , searchContext} = useHomeConsumer();
-    const [contacts , setContacts] = contactsContext
-    const [searchKey , setSearchKey] = searchContext
-
+  const {contactsContext , searchContext} = useHomeConsumer();
+  const [contacts , setContacts] = contactsContext
+  const [searchKey , setSearchKey] = searchContext
+  const [alertOpen, setAlertOpen] = useState(false);
     const [contactData , setContactData] = useState({
         name : '',
         email : '',
@@ -34,11 +36,15 @@ export default function CreateContactCard(){
     }
 
     function createContact(){
+
+        setAlertOpen(false);
         addContactAPI(contactData)
             .then(response=>{
               if(response.status===200){
                 if(contactData.name.startsWith(searchKey) || contactData.email.startsWith(searchKey))
                   setContacts(prevContacts=>[...prevContacts , contactData])
+
+                setAlertOpen(true);
               }
             })
             .catch(error=>console.log(error))
@@ -84,6 +90,14 @@ export default function CreateContactCard(){
             <Button variant="contained" color="success" onClick={createContact}>
               Create
             </Button>
+
+            
+
+            <Snackbar open={alertOpen} autoHideDuration={6000} onClose={() => setAlertOpen(false) }>
+              <Alert onClose={() => setAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
+                New Contact Added!
+              </Alert>
+            </Snackbar>
           </Box>
     )
 
