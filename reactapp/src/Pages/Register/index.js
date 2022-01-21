@@ -18,7 +18,8 @@ const darkTheme = createTheme({
 
 export default function Register(){
     const navigate = useNavigate();
-
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const {userContext} = useAppConsumer();
 
     const handleSubmit = (event) => {
@@ -37,15 +38,24 @@ export default function Register(){
         .then((response) => {
             if (response.status === 200) {
                 console.log(response.data);
-                localStorage.setItem('jwt-token', response.data['jwt-token']);
-                loginHandler(userContext)
-                navigate('/contacts')
+                if(response.data['Error'] === undefined) {
+                    localStorage.setItem('jwt-token', response.data['jwt-token']);
+                    loginHandler(userContext)
+                    navigate('/contacts')
+                } else {
+                    setErrorMessage(response.data['Error']);
+                    setAlertOpen(true);
+                }
+
             } else console.log("server error");
           })
           .catch((error) => console.log(error));
     };
 
     return (
-        <RegisterView handleSubmit = {handleSubmit} currentTheme={darkTheme}/>
+        <RegisterView handleSubmit = {handleSubmit} currentTheme={darkTheme}
+        alertOpen={alertOpen}
+        setAlertOpen={setAlertOpen}
+        errorMessage={errorMessage}/>
     )
 }

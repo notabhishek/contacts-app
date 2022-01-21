@@ -12,6 +12,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { Link } from 'react-router-dom';
 import { ListItemButton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
 
 const drawerWidth = 240;
 
