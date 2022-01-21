@@ -48,4 +48,9 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     @Modifying
     @Query(Utils.ContactQueryConstants.DELETE_CONTACTS)
     public void deleteContacts(@Param("uid") int uid,@Param("ids") List<Integer> ids);
+
+    @Transactional
+    @Modifying
+    @Query(Utils.ContactQueryConstants.UPDATE_FAV)
+    public void updateFav(@Param("uid") int uid, @Param("cid") int cid, @Param("fav") boolean fav);
 }

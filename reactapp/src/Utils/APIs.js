@@ -54,6 +54,9 @@ export function deleteContactAPI(payload){
     return makePostRequest('/contacts/deleteContact', payload , true)
 }
 
+export function updateFavAPI(payload) {
+    return makePostRequest('/contacts/updateFav', payload, true)
+}
 
 export function updateContactAPI(payload) {
     return makePostRequest('/contacts/update', payload , true)

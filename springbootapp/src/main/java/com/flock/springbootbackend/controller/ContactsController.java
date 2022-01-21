@@ -8,12 +8,9 @@ import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.service.ContactService;
 import com.flock.springbootbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.apache.naming.SelectorContext.prefix;
 
 @RestController
 @RequestMapping("/contacts")
@@ -74,5 +71,10 @@ public class ContactsController {
     @PostMapping("/updateUser")
     public String updateUser(@RequestBody User user) {
         return userService.updateUser(user);
+    }
+
+    @PostMapping("/updateFav")
+    public String updateFav(@RequestBody Contact contact) {
+        return contactService.updateFav(contact.getCid(), contact.getFav());
     }
 }

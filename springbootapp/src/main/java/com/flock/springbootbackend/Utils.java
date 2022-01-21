@@ -44,6 +44,7 @@ public interface Utils {
         String SCORE_UPDATED = "Score updated!";
         String CONTACT_DELETED = "Contact deleted";
         String CONTACTS_DELETED = "Contacts deleted";
+        String FAV_UPDATED = "Fav updated!";
     }
 
     interface ContactQueryConstants {
@@ -56,5 +57,6 @@ public interface Utils {
         String UPDATE_SCORE = "UPDATE Contact c SET c.score = c.score + 1 WHERE c.uid = :uid AND c.cid = :cid";
         String UPDATE_CONTACT = "UPDATE Contact c SET c.name=:name, c.email=:email, c.phone=:phone, c.address=:address WHERE c.uid = :uid AND c.cid = :cid";
         String DELETE_CONTACT = "DELETE FROM Contact c WHERE c.uid = :uid AND c.cid = :cid";
+        String UPDATE_FAV = "UPDATE Contact c SET c.fav = :fav WHERE c.uid = :uid AND c.cid = :cid";
     }
 }

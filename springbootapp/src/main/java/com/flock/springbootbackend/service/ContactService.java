@@ -75,9 +75,15 @@ public class ContactService {
         return Utils.ContactMsgConstants.CONTACT_DELETED;
     }
 
-    public String deleteContacts(ContactBulkReq contactBulkReq){
+    public String deleteContacts(ContactBulkReq contactBulkReq) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
         return Utils.ContactMsgConstants.CONTACTS_DELETED;
+    }
+
+    public String updateFav(int cid, boolean fav) {
+        int uid = userService.getCurrentUser().getUid();
+        contactRepository.updateFav(uid, cid, fav);
+        return Utils.ContactMsgConstants.FAV_UPDATED;
     }
 }
