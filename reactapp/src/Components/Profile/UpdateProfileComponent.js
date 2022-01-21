@@ -31,7 +31,7 @@ export default function UpdateProfileComponent(){
     }
 
     function UpdateUserData(){
-        addContactAPI(tempUserData)
+        updateUserAPI(tempUserData)
             .then(response=>{
                 console.log(response)
             })

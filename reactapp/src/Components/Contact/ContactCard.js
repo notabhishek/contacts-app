@@ -170,6 +170,7 @@ export default function ContactCard(props) {
           sx={{
             width: "30px",
             height: "30px",
+            ml : '10px',
             display: !(!checkBoxVisible && !checked) && "none",
           }}
         >
