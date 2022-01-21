@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers(Utils.UrlConstants.AUTH_URL).permitAll()
                 .antMatchers(Utils.UrlConstants.CONTACTS_URL).hasRole(Utils.UserConstants.USER)
+                .antMatchers(Utils.UrlConstants.USER_URL).hasRole(Utils.UserConstants.USER)
                 .and()
                 .userDetailsService(uds)
                 .exceptionHandling()

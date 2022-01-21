@@ -31,7 +31,15 @@ public class ContactService {
     }
 
     public String saveContacts(ContactBulkReq contactBulkReq){
-        contactRepository.saveAll(contactBulkReq.getContactList());
+        User user = userService.getCurrentUser();
+        int uid = user.getUid(), maxcid = user.getMaxcid();
+        for(Contact contact : contactBulkReq.getContactList()) {
+            contact.setUid(uid);
+            ++maxcid;
+            contact.setCid(maxcid);
+            userService.incrementMaxCid(uid);
+            contactRepository.save(contact);
+        }
         return Utils.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
 

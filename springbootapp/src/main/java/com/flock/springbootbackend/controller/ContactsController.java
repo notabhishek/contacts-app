@@ -20,8 +20,8 @@ public class ContactsController {
     @Autowired
     private ContactService contactService;
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
     @PostMapping("/add")
     public String add(@RequestBody Contact contact) {
@@ -63,16 +63,16 @@ public class ContactsController {
     public String deleteContactList(@RequestBody ContactBulkReq contactBulkReq ){
         return contactService.deleteContacts(contactBulkReq);
     }
-
-    @GetMapping("/getUser")
-    public UserReq getUser() {
-        return userService.getCurrentUserReq();
-    }
-
-    @PostMapping("/updateUser")
-    public UserReq updateUser(@RequestBody UserReq user) {
-        return userService.updateUser(user);
-    }
+//
+//    @GetMapping("/getUser")
+//    public UserReq getUser() {
+//        return userService.getCurrentUserReq();
+//    }
+//
+//    @PostMapping("/updateUser")
+//    public UserReq updateUser(@RequestBody UserReq user) {
+//        return userService.updateUser(user);
+//    }
 
     @PostMapping("/updateFav")
     public String updateFav(@RequestBody Contact contact) {

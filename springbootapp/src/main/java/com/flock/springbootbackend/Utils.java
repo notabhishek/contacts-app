@@ -9,6 +9,7 @@ public interface Utils {
 
         String AUTH_URL = "/auth/**";
         String CONTACTS_URL = "/contacts/**";
+        String USER_URL = "/user/**";
     }
     interface CommonConstants {
 
