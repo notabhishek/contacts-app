@@ -13,8 +13,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { addContactAPI } from '../../Utils/APIs';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 export default function CreateContactCard(){
+  const [alertOpen, setAlertOpen] = useState(false);
     const [contactData , setContactData] = useState({
         name : '',
         email : '',
@@ -29,9 +32,11 @@ export default function CreateContactCard(){
     }
 
     function createContact(){
+        setAlertOpen(false);
         addContactAPI({...contactData})
             .then(response=>{
-                console.log(response)
+                console.log(response);
+                setAlertOpen(true);
             })
             .catch(error=>console.log(error))
     }
@@ -76,6 +81,14 @@ export default function CreateContactCard(){
             <Button variant="contained" color="success" onClick={createContact}>
               Create
             </Button>
+
+            
+
+            <Snackbar open={alertOpen} autoHideDuration={6000} onClose={() => setAlertOpen(false) }>
+              <Alert onClose={() => setAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
+                New Contact Added!
+              </Alert>
+            </Snackbar>
           </Box>
     )
 
