@@ -86,4 +86,9 @@ public class ContactService {
         contactRepository.updateFav(uid, cid, fav);
         return Utils.ContactMsgConstants.FAV_UPDATED;
     }
+
+    public List<Contact> getFavourites() {
+        int uid = userService.getCurrentUser().getUid();
+        return contactRepository.getFavourites(uid);
+    }
 }

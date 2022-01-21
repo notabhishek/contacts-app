@@ -23,14 +23,14 @@ public class JWTUtil {
                 .withSubject(Utils.AuthContants.USER_DETAILS)
                 .withClaim(Utils.CommonConstants.EMAIL, email)
                 .withIssuedAt(new Date())
-                .withIssuer(Utils.CommonConstants.CONTACTSAPP)
+                .withIssuer(Utils.CommonConstants.CONTACTS_APP)
                 .sign(Algorithm.HMAC256(secret));
     }
 
     public String validateTokenAndRetrieveSubject(String token)throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject(Utils.AuthContants.USER_DETAILS)
-                .withIssuer(Utils.CommonConstants.CONTACTSAPP)
+                .withIssuer(Utils.CommonConstants.CONTACTS_APP)
                 .build();
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim(Utils.CommonConstants.EMAIL).asString();

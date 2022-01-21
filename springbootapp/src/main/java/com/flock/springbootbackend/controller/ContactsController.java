@@ -78,4 +78,10 @@ public class ContactsController {
     public String updateFav(@RequestBody Contact contact) {
         return contactService.updateFav(contact.getCid(), contact.getFav());
     }
+
+    @GetMapping("/favourites")
+    public List<Contact> getFavourites() {
+        return contactService.getFavourites();
+    }
 }
+
