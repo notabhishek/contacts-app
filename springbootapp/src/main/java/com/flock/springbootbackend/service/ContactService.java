@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.dto.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 
 import java.util.List;
@@ -13,9 +14,7 @@ public interface ContactService {
 
     public String updateScore(int cid);
     public String deleteContact(int cid);
-//    public List<Contact> startsWithName(String namePrefix);
-//    public List<Contact> endsWithName(String nameSuffix);
-//    public List<Contact> containsName(String name);
-//    public String deleteContactId(int cid);
-//    public String updateContact(int uid, int cid, String name, String email, String phone, String address);
+
+    public String saveContacts(ContactBulkReq contactBulkReq);
+    public String deleteContacts(ContactBulkReq contactBulkReq);
 }
