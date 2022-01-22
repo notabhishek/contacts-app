@@ -87,3 +87,7 @@ export function getUserAPI(){
 export function updateUserAPI(payload){
     return makePostRequest('/user/update', payload , true)
 }
+
+export function contactDetailsAPI(payload){
+    return makeGetRequest('/contacts/details' , payload , true);
+}

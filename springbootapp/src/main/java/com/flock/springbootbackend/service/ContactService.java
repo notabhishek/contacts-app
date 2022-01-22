@@ -104,4 +104,9 @@ public class ContactService {
         int uid = userService.getCurrentUser().getUid();
         return contactRepository.getFavourites(uid);
     }
+
+    public Contact getContactDetails(int cid) {
+        int uid = userService.getCurrentUser().getUid();
+        return contactRepository.getContactDetails(uid , cid);
+    }
 }
