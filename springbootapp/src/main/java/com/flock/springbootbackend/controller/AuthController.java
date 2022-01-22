@@ -1,11 +1,9 @@
 package com.flock.springbootbackend.controller;
 
-import com.flock.springbootbackend.Utils;
 import com.flock.springbootbackend.requestObjects.LoginCredentials;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.security.JWTUtil;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +12,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.flock.springbootbackend.Utils.AuthContants.INVALID_LOGIN_CREDENTIALS;
-import static com.flock.springbootbackend.Utils.AuthContants.JWT_TOKEN;
+import static com.flock.springbootbackend.utils.Constants.AuthContants.INVALID_LOGIN_CREDENTIALS;
+import static com.flock.springbootbackend.utils.Constants.AuthContants.JWT_TOKEN;
 
 @RestController
 @RequestMapping("/auth")

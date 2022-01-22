@@ -1,6 +1,6 @@
-package com.flock.springbootbackend;
+package com.flock.springbootbackend.utils;
 
-public interface Utils {
+public interface Constants {
 
     String INCREMENTED_MAX_CID = "Incremented max cid!";
     String INCREMENT_MAXCID = "UPDATE User u SET u.maxcid = u.maxcid + 1 WHERE u.uid = :uid";

@@ -1,4 +1,4 @@
-package com.flock.springbootbackend.csv;
+package com.flock.springbootbackend.model;
 
 public class ResponseMessage {
     public String message;

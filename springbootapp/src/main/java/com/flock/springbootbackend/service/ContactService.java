@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.service;
 
-import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
@@ -40,7 +40,7 @@ public class ContactService {
             userService.incrementMaxCid(uid);
             contactRepository.save(contact);
         }
-        return Utils.ContactMsgConstants.ALL_CONTACTS_SAVED;
+        return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
 
     public String saveContacts(List<Contact> contacts) {
@@ -53,12 +53,12 @@ public class ContactService {
             userService.incrementMaxCid(uid);
             contactRepository.save(contact);
         }
-        return Utils.ContactMsgConstants.ALL_CONTACTS_SAVED;
+        return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
     public String updateContact(Contact c) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());
-        return Utils.ContactMsgConstants.CONTACT_UPDATED;
+        return Constants.ContactMsgConstants.CONTACT_UPDATED;
     }
 
     public List<Contact> getAllContacts() {
@@ -67,7 +67,7 @@ public class ContactService {
 
     public List<Contact> searchPrefix(SearchContactsReq scr) {
         int uid = userService.getCurrentUser().getUid();
-        if(scr.getOrderby().equals(Utils.CommonConstants.SCORE)) {
+        if(scr.getOrderby().equals(Constants.CommonConstants.SCORE)) {
             if(scr.getDesc()) {
                 return contactRepository.searchPrefixOrderByScoreDESC(uid, scr.getPrefix());
             } else {
@@ -84,32 +84,32 @@ public class ContactService {
 
     public String updateScore(int cid) {
         Boolean validCid = true;
-        if(!validCid) return Utils.ContactMsgConstants.INVALID_CONTACT_ID;
+        if(!validCid) return Constants.ContactMsgConstants.INVALID_CONTACT_ID;
         int uid = userService.getCurrentUser().getUid();
         contactRepository.updateScore(uid, cid);
-        return Utils.ContactMsgConstants.SCORE_UPDATED;
+        return Constants.ContactMsgConstants.SCORE_UPDATED;
     }
 
     public String deleteContact(int cid) {
         Boolean validCid = true;
         if(!validCid) {
-            return Utils.ContactMsgConstants.INVALID_CONTACT_ID;
+            return Constants.ContactMsgConstants.INVALID_CONTACT_ID;
         }
         int uid = userService.getCurrentUser().getUid();
         contactRepository.deleteContact(uid, cid);
-        return Utils.ContactMsgConstants.CONTACT_DELETED;
+        return Constants.ContactMsgConstants.CONTACT_DELETED;
     }
 
     public String deleteContacts(ContactBulkReq contactBulkReq) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
-        return Utils.ContactMsgConstants.CONTACTS_DELETED;
+        return Constants.ContactMsgConstants.CONTACTS_DELETED;
     }
 
     public String updateFav(int cid, boolean fav) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.updateFav(uid, cid, fav);
-        return Utils.ContactMsgConstants.FAV_UPDATED;
+        return Constants.ContactMsgConstants.FAV_UPDATED;
     }
 
     public List<Contact> getFavourites() {

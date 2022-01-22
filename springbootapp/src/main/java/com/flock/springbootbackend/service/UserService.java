@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.service;
 
-import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.requestObjects.UserReq;
@@ -39,6 +39,6 @@ public class UserService {
 
     public String incrementMaxCid(int uid) {
         userRepo.incrementMaxCid(uid);
-        return Utils.INCREMENTED_MAX_CID;
+        return Constants.INCREMENTED_MAX_CID;
     }
 }

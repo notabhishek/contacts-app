@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.repository;
 
-import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +18,6 @@ public interface UserRepo extends JpaRepository<User, String> {
 
     @Transactional
     @Modifying
-    @Query(Utils.INCREMENT_MAXCID)
+    @Query(Constants.INCREMENT_MAXCID)
     public void incrementMaxCid(@Param("uid") int uid);
 }

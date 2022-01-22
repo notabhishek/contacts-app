@@ -1,4 +1,4 @@
-package com.flock.springbootbackend.csv;
+package com.flock.springbootbackend.utils;
 
 import com.flock.springbootbackend.model.Contact;
 import org.apache.commons.csv.CSVFormat;

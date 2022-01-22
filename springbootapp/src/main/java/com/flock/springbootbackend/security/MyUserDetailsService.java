@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.security;
 
-import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class MyUserDetailsService implements UserDetailsService {
         Optional<User> userRes = userRepo.findByEmail(email);
 
         if(userRes.isEmpty())
-            throw new UsernameNotFoundException(Utils.AuthContants.USER_NOT_FOUND_WITH_EMAIL + email);
+            throw new UsernameNotFoundException(Constants.AuthContants.USER_NOT_FOUND_WITH_EMAIL + email);
 
         User user = userRes.get();
         return new org.springframework.security.core.userdetails.User(
                 email,
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(Utils.AuthContants.ROLE_USER)));
+                Collections.singletonList(new SimpleGrantedAuthority(Constants.AuthContants.ROLE_USER)));
     }
 }

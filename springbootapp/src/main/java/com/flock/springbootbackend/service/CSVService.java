@@ -1,7 +1,7 @@
-package com.flock.springbootbackend.csv;
+package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.utils.CSVUtil;
 import com.flock.springbootbackend.model.Contact;
-import com.flock.springbootbackend.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,13 +1,10 @@
 package com.flock.springbootbackend.controller;
 
-import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.SearchContactsReq;
-import com.flock.springbootbackend.model.User;
-import com.flock.springbootbackend.requestObjects.UserReq;
 import com.flock.springbootbackend.service.ContactService;
-import com.flock.springbootbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +17,10 @@ public class ContactsController {
     @Autowired
     private ContactService contactService;
 
-//    @Autowired
-//    private UserService userService;
-
     @PostMapping("/add")
     public String add(@RequestBody Contact contact) {
         contactService.saveContact(contact);
-        return Utils.ContactMsgConstants.NEW_CONTACT_IS_ADDED;
+        return Constants.ContactMsgConstants.NEW_CONTACT_IS_ADDED;
     }
 
     @PostMapping("/addMultipleContact")
@@ -63,16 +57,6 @@ public class ContactsController {
     public String deleteContactList(@RequestBody ContactBulkReq contactBulkReq ){
         return contactService.deleteContacts(contactBulkReq);
     }
-//
-//    @GetMapping("/getUser")
-//    public UserReq getUser() {
-//        return userService.getCurrentUserReq();
-//    }
-//
-//    @PostMapping("/updateUser")
-//    public UserReq updateUser(@RequestBody UserReq user) {
-//        return userService.updateUser(user);
-//    }
 
     @PostMapping("/updateFav")
     public String updateFav(@RequestBody Contact contact) {
