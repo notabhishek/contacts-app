@@ -43,6 +43,18 @@ public class ContactService {
         return Utils.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
 
+    public String saveContacts(List<Contact> contacts) {
+        User user = userService.getCurrentUser();
+        int uid = user.getUid(), maxcid = user.getMaxcid();
+        for(Contact contact : contacts) {
+            contact.setUid(uid);
+            ++maxcid;
+            contact.setCid(maxcid);
+            userService.incrementMaxCid(uid);
+            contactRepository.save(contact);
+        }
+        return Utils.ContactMsgConstants.ALL_CONTACTS_SAVED;
+    }
     public String updateContact(Contact c) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());

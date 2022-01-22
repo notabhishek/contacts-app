@@ -10,6 +10,7 @@ public interface Utils {
         String AUTH_URL = "/auth/**";
         String CONTACTS_URL = "/contacts/**";
         String USER_URL = "/user/**";
+        String CSV_URL = "/csv/**";
     }
     interface CommonConstants {
 
