@@ -7,21 +7,19 @@ import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 import HomeView from "./HomeView";
 
 export default function Home() {
-  const {contactsContext , searchContext} = useHomeConsumer();
+  const {contactsContext , searchContext , fetchContacts} = useHomeConsumer();
   const [contacts , setContacts] = contactsContext;
   const [searchKey ,setSearchKey] = searchContext
-  const [orderby, setOrderBy] = useState("name");
-  const [desc, setDesc] = useState(false);
 
-  function fetchContacts() {
-    const payload= { prefix: searchKey, orderby: orderby, desc: desc }
-    fetchContactsAPI(payload)
-      .then((response) => {
-        if (response.status === 200) setContacts(response.data);
-        else console.log("server error");
-      })
-      .catch((error) => console.log(error));
-  }
+  // function fetchContacts() {
+  //   const payload= { prefix: searchKey, orderby: orderby, desc: desc }
+  //   fetchContactsAPI(payload)
+  //     .then((response) => {
+  //       if (response.status === 200) setContacts(response.data);
+  //       else console.log("server error");
+  //     })
+  //     .catch((error) => console.log(error));
+  // }
 
 
   useEffect(() => {

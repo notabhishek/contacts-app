@@ -6,7 +6,7 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// import ShareIcon from "@mui/icons-material/Share";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';// import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
@@ -15,6 +15,8 @@ import Button from "@mui/material/Button";
 import { ModalComponent } from "../ModalComponent";
 import { deleteContactAPI, updateContactAPI, updateFavAPI } from "../../Utils/APIs";
 import { Avatar, Checkbox } from "@mui/material";
+import { COLORS } from "../../Utils/themes";
+import { hashCode } from "../../Utils/utilities";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -27,8 +29,12 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+
 export default function ContactCard(props) {
-  const COLOR_FAV = "red";
+  
+  const PROFILE_COLOR = COLORS[Math.abs(hashCode(JSON.stringify(props.contact))) % COLORS.length];
+
+  console.log(Math.abs(hashCode(JSON.stringify(props.contact))) % COLORS.length)
 
   const [expanded, setExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -146,9 +152,6 @@ export default function ContactCard(props) {
       })
       .catch((error) => console.log(error));
   };
-  useEffect(() => {
-    console.log(contactData);
-  }, [contactData]);
 
   return (
     <Card
@@ -168,13 +171,14 @@ export default function ContactCard(props) {
       <CardActions disableSpacing>
         <Avatar
           sx={{
+            bgcolor : PROFILE_COLOR,
             width: "30px",
             height: "30px",
             ml : '10px',
             display: !(!checkBoxVisible && !checked) && "none",
           }}
         >
-          {props.contact.name[0]}
+          {props.contact.name[0].toUpperCase()}
         </Avatar>
         <Checkbox
           checked={checked}
@@ -194,9 +198,9 @@ export default function ContactCard(props) {
         <Box sx={{ ml: "auto" }}>
           <IconButton aria-label="add to favorites" onClick={() => toggleFav()}>
             {contactData.fav ? (
-              <FavoriteIcon style={{ color: COLOR_FAV }} />
+              <FavoriteIcon/>
             ) : (
-              <FavoriteIcon />
+              <FavoriteBorderOutlinedIcon />
             )}
           </IconButton>
           <IconButton aria-label="delete" onClick={() => setModalOpen(true)}>
