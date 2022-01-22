@@ -4,6 +4,7 @@ import com.flock.springbootbackend.requestObjects.LoginCredentials;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.security.JWTUtil;
+import com.flock.springbootbackend.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,7 +41,7 @@ public class AuthController {
             return Collections.singletonMap(JWT_TOKEN, token);
 
         } catch (DataIntegrityViolationException e) {
-            return Collections.singletonMap("Error", "User with this email already exists");
+            return Collections.singletonMap("Error", Constants.AuthContants.USER_ALREADY_EXISTS);
         }
     }
 

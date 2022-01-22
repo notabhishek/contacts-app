@@ -29,32 +29,35 @@ public class ContactService {
 
         return contactRepository.save(contact);
     }
-
-    public String saveContacts(ContactBulkReq contactBulkReq){
-        User user = userService.getCurrentUser();
-        int uid = user.getUid(), maxcid = user.getMaxcid();
-        for(Contact contact : contactBulkReq.getContactList()) {
-            contact.setUid(uid);
-            ++maxcid;
-            contact.setCid(maxcid);
-            userService.incrementMaxCid(uid);
-            contactRepository.save(contact);
-        }
-        return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
-    }
-
     public String saveContacts(List<Contact> contacts) {
         User user = userService.getCurrentUser();
         int uid = user.getUid(), maxcid = user.getMaxcid();
+
         for(Contact contact : contacts) {
             contact.setUid(uid);
-            ++maxcid;
-            contact.setCid(maxcid);
-            userService.incrementMaxCid(uid);
-            contactRepository.save(contact);
+            contact.setCid(++maxcid);
         }
+
+        contactRepository.saveAll(contacts);
+        userService.updateMaxCid(uid, maxcid);
         return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
+
+//    public String saveContacts(ContactBulkReq contactBulkReq){
+//
+//        User user = userService.getCurrentUser();
+//        int uid = user.getUid(), maxcid = user.getMaxcid();
+//        for(Contact contact : contactBulkReq.getContactList()) {
+//            contact.setUid(uid);
+//            ++maxcid;
+//            contact.setCid(maxcid);
+//            userService.incrementMaxCid(uid);
+//            contactRepository.save(contact);
+//        }
+//        return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
+//    }
+
+
     public String updateContact(Contact c) {
         int uid = userService.getCurrentUser().getUid();
         contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());

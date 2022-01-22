@@ -25,7 +25,7 @@ public class ContactsController {
 
     @PostMapping("/addMultipleContact")
     public String addMultiple(@RequestBody ContactBulkReq contactDto){
-        return contactService.saveContacts(contactDto);
+        return contactService.saveContacts(contactDto.getContactList());
     }
 
     @PostMapping("/update")

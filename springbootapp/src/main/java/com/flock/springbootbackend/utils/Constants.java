@@ -4,6 +4,7 @@ public interface Constants {
 
     String INCREMENTED_MAX_CID = "Incremented max cid!";
     String INCREMENT_MAXCID = "UPDATE User u SET u.maxcid = u.maxcid + 1 WHERE u.uid = :uid";
+    String SET_MAXCID = "UPDATE User u SET u.maxcid = :maxcid WHERE u.uid = :uid";
 
     interface UrlConstants {
 
@@ -32,12 +33,14 @@ public interface Constants {
         String BEARER_ = "Bearer ";
         String INVALID_JWT_TOKEN_IN_BEARER_HEADER = "Invalid JWT Token in Bearer Header";
         String INVALID_JWT_TOKEN = "Invalid JWT Token";
+        String USER_ALREADY_EXISTS = "User with this email already exists";
     }
 
     interface UserConstants {
 
         String USER = "USER";
         String USER_DATA_UPDATED = "User data updated!";
+        String MAX_CID_UPDATED = "MaxCid Updated!";
     }
 
     interface ContactMsgConstants {

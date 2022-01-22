@@ -20,4 +20,9 @@ public interface UserRepo extends JpaRepository<User, String> {
     @Modifying
     @Query(Constants.INCREMENT_MAXCID)
     public void incrementMaxCid(@Param("uid") int uid);
+
+    @Transactional
+    @Modifying
+    @Query(Constants.SET_MAXCID)
+    public void updateMaxCid(@Param("uid") int uid, @Param("maxcid") int maxcid);
 }

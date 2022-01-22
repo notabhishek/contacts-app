@@ -41,4 +41,9 @@ public class UserService {
         userRepo.incrementMaxCid(uid);
         return Constants.INCREMENTED_MAX_CID;
     }
+
+    public String updateMaxCid(int uid, int cid) {
+        userRepo.updateMaxCid(uid, cid);
+        return Constants.UserConstants.MAX_CID_UPDATED;
+    }
 }
