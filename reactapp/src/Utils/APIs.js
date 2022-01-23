@@ -91,3 +91,11 @@ export function updateUserAPI(payload){
 export function contactDetailsAPI(payload){
     return makeGetRequest('/contacts/details' , payload , true);
 }
+
+export function genResetTokenAPI(payload) {
+    return makePostRequest('/auth/genResetToken', payload);
+}
+
+export function resetPasswordAPI(payload) {
+    return makePostRequest('/auth/resetPassword', payload);
+}

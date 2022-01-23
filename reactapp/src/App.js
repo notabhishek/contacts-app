@@ -8,6 +8,7 @@ import {
 import LeftPanel from './Components/Home/DrawerPanel';
 import Login from './Pages/Login/';
 import Register from './Pages/Register';
+import ResetPassword from './Pages/ResetPassword';
 import Home from './Pages/Home';
 import { AppProvider } from './Utils/AppContext/AppContext';
 import ContactList from './Components/Contact/ContactList';
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/resetPassword' element={<ResetPassword />} />
           <Route element = {<ProtectedRoute/>}>
           <Route path='/' element={<HomeProvider><Home /></HomeProvider>} >
             <Route path = '/contact/:cid' element={<ContactDetails/>}/>
