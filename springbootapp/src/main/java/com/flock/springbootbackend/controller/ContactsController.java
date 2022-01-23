@@ -1,6 +1,9 @@
 package com.flock.springbootbackend.controller;
 
 import com.flock.springbootbackend.utils.Constants;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.flock.springbootbackend.Utils;
+import com.flock.springbootbackend.model.View;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.SearchContactsReq;
@@ -38,7 +41,14 @@ public class ContactsController {
         return contactService.getAllContacts();
     }
 
+    @GetMapping("/details")
+    public Contact getContactDetails(@RequestParam(value = "cid" , required = true) int cid){
+        System.out.println(contactService.getContactDetails(cid).getCid());
+        return contactService.getContactDetails(cid);
+    }
+
     @PostMapping("/search")
+    @JsonView(View.ContactSummary.class)
     public List<Contact> search(@RequestBody SearchContactsReq searchContactsReq) {
         return contactService.searchPrefix(searchContactsReq);
     }

@@ -10,17 +10,15 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AppBarComponent from "../../Components/Home/AppMenuComponent";
 import DrawerPanel, { DrawerHeader } from "../../Components/Home/DrawerPanel";
 import { Outlet } from "react-router-dom";
+import { LIGHT_THEME , DARK_THEME } from "../../Utils/themes";
+import { useAppConsumer } from "../../Utils/AppContext/AppContext";
 
 export default function HomeView() {
-  const theme = createTheme();
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
+  const {themeContext} = useAppConsumer();
+  const [theme ,setTheme] = themeContext
+
   const [open, setOpen] = useState(true);
-  const [currentTab, setCurrentTab] = useState("1");
-  // contacts
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -30,7 +28,7 @@ export default function HomeView() {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme === 'darkTheme' ? DARK_THEME : LIGHT_THEME}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBarComponent

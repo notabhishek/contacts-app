@@ -1,5 +1,7 @@
 package com.flock.springbootbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,15 +11,21 @@ public class Contact {
     @Id
     private int uid;
     @Id
+    @JsonView(View.ContactSummary.class)
     private int cid;
 
+    @JsonView(View.ContactSummary.class)
     private String name;
+    @JsonView(View.ContactSummary.class)
     private String email;
+    @JsonView(View.ContactSummary.class)
     private String phone;
+    @JsonView(View.ContactSummary.class)
+    private boolean fav;
+
     private String address;
     private int score;
 
-    private boolean fav;
 
     public Contact() {
         this.fav = false;

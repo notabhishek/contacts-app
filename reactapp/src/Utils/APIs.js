@@ -87,3 +87,15 @@ export function getUserAPI(){
 export function updateUserAPI(payload){
     return makePostRequest('/user/update', payload , true)
 }
+
+export function contactDetailsAPI(payload){
+    return makeGetRequest('/contacts/details' , payload , true);
+}
+
+export function genResetTokenAPI(payload) {
+    return makePostRequest('/auth/genResetToken', payload);
+}
+
+export function resetPasswordAPI(payload) {
+    return makePostRequest('/auth/resetPassword', payload);
+}

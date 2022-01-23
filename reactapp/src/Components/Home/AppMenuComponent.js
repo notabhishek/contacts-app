@@ -14,6 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { logoutHandler } from '../../Utils/logoutHandler';
 import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import Box from "@mui/material/Box";
 
 
 const drawerWidth = 240;
@@ -79,7 +82,8 @@ const AppBar = styled(MuiAppBar, {
 
 export default function AppBarComponent({ open, handleDrawerOpen }) {
   const {searchContext} = useHomeConsumer();
-  const {userContext} = useAppConsumer();
+  const {userContext , themeContext , changeTheme} = useAppConsumer();
+  const [theme , setTheme] = themeContext
   const [searchKey , setSearchKey] = searchContext
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -130,8 +134,14 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             value={searchKey}
           />
         </Search>
-        <IconButton onClick={handleClick} sx={{ ml: 'auto' }} aria-label='userIcon'>
-          <Avatar>
+        <Box sx={{ ml: 'auto' , display : 'flex' , alignItems : 'center' }}>
+          <IconButton onClick = {changeTheme}>
+          {
+            theme === 'darkTheme' ? <DarkModeIcon/> : <DarkModeOutlinedIcon/>
+          }
+          </IconButton>
+        <IconButton onClick={handleClick}  aria-label='userIcon'>
+          <Avatar style = {{height : '30px' , width : '30px'}}>
             <PersonIcon />
           </Avatar>
         </IconButton>
@@ -147,6 +157,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
           <MenuItem onClick = {GotoUpdateProfile}>Profile</MenuItem>
           <MenuItem onClick = {Logout}>Logout</MenuItem>
         </Menu>
+      </Box>
       </Toolbar>
     </AppBar>
   )
