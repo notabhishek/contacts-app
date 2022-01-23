@@ -57,6 +57,6 @@ public interface ContactRepo extends JpaRepository<Contact, Integer> {
     @Query(Constants.ContactQueryConstants.SELECT_FAVOURITES)
     public List<Contact> getFavourites(@Param("uid") int uid);
 
-    @Query(Utils.ContactQueryConstants.SELECT_CONTACT)
+    @Query(Constants.ContactQueryConstants.SELECT_CONTACT)
     public Contact getContactDetails(@Param("uid") int uid, @Param("cid") int cid);
 }

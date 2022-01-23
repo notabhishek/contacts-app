@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.controller;
 
+import com.flock.springbootbackend.requestObjects.PassResetTokenReq;
 import com.flock.springbootbackend.requestObjects.PasswordResetReq;
 import com.flock.springbootbackend.requestObjects.LoginCredentials;
 import com.flock.springbootbackend.model.User;
@@ -65,8 +66,8 @@ public class AuthController {
     }
 
     @PostMapping("/genResetToken")
-    public String genResetToken(HttpServletRequest request,
-                                         @RequestParam("email") String userEmail) {
+    public String genResetToken(@RequestBody PassResetTokenReq passResetTokenReq) {
+        String userEmail = passResetTokenReq.getEmail();
         System.out.println("/n/n/n/n/n/n/n" + userEmail);
         User user = userService.findByEmail(userEmail).get();
         System.out.println(user);
