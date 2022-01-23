@@ -76,6 +76,11 @@ export default function LoginView({
             </Button>
             <Grid container justifyContent='center'>
               <Grid item>
+                <Link href="/resetPassword" variant="body2">
+                  {"Forgot password? Reset your password"}
+                </Link>
+              </Grid>
+              <Grid item>
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>

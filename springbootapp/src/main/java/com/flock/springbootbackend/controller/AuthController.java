@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.flock.springbootbackend.utils.Constants.AuthContants.INVALID_LOGIN_CREDENTIALS;
 import static com.flock.springbootbackend.utils.Constants.AuthContants.JWT_TOKEN;
@@ -66,21 +67,21 @@ public class AuthController {
     }
 
     @PostMapping("/genResetToken")
-    public String genResetToken(@RequestBody PassResetTokenReq passResetTokenReq) {
+    public Map<String, Object> genResetToken(@RequestBody PassResetTokenReq passResetTokenReq) {
         String userEmail = passResetTokenReq.getEmail();
         System.out.println("/n/n/n/n/n/n/n" + userEmail);
-        User user = userService.findByEmail(userEmail).get();
-        System.out.println(user);
-
+        User user = userService.findByEmail(userEmail);
         if (user == null) {
-            return "No user exists with email: " + user.getEmail();
+            return Collections.singletonMap("Error", "No user exists with email: " + userEmail);
         }
         String token =  userService.genResetToken(userEmail, user);
-        return "Password Reset token sent to " + user.getEmail() + "\n token: " + token;
+        if(token == "")
+            return Collections.singletonMap("Error", "Could not generate password reset token");
+        return Collections.singletonMap("Success", "Password Reset token sent to " + user.getEmail() + "\n token: " + token);
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestBody PasswordResetReq passwordResetReq) {
+    public Map<String, Object> resetPassword(@RequestBody PasswordResetReq passwordResetReq) {
         return userService.resetPassword(passwordResetReq);
     }
 }

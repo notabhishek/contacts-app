@@ -35,6 +35,7 @@ export default function ResetPassword(){
             if (response.status === 200) {
                 console.log(response.data);
                 if(response.data['Error'] === undefined) {
+                    alert(response.data.Success);
                     console.log(response.data);
                 } else {
                     setErrorMessage(response.data['Error']);
@@ -58,6 +59,8 @@ export default function ResetPassword(){
             if (response.status === 200) {
                 console.log(response.data);
                 if(response.data['Error'] === undefined) {
+                    alert(response.data.Success + "\nPress OK to go to login page");
+                    navigate('/login')
                     console.log(response.data);
                 } else {
                     setErrorMessage(response.data['Error']);
