@@ -6,7 +6,19 @@ const AppContext = createContext()
 function AppProvider({children}){
     const [userData , setUserData] = useState(null)
     const [theme , setTheme] = useState('lightTheme')
-    const [contacts , setContacts] = useState([])
+
+    const changeTheme = () =>{
+        setTheme(prevTheme=>{
+            if(prevTheme === 'lightTheme'){ 
+                localStorage.setItem('theme' , 'darkTheme')
+                return 'darkTheme'
+            }
+            else{ 
+                localStorage.setItem('theme' , 'lightTheme')
+                return 'lightTheme'
+            }
+        })
+    }
 
     const fetchUser = () =>{
         getUserAPI()
@@ -25,12 +37,14 @@ function AppProvider({children}){
         const jwt = getAuthTokenFromLocalStorage();
         if(jwt) fetchUser()
 
+        const theme = localStorage.getItem('theme')
+        if(theme) setTheme(theme)
     },[])
     
     const globalStateAndMethods = {
         userContext : [userData , setUserData],
         themeContext : [theme , setTheme],
-        contactsContext : [contacts , setContacts],
+        changeTheme : changeTheme
     }
 
     return <AppContext.Provider value = {globalStateAndMethods}>{children}</AppContext.Provider>

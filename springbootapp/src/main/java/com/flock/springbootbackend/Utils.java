@@ -63,5 +63,6 @@ public interface Utils {
         String DELETE_CONTACT = "DELETE FROM Contact c WHERE c.uid = :uid AND c.cid = :cid";
         String UPDATE_FAV = "UPDATE Contact c SET c.fav = :fav WHERE c.uid = :uid AND c.cid = :cid";
         String SELECT_FAVOURITES = "Select c FROM Contact c WHERE c.uid = :uid AND c.fav <> 0 ORDER BY c.name ASC";
+        String SELECT_CONTACT = "Select c FROM Contact c WHERE c.uid = :uid AND c.cid = :cid";
     }
 }

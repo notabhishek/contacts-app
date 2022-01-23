@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';// import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { ModalComponent } from "../ModalComponent";
-import { deleteContactAPI, updateContactAPI, updateFavAPI } from "../../Utils/APIs";
+import { deleteContactAPI, updateFavAPI } from "../../Utils/APIs";
 import { Avatar, Checkbox } from "@mui/material";
+import { COLORS } from "../../Utils/themes";
+import { hashCode } from "../../Utils/utilities";
+import { useNavigate } from "react-router-dom";
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 export default function ContactCard(props) {
-  const COLOR_FAV = "red";
+  
+  const PROFILE_COLOR = COLORS[Math.abs(hashCode(JSON.stringify(props.contact))) % COLORS.length];
 
-  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [contactData, setContactData] = useState(props.contact);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
@@ -67,41 +56,7 @@ export default function ContactCard(props) {
       .catch((error) => console.log(error));
   };
 
-  const handleExpandClick = () => {
-    console.log(props.contact);
-    if (!expanded) {
-      // update score of contact
-      props.updateScore({
-        cid: props.contact.cid,
-      });
-    }
-    setExpanded(!expanded);
-  };
 
-  function inputHandler(event, type) {
-    setContactData((prevcontact) => {
-      return { ...prevcontact, [type]: event.target.value };
-    });
-  }
-
-  const handleUpdate = () => {
-    updateContactAPI(contactData)
-      .then((response) => {
-        if (response.status === 200) {
-          props.setContacts((prevContacts) => {
-            let temp = prevContacts.map((contact) => {
-              if (contact.cid === props.contact.cid) {
-                return contactData;
-              } else return contact;
-            });
-            return temp;
-          });
-
-          console.log("contact updated!");
-        } else console.log("server error");
-      })
-      .catch((error) => console.log(error));
-  };
 
   const checkHandler = (event) => {
     setChecked(event.target.checked);
@@ -145,9 +100,6 @@ export default function ContactCard(props) {
       })
       .catch((error) => console.log(error));
   };
-  useEffect(() => {
-    console.log(contactData);
-  }, [contactData]);
 
   return (
     <Card
@@ -167,19 +119,22 @@ export default function ContactCard(props) {
       <CardActions disableSpacing>
         <Avatar
           sx={{
+            bgcolor : PROFILE_COLOR,
             width: "30px",
             height: "30px",
             ml : '10px',
             display: !(!checkBoxVisible && !checked) && "none",
           }}
         >
-          {props.contact.name[0]}
+          {props.contact.name[0].toUpperCase()}
         </Avatar>
         <Checkbox
           checked={checked}
           onChange={checkHandler}
           sx={{ display: !checkBoxVisible && !checked && "none" }}
         />
+
+        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {()=>navigate(`/contact/${props.contact.cid}`)}>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>
@@ -190,71 +145,20 @@ export default function ContactCard(props) {
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.phone}</div>
         </Box>
+        </Box>
         <Box sx={{ ml: "auto" }}>
           <IconButton aria-label="add to favorites" onClick={() => toggleFav()}>
             {contactData.fav ? (
-              <FavoriteIcon style={{ color: COLOR_FAV }} />
+              <FavoriteIcon/>
             ) : (
-              <FavoriteIcon />
+              <FavoriteBorderOutlinedIcon />
             )}
           </IconButton>
           <IconButton aria-label="delete" onClick={() => setModalOpen(true)}>
             <DeleteIcon />
           </IconButton>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
         </Box>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1 },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-name"
-              label="Name"
-              fullWidth
-              defaultValue={props.contact.name}
-              onChange={(e) => inputHandler(e, "name")}
-            />
-            <TextField
-              id="outlined-name"
-              label="Email"
-              fullWidth
-              defaultValue={props.contact.email}
-              onChange={(e) => inputHandler(e, "email")}
-            />
-            <TextField
-              id="outlined-name"
-              label="Phone"
-              fullWidth
-              defaultValue={props.contact.phone}
-              onChange={(e) => inputHandler(e, "phone")}
-            />
-            <TextField
-              id="outlined-name"
-              label="Address"
-              fullWidth
-              defaultValue={props.contact.address}
-              onChange={(e) => inputHandler(e, "address")}
-            />
-            <Button variant="contained" color="success" onClick={handleUpdate}>
-              Update
-            </Button>
-          </Box>
-        </CardContent>
-      </Collapse>
     </Card>
   );
 }

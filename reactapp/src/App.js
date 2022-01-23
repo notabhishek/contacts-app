@@ -15,6 +15,7 @@ import CreateContactCard from './Components/Contact/CreateContactCard';
 import UpdateProfileComponent from './Components/Profile/UpdateProfileComponent';
 import ProtectedRoute from './HOC/ProtectedRoute';
 import { HomeProvider } from './Utils/HomeContext/HomeContext';
+import ContactDetails from './Components/Contact/ContactDetails';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route element = {<ProtectedRoute/>}>
           <Route path='/' element={<HomeProvider><Home /></HomeProvider>} >
+            <Route path = '/contact/:cid' element={<ContactDetails/>}/>
             <Route path = '/contacts' element = {<ContactList/>}/>
             <Route path = '/newContact' element = {<CreateContactCard/>}/>
             <Route path = '/updateProfile' element = {<UpdateProfileComponent/>}/>
