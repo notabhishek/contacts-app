@@ -5,7 +5,7 @@ import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.SearchContactsReq;
-import com.flock.springbootbackend.repository.ContactRepository;
+import com.flock.springbootbackend.repository.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class ContactService {
 
     @Autowired
-    private ContactRepository contactRepository;
+    private ContactRepo contactRepository;
 
     @Autowired
     private UserService userService;

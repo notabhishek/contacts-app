@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.utils;
 
-import com.flock.springbootbackend.model.ResponseMessage;
+import com.flock.springbootbackend.requestObjects.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

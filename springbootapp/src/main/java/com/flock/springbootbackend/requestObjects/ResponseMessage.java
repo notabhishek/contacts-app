@@ -1,4 +1,4 @@
-package com.flock.springbootbackend.model;
+package com.flock.springbootbackend.requestObjects;
 
 public class ResponseMessage {
     public String message;

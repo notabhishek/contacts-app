@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Repository
-public interface ContactRepository extends JpaRepository<Contact, Integer> {
+public interface ContactRepo extends JpaRepository<Contact, Integer> {
 
     @Query(Constants.ContactQueryConstants.SELECT_CONTACTS_NAME_ASC)
     public List<Contact> searchPrefixOrderByNameASC(@Param("uid") int uid, @Param("prefix") String prefix);

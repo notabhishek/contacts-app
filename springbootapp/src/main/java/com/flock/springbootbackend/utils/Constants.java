@@ -5,6 +5,7 @@ public interface Constants {
     String INCREMENTED_MAX_CID = "Incremented max cid!";
     String INCREMENT_MAXCID = "UPDATE User u SET u.maxcid = u.maxcid + 1 WHERE u.uid = :uid";
     String SET_MAXCID = "UPDATE User u SET u.maxcid = :maxcid WHERE u.uid = :uid";
+    String SUPPORT_EMAIL = "notabhishektiwari@gmail.com";
 
     interface UrlConstants {
 

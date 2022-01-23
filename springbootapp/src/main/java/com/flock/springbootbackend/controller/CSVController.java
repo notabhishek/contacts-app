@@ -1,7 +1,7 @@
 package com.flock.springbootbackend.controller;
 
 import com.flock.springbootbackend.service.CSVService;
-import com.flock.springbootbackend.model.ResponseMessage;
+import com.flock.springbootbackend.requestObjects.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

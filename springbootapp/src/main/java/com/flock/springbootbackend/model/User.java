@@ -88,4 +88,17 @@ public class User {
     public void setMaxcid(int maxcid) {
         this.maxcid = maxcid;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid=" + uid +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", maxcid=" + maxcid +
+                '}';
+    }
 }
