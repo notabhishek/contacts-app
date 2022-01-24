@@ -2,10 +2,8 @@ package com.flock.springbootbackend.controller;
 
 import com.flock.springbootbackend.model.DeletedContact;
 import com.flock.springbootbackend.service.BinService;
-import com.flock.springbootbackend.service.ContactService;
 import com.flock.springbootbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

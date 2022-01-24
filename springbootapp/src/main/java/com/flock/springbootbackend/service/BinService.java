@@ -6,6 +6,7 @@ import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.model.DeletedContact;
 import com.flock.springbootbackend.repository.BinRepo;
 import com.flock.springbootbackend.repository.ContactRepo;
+import com.flock.springbootbackend.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,25 +33,16 @@ public class BinService {
         try {
             dc = binRepo.getDeletedContact(uid, cid);
         } catch (Exception e) {
-            throw new BinError("getDeletedContact(uid, cid) failed! " + e.getMessage());
+            throw new BinError("Restore Failed as getDeletedContact(uid, cid) failed! " + e.getMessage());
         }
-//        Contact contact = new Contact();
-//        contact.setUid(dc.getUid());
-//        contact.setCid(dc.getCid());
-//        contact.setName(dc.getName());
-//        contact.setEmail(dc.getEmail());
-//        contact.setPhone(dc.getPhone());
-//        contact.setFav(dc.isFav());
-//        contact.setAddress(dc.getAddress());
-//        contact.setScore(dc.getScore());
-        Contact contact = dc.getAsContact();
-        System.out.println(contact);
-        System.out.println("here");
-        System.out.println(contactRepo.findAll());
-        contactRepo.save(contact);
-        System.out.println("idhar chal gya");
-        binRepo.deleteFromBin(uid, cid);
-        return dc;
+        try {
+            Contact contact = Util.deletedContactToContact(dc);
+            contactRepo.save(contact);
+            binRepo.deleteFromBin(uid, cid);
+            return dc;
+        } catch (Exception e) {
+            throw new BinError("Restore failed! " + e.getMessage());
+        }
     }
 
     public List<DeletedContact> getAll() {
@@ -58,10 +50,22 @@ public class BinService {
     }
 
     public DeletedContact get(int uid, int cid) {
-        return binRepo.get(uid, cid);
+        try {
+            return binRepo.get(uid, cid);
+        } catch (Exception e) {
+            throw new BinError("Get Failed! " + e.getMessage());
+        }
     }
 
     public void delete(int uid, int cid) {
-        binRepo.deleteFromBin(uid, cid);
+        try {
+            binRepo.deleteFromBin(uid, cid);
+        }catch (Exception e) {
+            throw new BinError("Delete failed! " + e.getMessage());
+        }
+    }
+
+    public void saveAll(List<DeletedContact> deletedContacts) {
+        binRepo.saveAll(deletedContacts);
     }
 }

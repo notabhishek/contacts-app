@@ -59,7 +59,8 @@ public interface Constants {
 
     interface ContactQueryConstants {
 
-        String DELETE_CONTACTS = "DELETE FROM Contact c WHERE c.uid = :uid AND c.cid in :ids";
+        String DELETE_CONTACTS = "DELETE FROM Contact c WHERE c.uid = :uid AND c.cid in :cids";
+        String SELECT_CONTACTS_CIDS = "SELECT c FROM Contact c WHERE c.uid = :uid AND c.cid in :cids";
         String SELECT_CONTACTS_NAME_ASC = "Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.name ASC";
         String SELECT_CONTACTS_NAME_DESC = "Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.name DESC";
         String SELECT_CONTACTS_SCORE_ASC = "Select c FROM Contact c WHERE c.uid = :uid AND (c.name LIKE :prefix% or c.email LIKE :prefix%) ORDER BY c.score ASC";

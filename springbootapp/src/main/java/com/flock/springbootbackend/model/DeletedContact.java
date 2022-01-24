@@ -57,18 +57,18 @@ public class DeletedContact {
         this.expirydate = expirydate;
     }
 
-    public Contact getAsContact() {
-        return new Contact(
-                uid,
-                cid,
-                name,
-                email,
-                phone,
-                fav,
-                address,
-                score
-        );
-    }
+//    public Contact getAsContact() {
+//        return new Contact(
+//                uid,
+//                cid,
+//                name,
+//                email,
+//                phone,
+//                fav,
+//                address,
+//                score
+//        );
+//    }
 
     public int getUid() {
         return uid;

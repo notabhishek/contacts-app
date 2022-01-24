@@ -47,7 +47,7 @@ public interface ContactRepo extends JpaRepository<Contact, Integer> {
     @Transactional
     @Modifying
     @Query(Constants.ContactQueryConstants.DELETE_CONTACTS)
-    public void deleteContacts(@Param("uid") int uid,@Param("ids") List<Integer> ids);
+    public void deleteContacts(@Param("uid") int uid,@Param("cids") List<Integer> cids);
 
     @Transactional
     @Modifying
@@ -59,4 +59,8 @@ public interface ContactRepo extends JpaRepository<Contact, Integer> {
 
     @Query(Constants.ContactQueryConstants.SELECT_CONTACT)
     public Contact getContactDetails(@Param("uid") int uid, @Param("cid") int cid);
+
+    @Query(Constants.ContactQueryConstants.SELECT_CONTACTS_CIDS)
+    public List<Contact> findAll(@Param("uid") int uid,@Param("cids") List<Integer> cids);
+
 }
