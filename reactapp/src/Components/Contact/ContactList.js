@@ -6,11 +6,11 @@ import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 import ContactControlBar from "./ContactControlBar";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutline";
 import { IconButton, Typography } from "@mui/material";
-import {Box} from '@mui/material'
+import { Box } from '@mui/material'
 
-function EmptyContact(){
-  return(
-    <Box display={'flex'} sx={{mt : 10, alignItems : 'center' , justifyContent : 'center'}}>
+function EmptyContact() {
+  return (
+    <Box display={'flex'} sx={{ mt: 10, alignItems: 'center', justifyContent: 'center' }}>
       <Typography>Such a void, Create some contacts to fill it</Typography>
     </Box>
   )
@@ -23,7 +23,7 @@ export default function ContactList() {
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-
+  const [checked, setChecked] = useState({})
 
   function updateScore(payload) {
     updateScoreAPI(payload)
@@ -67,9 +67,30 @@ export default function ContactList() {
 
   }
 
+  const handleParentCheck = (event) =>{
+    setChecked(prev=>{
+      let temp = {}
+      contacts.forEach(contact=>{
+        temp[contact.cid] = event.target.checked
+      })
+      return temp;
+    })
+
+    if(event.target.checked){
+      setContactsDelete(contacts.map(contact=>contact.cid))
+    }
+    else{
+      setContactsDelete([])
+    }
+  }
+
+  useEffect(()=>{
+    console.log(contactsDelete)
+  },[contactsDelete])
+
 
   return (
-    <ul className="list-unstyled" style = {{marginTop : 0}}>
+    <ul className="list-unstyled" style={{ marginTop: 0 }}>
       <ModalComponent
         open={modalOpen}
         title={"Confirm Delete"}
@@ -77,10 +98,12 @@ export default function ContactList() {
         yesHandler={DeleteAllContacts}
         noHandler={() => setModalOpen(false)}
       />
-      <ContactControlBar contactsDelete={contactsDelete} setModalOpen ={setModalOpen}/>
-      {contacts.length >0 ? contacts.map((contact) => {
+      <ContactControlBar contactsLength = {contacts.length} checked={checked} setChecked={setChecked} handleCheck={handleParentCheck} contactsDelete={contactsDelete} setModalOpen={setModalOpen} />
+      {contacts.length > 0 ? contacts.map((contact) => {
         // console.log(contact)
         return <ContactCard
+          checked={checked}
+          setChecked={setChecked}
           key={contact.cid}
           contact={contact}
           setContacts={setContacts}
@@ -88,7 +111,7 @@ export default function ContactList() {
           setContactsDelete={setContactsDelete}
           updateScore={updateScore}
         />
-      }) : <EmptyContact/>}
+      }) : <EmptyContact />}
     </ul>
   );
 }

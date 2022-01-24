@@ -11,9 +11,11 @@ import ListItemText from '@mui/material/ListItemText';
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import PersonIcon from '@mui/icons-material/Person'
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import PublishIcon from '@mui/icons-material/Publish';
 import { Link } from 'react-router-dom';
 import { ListItemButton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { UploadContactComponent } from '../ModalComponent';
 
 const drawerWidth = 240;
 
@@ -67,7 +69,8 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function DrawerPanel({theme , open , handleDrawerClose}){
     const location = useLocation();
-    console.log(location.pathname)
+
+    const [openUploadContact , setOpenUploadContact] = React.useState(false)
 
     return(
     <Drawer variant="permanent" open={open}>
@@ -92,6 +95,14 @@ export default function DrawerPanel({theme , open , handleDrawerClose}){
           </ListItemButton>
         </List>
         <Divider />
+        <List>
+          <ListItemButton selected = {location.pathname === '/import'} onClick = {()=>setOpenUploadContact(true)} key={'Import'}>
+            <ListItemIcon><PublishIcon/></ListItemIcon>
+            <ListItemText primary = {'Import'}/>
+          </ListItemButton>
+        </List>
+        <Divider />
+        <UploadContactComponent open = {openUploadContact} setOpen={setOpenUploadContact}/>
       </Drawer>
     )
 }

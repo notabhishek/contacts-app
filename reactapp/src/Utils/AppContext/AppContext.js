@@ -6,6 +6,7 @@ const AppContext = createContext()
 function AppProvider({children}){
     const [userData , setUserData] = useState(null)
     const [theme , setTheme] = useState('lightTheme')
+    const [alertData , setAlertData] = useState({open : false , severity : '' , errorMessage : ''})
 
     const changeTheme = () =>{
         setTheme(prevTheme=>{
@@ -33,6 +34,10 @@ function AppProvider({children}){
             .catch(error=>console.log(error))
     }
 
+    const setAlertPop = (data) =>{
+        setAlertData(data)
+    }
+
     useEffect(()=>{
         const jwt = getAuthTokenFromLocalStorage();
         if(jwt) fetchUser()
@@ -44,6 +49,8 @@ function AppProvider({children}){
     const globalStateAndMethods = {
         userContext : [userData , setUserData],
         themeContext : [theme , setTheme],
+        alertContext : [alertData , setAlertData],
+        setAlertPop : setAlertPop,
         changeTheme : changeTheme
     }
 

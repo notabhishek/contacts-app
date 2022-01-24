@@ -3,7 +3,7 @@ import ContactCard from "./ContactCard";
 
 import Dexie from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Box, IconButton } from "@mui/material";
+import { Box, Checkbox, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { ModalComponent } from "../ModalComponent";
@@ -15,21 +15,26 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 
-export default function ContactControlBar({ contactsDelete , setModalOpen }) {
+export default function ContactControlBar({ contactsLength, checked, setChecked, handleCheck, contactsDelete, setModalOpen }) {
 
-    const { orderContext , fetchContacts } = useHomeConsumer()
+    const { orderContext, fetchContacts } = useHomeConsumer()
     const [order, setOrder] = orderContext
 
     const handlerOrder = (event, type) => {
         setOrder(prev => ({ ...prev, [type]: event.target.value }));
     };
 
+    console.log(contactsLength)
+    const isChecked = contactsDelete.length> 0 && contactsDelete.length === contactsLength && Object.values(checked).every(val => val === true)
+
+    const isIndeterminate = contactsDelete.length >0 && contactsDelete.length < contactsLength
     return (
-        <Box sx={{ mb: '20px' , display : 'flex' , alignItems : 'center' }}>
+        <Box sx={{ mb: '20px', display: 'flex', alignItems: 'center' }}>
+            <Checkbox inputProps={{ 'aria-label': 'controlled' }} checked={isChecked} indeterminate={isIndeterminate} onChange={handleCheck} />
             {contactsDelete.length > 0 && <IconButton aria-label="delete" onClick={() => setModalOpen(true)}>
                 <DeleteIcon />
             </IconButton>}
-            <IconButton onClick = {fetchContacts} aria-label="delete">
+            <IconButton onClick={fetchContacts} aria-label="delete">
                 <RefreshIcon />
             </IconButton>
             <FormControl sx={{ m: 1, minWidth: 80 }}>
@@ -55,7 +60,7 @@ export default function ContactControlBar({ contactsDelete , setModalOpen }) {
                     label="Order By"
                     autoWidth
                     onChange={(e) => handlerOrder(e, 'desc')}
-                    sx = {{padding : 0}}
+                    sx={{ padding: 0 }}
                 >
                     <MenuItem value={true}>Desc.</MenuItem>
                     <MenuItem value={false}>Asc.</MenuItem>

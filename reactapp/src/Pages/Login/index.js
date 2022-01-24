@@ -18,11 +18,9 @@ const darkTheme = createTheme({
 )
 
 export default function  Login(){
-    const [alertOpen, setAlertOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const {userContext} = useAppConsumer();
+    const {userContext , setAlertPop} = useAppConsumer();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -40,9 +38,9 @@ export default function  Login(){
                     localStorage.setItem('jwt-token', response.data['jwt-token']);
                     loginHandler(userContext)
                     navigate('/contacts')
+                    setAlertPop({open : true , severity : 'success', errorMessage : 'Logged in successfully'})
                 } else {
-                    setErrorMessage(response.data['Error']);
-                    setAlertOpen(true);
+                    setAlertPop({open : true , severity : 'error', errorMessage : response.data['Error']})
                 }
             } else console.log("server error");
           })
@@ -50,9 +48,6 @@ export default function  Login(){
     };
 
     return (
-        <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme}
-        alertOpen={alertOpen}
-        setAlertOpen={setAlertOpen}
-        errorMessage={errorMessage} />
+        <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme} />
     )
 }

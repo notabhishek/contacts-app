@@ -103,3 +103,7 @@ export function resetPasswordAPI(payload) {
 export function fetchFavContactsAPI(){
     return makeGetRequest('/contacts/favourites' , {} , true)
 }
+
+export function uploadCSVContactsAPI(payload){
+    return makePostRequest('/csv/upload' , payload , true)
+}

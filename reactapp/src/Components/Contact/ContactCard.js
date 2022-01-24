@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
@@ -10,19 +10,19 @@ import { ModalComponent } from "../ModalComponent";
 import { deleteContactAPI, updateFavAPI } from "../../Utils/APIs";
 import { Avatar, Checkbox } from "@mui/material";
 import { COLORS } from "../../Utils/themes";
-import { hashCode } from "../../Utils/utilities";
+import { hashCode, isNull } from "../../Utils/utilities";
 import { useNavigate } from "react-router-dom";
 
 
 export default function ContactCard(props) {
-  
+
   const PROFILE_COLOR = COLORS[Math.abs(hashCode(props.contact.cid)) % COLORS.length];
 
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [contactData, setContactData] = useState(props.contact);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const checked = isNull(props.checked[props.contact.cid]) ? false : props.checked[props.contact.cid]
 
   const removeContactFromChecklist = () => {
     const index = props.contactsDelete.indexOf(props.contact.cid);
@@ -59,7 +59,7 @@ export default function ContactCard(props) {
 
 
   const checkHandler = (event) => {
-    setChecked(event.target.checked);
+    props.setChecked(prev => ({ ...prev, [props.contact.cid]: event.target.checked }));
     if (event.target.checked) {
       if (!props.contactsDelete.includes(props.contact.cid)) {
         props.setContactsDelete((prevContact) => [
@@ -74,15 +74,15 @@ export default function ContactCard(props) {
 
   const toggleFav = (event) => {
     const updFavPayload = {
-      cid : contactData.cid,
-      fav : contactData.fav,
+      cid: contactData.cid,
+      fav: contactData.fav,
     }
     setContactData((prevcontact) => {
       updFavPayload.fav = !prevcontact.fav;
       return { ...prevcontact, fav: !prevcontact.fav };
     });
 
-  
+
     updateFavAPI(updFavPayload)
       .then((response) => {
         if (response.status === 200) {
@@ -101,7 +101,7 @@ export default function ContactCard(props) {
       .catch((error) => console.log(error));
   };
 
-  const handleContactOpen = () =>{
+  const handleContactOpen = () => {
     props.updateScore({
       cid: props.contact.cid,
     });
@@ -124,39 +124,38 @@ export default function ContactCard(props) {
         noHandler={() => setModalOpen(false)}
       />
       <CardActions disableSpacing>
-        <Avatar
+        {props.isCallingFromOtherList || (!checkBoxVisible && !props.checked[props.contact.cid]) ? <Avatar
           sx={{
-            bgcolor : PROFILE_COLOR,
+            bgcolor: PROFILE_COLOR,
             width: "30px",
             height: "30px",
-            ml : '10px',
-            display: !(!checkBoxVisible && !checked) && "none",
+            ml: '10px',
           }}
         >
           {props.contact.name[0].toUpperCase()}
-        </Avatar>
-        <Checkbox
-          checked={checked}
-          onChange={checkHandler}
-          sx={{ display: !checkBoxVisible && !checked && "none" }}
-        />
+        </Avatar> :
+          <Checkbox
+            inputProps={{ 'aria-label': 'controlled' }}
+            checked={checked}
+            onChange={checkHandler}
+          />}
 
-        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {handleContactOpen}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, cursor: 'pointer' }} onClick={handleContactOpen}>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
-          <div>{props.contact.name}</div>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
-          <div>{props.contact.email}</div>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
-          <div>{props.contact.phone}</div>
-        </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
+            <div>{props.contact.name}</div>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
+            <div>{props.contact.email}</div>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
+            <div>{props.contact.phone}</div>
+          </Box>
         </Box>
         <Box sx={{ ml: "auto" }}>
           <IconButton aria-label="add to favorites" onClick={() => toggleFav()}>
             {contactData.fav ? (
-              <FavoriteIcon/>
+              <FavoriteIcon />
             ) : (
               <FavoriteBorderOutlinedIcon />
             )}

@@ -8,3 +8,7 @@ export function hashCode(st) {
 
     return hash;
 }
+
+export function isNull(val){
+    return val == null
+}
