@@ -1,5 +1,7 @@
 package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.exception.InvalidContact;
+import com.flock.springbootbackend.model.DeletedContact;
 import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.flock.springbootbackend.utils.Validation.*;
+
 @Service
 public class ContactService {
 
@@ -20,13 +24,26 @@ public class ContactService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BinService binService;
+
+    public void validateContact(Contact contact) {
+        if(!validName(contact.getName()))
+            throw new InvalidContact("Invalid Contact Name");
+        if(!validEmail(contact.getEmail()))
+            throw new InvalidContact("Invalid Contact Email");
+        if(!validPhone(contact.getPhone()))
+            throw new InvalidContact("Invalid Contact Phone");
+    }
+
     public Contact saveContact(Contact contact) {
         User user = userService.getCurrentUser();
         contact.setUid(user.getUid());
         contact.setCid(user.getMaxcid() + 1);
 
-        userService.incrementMaxCid(user.getUid());
+        validateContact(contact);
 
+        userService.incrementMaxCid(user.getUid());
         return contactRepository.save(contact);
     }
     public String saveContacts(List<Contact> contacts) {
@@ -34,6 +51,7 @@ public class ContactService {
         int uid = user.getUid(), maxcid = user.getMaxcid();
 
         for(Contact contact : contacts) {
+            validateContact(contact);
             contact.setUid(uid);
             contact.setCid(++maxcid);
         }
@@ -43,25 +61,15 @@ public class ContactService {
         return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
     }
 
-//    public String saveContacts(ContactBulkReq contactBulkReq){
-//
-//        User user = userService.getCurrentUser();
-//        int uid = user.getUid(), maxcid = user.getMaxcid();
-//        for(Contact contact : contactBulkReq.getContactList()) {
-//            contact.setUid(uid);
-//            ++maxcid;
-//            contact.setCid(maxcid);
-//            userService.incrementMaxCid(uid);
-//            contactRepository.save(contact);
-//        }
-//        return Constants.ContactMsgConstants.ALL_CONTACTS_SAVED;
-//    }
-
-
     public String updateContact(Contact c) {
         int uid = userService.getCurrentUser().getUid();
-        contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());
-        return Constants.ContactMsgConstants.CONTACT_UPDATED;
+        validateContact(c);
+        try {
+            contactRepository.updateContact(uid, c.getCid(), c.getName(), c.getEmail(), c.getPhone(), c.getAddress());
+            return Constants.ContactMsgConstants.CONTACT_UPDATED;
+        } catch (Exception e) {
+            throw new InvalidContact("Update contact failed!" + e.getMessage());
+        }
     }
 
     public List<Contact> getAllContacts() {
@@ -86,33 +94,52 @@ public class ContactService {
     }
 
     public String updateScore(int cid) {
-        Boolean validCid = true;
-        if(!validCid) return Constants.ContactMsgConstants.INVALID_CONTACT_ID;
-        int uid = userService.getCurrentUser().getUid();
-        contactRepository.updateScore(uid, cid);
-        return Constants.ContactMsgConstants.SCORE_UPDATED;
+        try {
+            int uid = userService.getCurrentUser().getUid();
+            contactRepository.updateScore(uid, cid);
+            return Constants.ContactMsgConstants.SCORE_UPDATED;
+        } catch (Exception e) {
+            throw new InvalidContact("Update score failed! " + e.getMessage());
+        }
     }
 
     public String deleteContact(int cid) {
-        Boolean validCid = true;
-        if(!validCid) {
-            return Constants.ContactMsgConstants.INVALID_CONTACT_ID;
+        User user = userService.getCurrentUser();
+        Contact c = null;
+        try {
+            c = contactRepository.getContactDetails(user.getUid(), cid);
+        } catch (Exception e) {
+            throw new InvalidContact("Delete contact failed! " + e.getMessage());
         }
-        int uid = userService.getCurrentUser().getUid();
-        contactRepository.deleteContact(uid, cid);
+
+        DeletedContact deletedContact = new DeletedContact(c.getUid(), c.getCid(),
+                c.getName(), c.getEmail(), c.getPhone(), c.getFav(), c.getAddress(), c.getScore());
+
+        System.out.println(deletedContact);
+        binService.saveDeletedContact(deletedContact);
+        contactRepository.deleteContact(user.getUid(), cid);
+
         return Constants.ContactMsgConstants.CONTACT_DELETED;
     }
 
     public String deleteContacts(ContactBulkReq contactBulkReq) {
-        int uid = userService.getCurrentUser().getUid();
-        contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
-        return Constants.ContactMsgConstants.CONTACTS_DELETED;
+        try {
+            int uid = userService.getCurrentUser().getUid();
+            contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
+            return Constants.ContactMsgConstants.CONTACTS_DELETED;
+        } catch (Exception e) {
+            throw new InvalidContact("Delete Contacts failed! " + e.getMessage());
+        }
     }
 
     public String updateFav(int cid, boolean fav) {
-        int uid = userService.getCurrentUser().getUid();
-        contactRepository.updateFav(uid, cid, fav);
-        return Constants.ContactMsgConstants.FAV_UPDATED;
+        try {
+            int uid = userService.getCurrentUser().getUid();
+            contactRepository.updateFav(uid, cid, fav);
+            return Constants.ContactMsgConstants.FAV_UPDATED;
+        } catch (Exception e) {
+            throw new InvalidContact("Update favourite failed! " + e.getMessage());
+        }
     }
 
     public List<Contact> getFavourites() {
@@ -121,7 +148,11 @@ public class ContactService {
     }
 
     public Contact getContactDetails(int cid) {
-        int uid = userService.getCurrentUser().getUid();
-        return contactRepository.getContactDetails(uid , cid);
+        try {
+            int uid = userService.getCurrentUser().getUid();
+            return contactRepository.getContactDetails(uid, cid);
+        } catch (Exception e) {
+            throw new InvalidContact("Could not get details for contact! " + e.getMessage());
+        }
     }
 }

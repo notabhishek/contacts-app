@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react'
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button"
-import { addContactAPI } from '../../Utils/APIs';
 import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Avatar, Divider, IconButton, Typography } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom'
-import { contactDetailsAPI, updateContactAPI } from '../../Utils/APIs';
+import { delContactDetailsAPI, restoreContactAPI } from '../../Utils/APIs';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { COLORS } from '../../Utils/themes';
 import { hashCode } from '../../Utils/utilities';
 
-export default function ContactDetails() {
+export default function DelContactDetails() {
 
     let { cid } = useParams();
     console.log("cidddd" + cid);
@@ -34,7 +33,7 @@ export default function ContactDetails() {
     const PROFILE_COLOR = contactData ? COLORS[Math.abs(hashCode(contactData.cid)) % COLORS.length] : null
 
     const getContactDetails = () => {
-        contactDetailsAPI({ cid: cid })
+        delContactDetailsAPI({ cid: cid })
             .then(response => {
                 console.log(response)
                 if (response.status === 200) {
@@ -52,8 +51,11 @@ export default function ContactDetails() {
             })
     }
 
-    const handleUpdate = () => {
-        updateContactAPI(updateContactData)
+    const handleRestore = () => {
+        const payload = {
+            cid : cid
+        };
+        restoreContactAPI(payload)
             .then((response) => {
                 if (response.status === 200) {
                     setContactData(updateContactData)
@@ -67,6 +69,8 @@ export default function ContactDetails() {
                     });
 
                     console.log("contact updated!");
+                    alert('restored!');
+                    navigate('/bin')
                 } else console.log("server error");
             })
             .catch((error) => console.log(error));
@@ -75,12 +79,6 @@ export default function ContactDetails() {
     useEffect(() => {
         getContactDetails()
     }, [])
-
-    function inputHandler(event, type) {
-        setUpdateContactData(prevcontact => {
-            return { ...prevcontact, [type]: event.target.value }
-        })
-    }
 
     return (
         <Box sx={{ m: 4 }}>
@@ -111,7 +109,7 @@ export default function ContactDetails() {
                     label="name"
                     variant="standard"
                     value={updateContactData.name}
-                    onChange={(e) => inputHandler(e, 'name')}
+                    disabled
                     sx={{ width: '50%' }}
                 />
                 <TextField
@@ -119,7 +117,7 @@ export default function ContactDetails() {
                     label="email"
                     variant="standard"
                     value={updateContactData.email}
-                    onChange={(e) => inputHandler(e, 'email')}
+                    disabled
                     sx={{ width: '50%' }}
                 />
                 <TextField
@@ -127,7 +125,7 @@ export default function ContactDetails() {
                     label="phone"
                     variant="standard"
                     value={updateContactData.phone}
-                    onChange={(e) => inputHandler(e, 'phone')}
+                    disabled
                     sx={{ width: '50%' }}
                 />
                 <TextField
@@ -135,13 +133,13 @@ export default function ContactDetails() {
                     label="address"
                     variant="standard"
                     value={updateContactData.address}
-                    onChange={(e) => inputHandler(e, 'address')}
+                    disabled
                     sx={{ width: '50%' }}
                 />
             </Box>
 
-            <Button sx={{ mt: 5, ml: 1 }} variant="contained" color="success" onClick={handleUpdate}>
-                Update
+            <Button sx={{ mt: 5, ml: 1 }} variant="contained" color="success" onClick={handleRestore}>
+                Restore
             </Button>
         </Box>
     )

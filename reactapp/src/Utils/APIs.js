@@ -106,4 +106,21 @@ export function fetchFavContactsAPI(){
 
 export function uploadCSVContactsAPI(payload){
     return makePostRequest('/csv/upload' , payload , true)
+
+}
+
+export function fetchDelContactsAPI(){
+    return makeGetRequest('/bin/getAll' , {} , true)
+}
+
+export function delContactDetailsAPI(payload){
+    return makeGetRequest('/bin/get' , payload , true);
+}
+
+export function restoreContactAPI(payload){
+    return makePostRequest('/bin/restore', payload , true)
+}
+
+export function deleteFromBinAPI(payload){
+    return makePostRequest('/bin/delete', payload , true)
 }
