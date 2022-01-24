@@ -19,8 +19,7 @@ const darkTheme = createTheme({
 
 export default function ResetPassword() {
     const navigate = useNavigate();
-    const [alertOpen, setAlertOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [genTokenLoading , setGenTokenLoading] = useState(false)
     const { setAlertPop } = useAppConsumer();
 
     const handleGenResetToken = (event) => {
@@ -31,15 +30,16 @@ export default function ResetPassword() {
             email: data.get('email')
         }
 
+        setGenTokenLoading(true)
         genResetTokenAPI(payload)
             .then((response) => {
                 if (response.status === 200) {
-                    console.log(response.data);
-                    console.log(response.data);
-                    setAlertPop({ open: true, severity: 'success', errorMessage: response.data.success })
+                    setAlertPop({ open: true, severity: 'success', errorMessage: response.data.Success })
                 } else console.log("server error");
+                setGenTokenLoading(false)
             })
             .catch((error) => {
+                setGenTokenLoading(false)
                 setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
             });
     }
@@ -67,7 +67,7 @@ export default function ResetPassword() {
 
     return (
         <ResetPasswordView handleSubmit={handleSubmit} currentTheme={darkTheme}
-            handleGenResetToken={handleGenResetToken}
+            handleGenResetToken={handleGenResetToken} genTokenLoading={genTokenLoading}
         />
     )
 }

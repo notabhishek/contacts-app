@@ -12,11 +12,13 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import LoadingButton from '@mui/lab/LoadingButton'
 
 export default function ResetPasswordView({
   handleSubmit,
   currentTheme,
   handleGenResetToken,
+  genTokenLoading,
 }) {
   return (
     <ThemeProvider theme={currentTheme}>
@@ -51,12 +53,13 @@ export default function ResetPasswordView({
               name="email"
               autoComplete="email"
             />
-            <Button
+            <LoadingButton
+              loading = {genTokenLoading}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-            >Generate Reset Token</Button>
+            >Generate Reset Token</LoadingButton>
           </Box>
         </Box>
         <Box
