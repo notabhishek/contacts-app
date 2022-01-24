@@ -7,18 +7,13 @@ import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.repository.UserRepo;
 import com.flock.springbootbackend.requestObjects.UserReq;
-import com.flock.springbootbackend.utils.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -28,6 +23,8 @@ public class UserService {
     PasswordTokenRepo passwordTokenRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MailService mailService;
 
     public User save(User user) {
         return userRepo.save(user);
@@ -82,23 +79,21 @@ public class UserService {
         passwordTokenRepo.save(myToken);
     }
 
-    public String genResetToken(String userEmail, User user) {
+    public boolean genResetToken(String userEmail, User user) {
         try {
             String token = UUID.randomUUID().toString();
             createPasswordResetTokenForUser(user, token);
             JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-            MailUtil mailUtil = new MailUtil();
+            MailService mailUtil = new MailService();
             System.out.println(token);
 
-            String from = "beastonthelease@gmail.com";
-            String to = "abhishektiw@flock.com";
-
-            // Connection Refused Error while sending mail
-//        mailSender.send(mailUtil.constructResetTokenEmail(token, user));
-            return token;
+            mailService.sendResetEmail(userEmail, token);
+            return true;
         } catch (Exception e) {
-            return "";
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -112,7 +107,7 @@ public class UserService {
 
             PasswordResetToken token = passwordTokenRepo.getById(user.getUid());
 
-            if (false && token.hasExpired()) { // Remove bug here, always expired
+            if (token.hasExpired()) {
                 try {
                     passwordTokenRepo.deleteById(user.getUid());
                 } catch (Exception e) {

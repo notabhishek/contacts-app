@@ -22,6 +22,7 @@ export default function ResetPassword(){
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const {userContext} = useAppConsumer();
+    
     const handleGenResetToken = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
