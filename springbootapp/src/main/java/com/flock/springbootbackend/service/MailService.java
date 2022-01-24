@@ -1,6 +1,6 @@
 package com.flock.springbootbackend.service;
 
-import com.flock.springbootbackend.model.User;
+import com.flock.springbootbackend.exception.MailError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,16 +25,10 @@ public class MailService {
 
     public void sendResetEmail(String to, String token) {
         SimpleMailMessage message = createResetTokenMail(from, to, token);
-        mailSender.send(message);
-    }
-    public void sendSimpleEmail(String to, String body, String sub) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject(sub);
-        message.setText(body);
-
-        mailSender.send(message);
-        System.out.println("Mail sent...");
+        try {
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new MailError("Couldn't send reset token to " + to);
+        }
     }
 }

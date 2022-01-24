@@ -1,5 +1,10 @@
 package com.flock.springbootbackend.service;
 
+import com.flock.springbootbackend.exception.InvalidContact;
+import com.flock.springbootbackend.exception.InvalidUser;
+import com.flock.springbootbackend.exception.TokenError;
+import com.flock.springbootbackend.exception.UserNotFound;
+import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.PasswordResetReq;
 import com.flock.springbootbackend.model.PasswordResetToken;
 import com.flock.springbootbackend.repository.PasswordTokenRepo;
@@ -15,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.flock.springbootbackend.utils.Validation.*;
+
 @Service
 public class UserService {
     @Autowired
@@ -26,7 +33,24 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
-    public User save(User user) {
+    public void validateUser(User user) {
+        if(!validName(user.getName()))
+            throw new InvalidUser("Invalid User Name");
+        if(!validEmail(user.getEmail()))
+            throw new InvalidUser("Invalid User Email");
+        if(!validPhone(user.getPhone()))
+            throw new InvalidUser("Invalid User Phone");
+    }
+
+    public User saveUser(User user) {
+        validateUser(user);
+        if(findByEmail(user.getEmail()) == null)
+            return userRepo.save(user);
+        else throw new InvalidUser("User with email: " + user.getEmail() + " already exists, use /login!");
+    }
+
+    public User updateUser(User user) {
+        validateUser(user);
         return userRepo.save(user);
     }
 
@@ -79,55 +103,38 @@ public class UserService {
         passwordTokenRepo.save(myToken);
     }
 
-    public boolean genResetToken(String userEmail, User user) {
-        try {
-            String token = UUID.randomUUID().toString();
-            createPasswordResetTokenForUser(user, token);
-            JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    public void genResetToken(String userEmail, User user) {
+        String token = UUID.randomUUID().toString();
+        createPasswordResetTokenForUser(user, token);
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-            MailService mailUtil = new MailService();
-            System.out.println(token);
+        MailService mailUtil = new MailService();
 
-            mailService.sendResetEmail(userEmail, token);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+        mailService.sendResetEmail(userEmail, token);
     }
 
     public Map<String, Object> resetPassword(PasswordResetReq passwordResetReq) {
-        try {
-            User user = findByEmail(passwordResetReq.getEmail());
-            if(user == null)
-                return Collections.singletonMap("Error", "No user with this email exists");
-            if (!passwordTokenRepo.existsById(user.getUid()))
-                return Collections.singletonMap("Error", "No token for this user!");
 
-            PasswordResetToken token = passwordTokenRepo.getById(user.getUid());
+        User user = findByEmail(passwordResetReq.getEmail());
+        if(user == null)
+            throw new UserNotFound(passwordResetReq.getEmail());
+        if (!passwordTokenRepo.existsById(user.getUid()))
+            throw new TokenError("No token for email: " + passwordResetReq.getEmail());
 
-            if (token.hasExpired()) {
-                try {
-                    passwordTokenRepo.deleteById(user.getUid());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-                return Collections.singletonMap("Error", "Token Expired, generate a new one");
-            }
+        PasswordResetToken token = passwordTokenRepo.getById(user.getUid());
 
-            if (token.getToken().equals(passwordResetReq.getResetToken())) {
-                String encodedPass = passwordEncoder.encode(passwordResetReq.getPassword());
-                user.setPassword(encodedPass);
-                user = save(user);
-                passwordTokenRepo.deleteById(user.getUid());
-                return Collections.singletonMap("Success", "Password reset, relogin!");
-            }
-        } catch (Exception e) {
-            return Collections.singletonMap("Error", "Invalid token!" + e.getMessage());
+        if (token.hasExpired()) {
+            passwordTokenRepo.deleteById(user.getUid());
+            throw new TokenError("Token expired, generate a new one!");
         }
-        return Collections.singletonMap("Error", "Invalid token!!");
+
+        if (!token.getToken().equals(passwordResetReq.getResetToken()))
+            throw new TokenError("Invalid Token!");
+
+        String encodedPass = passwordEncoder.encode(passwordResetReq.getPassword());
+        user.setPassword(encodedPass);
+        user = updateUser(user);
+        passwordTokenRepo.deleteById(user.getUid());
+        return Collections.singletonMap("Success", "Password reset, relogin!");
     }
-
-
 }
