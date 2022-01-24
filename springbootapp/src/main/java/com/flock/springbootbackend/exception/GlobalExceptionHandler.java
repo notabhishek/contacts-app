@@ -51,6 +51,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BinError.class)
+    public ResponseEntity<?> BinErrorExceptionHandling(BinError e, WebRequest req) {
+        ErrorDetails errorResponse = new ErrorDetails(new Date(), e.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> invalidUserExceptionHandling(AuthenticationException e, WebRequest req) {
         ErrorDetails errorResponse = new ErrorDetails(new Date(), "Invalid Email or Password\n" + e.getMessage(), req.getDescription(false));

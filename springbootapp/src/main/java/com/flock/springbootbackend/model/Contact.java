@@ -30,7 +30,7 @@ public class Contact {
         this.fav = false;
     }
 
-    public Contact(int cid, int uid, String name, String email, String phone, String address) {
+    public Contact(int uid, int cid, String name, String email, String phone, String address) {
         this.cid = cid;
         this.uid = uid;
         this.name = name;

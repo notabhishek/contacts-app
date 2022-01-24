@@ -94,6 +94,7 @@ export default function DelContactDetails() {
                     <Typography variant='h4'>{contactData.name}</Typography>
                     <Typography variant='h6'>{contactData.email}</Typography>
                     <Typography variant='h6'>{contactData.phone}</Typography>
+                    <Typography variant='h6'>Automatic delete on: {contactData.expirydate}</Typography>
                 </Box>}
             </Box>
             <Divider sx={{ mt: 5, mb: 5 }} />

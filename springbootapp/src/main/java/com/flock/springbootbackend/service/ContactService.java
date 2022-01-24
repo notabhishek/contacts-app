@@ -8,9 +8,11 @@ import com.flock.springbootbackend.requestObjects.ContactBulkReq;
 import com.flock.springbootbackend.model.Contact;
 import com.flock.springbootbackend.requestObjects.SearchContactsReq;
 import com.flock.springbootbackend.repository.ContactRepo;
+import com.flock.springbootbackend.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.flock.springbootbackend.utils.Validation.*;
@@ -109,22 +111,30 @@ public class ContactService {
         try {
             c = contactRepository.getContactDetails(user.getUid(), cid);
         } catch (Exception e) {
-            throw new InvalidContact("Delete contact failed! " + e.getMessage());
+            throw new InvalidContact("Invalid contact! " + e.getMessage());
         }
+        try {
+            DeletedContact deletedContact = new DeletedContact(c.getUid(), c.getCid(),
+                    c.getName(), c.getEmail(), c.getPhone(), c.getFav(), c.getAddress(), c.getScore());
 
-        DeletedContact deletedContact = new DeletedContact(c.getUid(), c.getCid(),
-                c.getName(), c.getEmail(), c.getPhone(), c.getFav(), c.getAddress(), c.getScore());
+            System.out.println(deletedContact);
+            binService.saveDeletedContact(deletedContact);
+            contactRepository.deleteContact(user.getUid(), cid);
 
-        System.out.println(deletedContact);
-        binService.saveDeletedContact(deletedContact);
-        contactRepository.deleteContact(user.getUid(), cid);
-
-        return Constants.ContactMsgConstants.CONTACT_DELETED;
+            return Constants.ContactMsgConstants.CONTACT_DELETED;
+        } catch (Exception e) {
+            throw new InvalidContact("Delete Failed! " + e.getMessage());
+        }
     }
 
     public String deleteContacts(ContactBulkReq contactBulkReq) {
         try {
             int uid = userService.getCurrentUser().getUid();
+            List<Contact> contacts = contactRepository.findAll(uid, contactBulkReq.getContactCid());
+            List<DeletedContact> deletedContacts = new ArrayList<>();
+            for(Contact contact : contacts)
+                deletedContacts.add(Util.contactToDeletedContact(contact));
+            binService.saveAll(deletedContacts);
             contactRepository.deleteContacts(uid, contactBulkReq.getContactCid());
             return Constants.ContactMsgConstants.CONTACTS_DELETED;
         } catch (Exception e) {
