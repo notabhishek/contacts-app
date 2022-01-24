@@ -110,4 +110,17 @@ public class Contact {
         this.fav = fav;
     }
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "uid=" + uid +
+                ", cid=" + cid +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", fav=" + fav +
+                ", address='" + address + '\'' +
+                ", score=" + score +
+                '}';
+    }
 }

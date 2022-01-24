@@ -23,13 +23,16 @@ public class ContactsController {
     private ContactService contactService;
 
     @PostMapping("/add")
+    @JsonView(View.ContactSummary.class)
     public Map<String, Object> add(@RequestBody Contact contact) {
         contact.setName(contact.getName().trim());
         System.out.println(contact.getName());
         if(contact.getName().equals(""))
             return Collections.singletonMap("Error", "Name cannot be empty");
-        contactService.saveContact(contact);
-        return Collections.singletonMap("Success", Constants.ContactMsgConstants.NEW_CONTACT_IS_ADDED);
+        contact = contactService.saveContact(contact);
+        System.out.println(contact);
+        return Collections.singletonMap("Success", contact);
+//        return Collections.singletonMap("Success", Constants.ContactMsgConstants.NEW_CONTACT_IS_ADDED);
     }
 
     @PostMapping("/addMultipleContact")
