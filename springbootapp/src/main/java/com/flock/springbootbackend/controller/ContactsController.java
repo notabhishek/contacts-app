@@ -11,7 +11,9 @@ import com.flock.springbootbackend.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/contacts")
@@ -21,9 +23,16 @@ public class ContactsController {
     private ContactService contactService;
 
     @PostMapping("/add")
-    public String add(@RequestBody Contact contact) {
-        contactService.saveContact(contact);
-        return Constants.ContactMsgConstants.NEW_CONTACT_IS_ADDED;
+    @JsonView(View.ContactSummary.class)
+    public Map<String, Object> add(@RequestBody Contact contact) {
+        contact.setName(contact.getName().trim());
+        System.out.println(contact.getName());
+        if(contact.getName().equals(""))
+            return Collections.singletonMap("Error", "Name cannot be empty");
+        contact = contactService.saveContact(contact);
+        System.out.println(contact);
+        return Collections.singletonMap("Success", contact);
+//        return Collections.singletonMap("Success", Constants.ContactMsgConstants.NEW_CONTACT_IS_ADDED);
     }
 
     @PostMapping("/addMultipleContact")

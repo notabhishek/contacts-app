@@ -74,10 +74,10 @@ public class AuthController {
         if (user == null) {
             return Collections.singletonMap("Error", "No user exists with email: " + userEmail);
         }
-        String token =  userService.genResetToken(userEmail, user);
-        if(token == "")
-            return Collections.singletonMap("Error", "Could not generate password reset token");
-        return Collections.singletonMap("Success", "Password Reset token sent to " + user.getEmail() + "\n token: " + token);
+
+        if(userService.genResetToken(userEmail, user))
+            return Collections.singletonMap("Success", "Password Reset token sent to " + user.getEmail());
+        return Collections.singletonMap("Error", "Could not generate password reset token");
     }
 
     @PostMapping("/resetPassword")

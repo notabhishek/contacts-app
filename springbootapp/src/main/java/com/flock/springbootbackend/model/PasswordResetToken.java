@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 public class PasswordResetToken {
-    public static final int EXPIRATION = 24 * 60 * 60 * 1000;
+    public static final int EXPIRATION = 60 * 60 * 1000;
 
     @Id
     private int uid;
@@ -50,6 +50,6 @@ public class PasswordResetToken {
     }
 
     public boolean hasExpired() {
-        return this.expirydate.after(new Date());
+        return this.expirydate.before(new Date(System.currentTimeMillis()));
     }
 }
