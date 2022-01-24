@@ -8,6 +8,7 @@ import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 export default function UpdateProfileComponent(){
     const {userContext} = useAppConsumer();
     const [userData , setUserData] = userContext;
+    const {setAlertPop} = useAppConsumer();
 
     const [tempUserData , setTempUserData] = useState({
         name : '',
@@ -38,8 +39,11 @@ export default function UpdateProfileComponent(){
                 if(response.status === 200){
                     setUserData(tempUserData)
                 }
+                setAlertPop({ open: true, severity: 'success', errorMessage: "profile updated successfully" })
             })
-            .catch(error=>console.log(error))
+            .catch((error) => {
+              setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     }
 
 

@@ -6,6 +6,8 @@ const HomeContext = createContext()
 function HomeProvider({ children }) {
     const [searchKey, setSearchKey] = useState('')
     const [contacts, setContacts] = useState([])
+    const [favContacts , setFavContacts] = useState([])
+    const [delContacts , setDelContacts] = useState([])
     const [order, setOrder] = useState({ orderby: 'name', desc: false });
 
     function fetchContacts() {
@@ -21,6 +23,8 @@ function HomeProvider({ children }) {
     const globalStateAndMethods = {
         searchContext: [searchKey, setSearchKey],
         contactsContext: [contacts, setContacts],
+        favContactsContext : [favContacts , setFavContacts],
+        delContactsContext : [delContacts , setDelContacts],
         orderContext: [order, setOrder],
         fetchContacts: fetchContacts,
     }

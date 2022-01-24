@@ -10,15 +10,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 
 export default function RegisterView({
   handleSubmit,
   currentTheme,
-  alertOpen,
-  setAlertOpen,
-  errorMessage,
 }) {
   return (
     <ThemeProvider theme={currentTheme}>
@@ -114,19 +109,6 @@ export default function RegisterView({
             </Grid>
           </Box>
         </Box>
-        <Snackbar
-          open={alertOpen}
-          autoHideDuration={6000}
-          onClose={() => setAlertOpen(false)}
-        >
-          <Alert
-            onClose={() => setAlertOpen(false)}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            {errorMessage}
-          </Alert>
-        </Snackbar>
       </Container>
     </ThemeProvider>
   );

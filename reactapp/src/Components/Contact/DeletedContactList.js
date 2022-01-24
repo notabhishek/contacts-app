@@ -61,6 +61,7 @@ export default function DelContactList() {
       {delContacts.length>0 ? delContacts.map((contact) => {
         // console.log(contact)
         return <ContactCard
+          checked = {{}}
           key={contact.cid}
           contact={contact}
           setFavContacts={setDelContacts}
@@ -68,6 +69,7 @@ export default function DelContactList() {
           setContactsDelete={setContactsDelete}
           updateScore={updateScore}
           isDeleted = {true}
+          isCallingFromOtherList = {true}
         />
       }) : <EmptyDel/>}
     </ul>

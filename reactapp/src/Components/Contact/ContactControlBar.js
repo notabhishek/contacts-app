@@ -24,10 +24,10 @@ export default function ContactControlBar({ contactsLength, checked, setChecked,
         setOrder(prev => ({ ...prev, [type]: event.target.value }));
     };
 
-    console.log(contactsLength)
     const isChecked = contactsDelete.length> 0 && contactsDelete.length === contactsLength && Object.values(checked).every(val => val === true)
-
     const isIndeterminate = contactsDelete.length >0 && contactsDelete.length < contactsLength
+
+
     return (
         <Box sx={{ mb: '20px', display: 'flex', alignItems: 'center' }}>
             <Checkbox inputProps={{ 'aria-label': 'controlled' }} checked={isChecked} indeterminate={isIndeterminate} onChange={handleCheck} />

@@ -12,9 +12,16 @@ import { Avatar, Checkbox } from "@mui/material";
 import { COLORS } from "../../Utils/themes";
 import { hashCode, isNull } from "../../Utils/utilities";
 import { useNavigate } from "react-router-dom";
+import { useAppConsumer } from "../../Utils/AppContext/AppContext";
+import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 
 
 export default function ContactCard(props) {
+
+  const { setAlertPop } = useAppConsumer();
+  const { favContactsContext , contactsContext } = useHomeConsumer();
+  const [favContacts, setFavContacts] = favContactsContext
+  const [contactsData , setContactsData] = contactsContext
 
   const PROFILE_COLOR = COLORS[Math.abs(hashCode(props.contact.cid)) % COLORS.length];
 
@@ -23,7 +30,8 @@ export default function ContactCard(props) {
   const [contactData, setContactData] = useState(props.contact);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const checked = isNull(props.checked[props.contact.cid]) ? false : props.checked[props.contact.cid]
-  const {isDeleted} = props
+  const isDeleted = props.isDeleted === true
+
   const removeContactFromChecklist = () => {
     const index = props.contactsDelete.indexOf(props.contact.cid);
     if (index > -1) {
@@ -38,40 +46,46 @@ export default function ContactCard(props) {
 
   const DeleteContact = () => {
     setModalOpen(false);
-    if(isDeleted == false) {
-    deleteContactAPI({ cid: props.contact.cid })
-      .then((response) => {
-        if (response.status === 200) {
-          removeContactFromChecklist();
-          props.setContacts((prevContact) => {
-            let newContacts = prevContact.filter(
-              (contact) => contact.cid !== props.contact.cid
-            );
-            return newContacts;
-          });
-          console.log(response);
-        } else {
-          console.log("error from server while deleting contact");
-        }
-      })
-      .catch((error) => console.log(error));
+    if (isDeleted == false) {
+      deleteContactAPI({ cid: props.contact.cid })
+        .then((response) => {
+          if (response.status === 200) {
+            removeContactFromChecklist();
+            props.setContacts((prevContact) => {
+              let newContacts = prevContact.filter(
+                (contact) => contact.cid !== props.contact.cid
+              );
+              return newContacts;
+            });
+            setAlertPop({ open: true, severity: 'success', errorMessage: "contact moved to bin" })
+          } else {
+            console.log("error from server while deleting contact");
+          }
+        })
+        .catch((error) => {
+          setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+        });
     } else {
       deleteFromBinAPI({ cid: props.contact.cid })
-      .then((response) => {
-        if (response.status === 200) {
-          removeContactFromChecklist();
-          props.setContacts((prevContact) => {
-            let newContacts = prevContact.filter(
-              (contact) => contact.cid !== props.contact.cid
-            );
-            return newContacts;
-          });
-          console.log(response);
-        } else {
-          console.log("error from server while deleting contact");
-        }
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          if (response.status === 200) {
+            removeContactFromChecklist();
+            props.setContacts((prevContact) => {
+              let newContacts = prevContact.filter(
+                (contact) => contact.cid !== props.contact.cid
+              );
+              return newContacts;
+            });
+            console.log(response);
+            setAlertPop({ open: true, severity: 'success', errorMessage: "contact deleted permanently" })
+          } else {
+            console.log("error from server while deleting contact");
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+        });
     }
   };
 
@@ -94,21 +108,25 @@ export default function ContactCard(props) {
   const toggleFav = (event) => {
     const updFavPayload = {
       cid: contactData.cid,
-      fav: contactData.fav,
+      fav: !contactData.fav,
     }
-    setContactData((prevcontact) => {
-      updFavPayload.fav = !prevcontact.fav;
-      return { ...prevcontact, fav: !prevcontact.fav };
-    });
-
-
     updateFavAPI(updFavPayload)
       .then((response) => {
         if (response.status === 200) {
-          props.setContacts((prevContacts) => {
+          let newContactData = {...contactData , fav : !contactData.fav}
+          setContactData(newContactData)
+          setFavContacts((prevContacts) => {
             let temp = prevContacts.map((contact) => {
               if (contact.cid === props.contact.cid) {
-                return contactData;
+                return newContactData;
+              } else return contact;
+            });
+            return temp;
+          });
+          setContactsData((prevContacts) => {
+            let temp = prevContacts.map((contact) => {
+              if (contact.cid === props.contact.cid) {
+                return newContactData;
               } else return contact;
             });
             return temp;
@@ -126,10 +144,10 @@ export default function ContactCard(props) {
     });
     console.log(props.contact);
     console.log("isDeleted " + isDeleted);
-    if(isDeleted)
-    navigate(`/bin/get/${props.contact.cid}`)
-    else   
-    navigate(`/contacts/${props.contact.cid}`)
+    if (isDeleted)
+      navigate(`/bin/get/${props.contact.cid}`)
+    else
+      navigate(`/contacts/${props.contact.cid}`)
   }
 
   return (
@@ -158,8 +176,8 @@ export default function ContactCard(props) {
           yesHandler={DeleteContact}
           noHandler={() => setModalOpen(false)}
         />)
-      
-}
+
+      }
       <CardActions disableSpacing>
         {props.isCallingFromOtherList || (!checkBoxVisible && !props.checked[props.contact.cid]) ? <Avatar
           sx={{
@@ -190,12 +208,12 @@ export default function ContactCard(props) {
           </Box>
         </Box>
         <Box sx={{ ml: "auto" }}>
-          <IconButton aria-label="add to favorites" 
-          onClick={() => {
-            if(isDeleted == false)
-              toggleFav()
-          }
-        }
+          <IconButton aria-label="add to favorites"
+            onClick={() => {
+              if (isDeleted == false)
+                toggleFav()
+            }
+            }
           >
             {contactData.fav ? (
               <FavoriteIcon />

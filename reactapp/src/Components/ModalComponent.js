@@ -6,6 +6,7 @@ import { uploadCSVContactsAPI } from '../Utils/APIs';
 import { Typography } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import { useHomeConsumer } from '../Utils/HomeContext/HomeContext';
+import { useAppConsumer } from '../Utils/AppContext/AppContext';
 
 const style = {
     position: 'absolute',
@@ -51,6 +52,9 @@ export function UploadContactComponent({ open, setOpen}) {
 
     const [csv , setCsv] = React.useState('')
     const [loading , setLoading] = React.useState(false)
+
+    const {setAlertPop} = useAppConsumer();
+
     const handleFileSelect=(e)=>{
         setCsv(e.target.files[0])
     }
@@ -67,16 +71,14 @@ export function UploadContactComponent({ open, setOpen}) {
                 setCsv('')
                 setOpen(false)
                 fetchContacts()
-            }
-            else{
-
+                setAlertPop({ open: true, severity: 'success', errorMessage: 'contacts imported successfully' })
             }
             setLoading(false)
         })
-        .catch(error=>{
-            console.log(error)
+        .catch((error) => {
             setLoading(false)
-        })
+            setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+        });
     }
 
     return (

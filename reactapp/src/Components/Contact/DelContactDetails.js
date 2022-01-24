@@ -11,6 +11,7 @@ import { delContactDetailsAPI, restoreContactAPI } from '../../Utils/APIs';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { COLORS } from '../../Utils/themes';
 import { hashCode } from '../../Utils/utilities';
+import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 
 export default function DelContactDetails() {
 
@@ -21,6 +22,7 @@ export default function DelContactDetails() {
     // const 
     const { contactsContext } = useHomeConsumer();
     const [contacts, setContacts] = contactsContext;
+    const {setAlertPop} = useAppConsumer();
     
     const [contactData, setContactData] = useState(null)
     const [updateContactData, setUpdateContactData] = useState({
@@ -68,12 +70,13 @@ export default function DelContactDetails() {
                         return temp;
                     });
 
-                    console.log("contact updated!");
-                    alert('restored!');
+                    setAlertPop({ open: true, severity: 'success', errorMessage: "contact restored successfully" })
                     navigate('/bin')
                 } else console.log("server error");
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     };
 
     useEffect(() => {

@@ -12,10 +12,12 @@ import { contactDetailsAPI, updateContactAPI } from '../../Utils/APIs';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { COLORS } from '../../Utils/themes';
 import { hashCode } from '../../Utils/utilities';
+import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 
 export default function ContactDetails() {
 
     let { cid } = useParams();
+    const {setAlertPop} = useAppConsumer();
     console.log("cidddd" + cid);
     const navigate = useNavigate();
     console.log(cid)
@@ -36,7 +38,6 @@ export default function ContactDetails() {
     const getContactDetails = () => {
         contactDetailsAPI({ cid: cid })
             .then(response => {
-                console.log(response)
                 if (response.status === 200) {
                     setContactData(response.data)
                     setUpdateContactData(response.data)
@@ -47,7 +48,7 @@ export default function ContactDetails() {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                setAlertPop({open : true , severity : 'error', errorMessage : error.response.data.message})
                 navigate('/contacts')
             })
     }
@@ -65,11 +66,13 @@ export default function ContactDetails() {
                         });
                         return temp;
                     });
-
+                    setAlertPop({open : true , severity : 'success', errorMessage : 'successfully updated'})
                     console.log("contact updated!");
                 } else console.log("server error");
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     };
 
     useEffect(() => {

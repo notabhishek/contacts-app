@@ -12,6 +12,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle'
 import PersonIcon from '@mui/icons-material/Person'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PublishIcon from '@mui/icons-material/Publish';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
 import { ListItemButton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
@@ -67,47 +68,50 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export default function DrawerPanel({theme , open , handleDrawerClose}){
-    const location = useLocation();
+export default function DrawerPanel({ theme, open, handleDrawerClose }) {
+  const location = useLocation();
 
-    const [openUploadContact , setOpenUploadContact] = React.useState(false)
+  const [openUploadContact, setOpenUploadContact] = React.useState(false)
 
-    return(
+  return (
     <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <ListItemButton selected = {location.pathname === '/contacts'} component = {Link} to='/contacts' key={'Contacts'}>
-            <ListItemIcon><PersonIcon/></ListItemIcon>
-            <ListItemText primary = {'Contacts'}/>
-          </ListItemButton>
-          <ListItemButton selected = {location.pathname === '/newContact'} component = {Link} to='/newContact' key={'New Contact'}>
-            <ListItemIcon><AddCircleIcon/></ListItemIcon>
-            <ListItemText primary = {'New Contact'}/>
-          </ListItemButton>
-          <ListItemButton selected = {location.pathname === '/favrouites'} component = {Link} to='/favrouites' key={'Favrouites'}>
-            <ListItemIcon><FavoriteIcon/></ListItemIcon>
-            <ListItemText primary = {'Favrouites'}/>
-          </ListItemButton>
-          <ListItemButton selected = {location.pathname === '/bin/getAll'} component = {Link} to='/bin' key={'Bin'}>
-            <ListItemIcon><FavoriteIcon/></ListItemIcon>
-            <ListItemText primary = {'Bin'}/>
-          </ListItemButton>
-        </List>
-        <Divider />
-        <List>
-          <ListItemButton selected = {location.pathname === '/import'} onClick = {()=>setOpenUploadContact(true)} key={'Import'}>
-            <ListItemIcon><PublishIcon/></ListItemIcon>
-            <ListItemText primary = {'Import'}/>
-          </ListItemButton>
-        </List>
-        <Divider />
-        <UploadContactComponent open = {openUploadContact} setOpen={setOpenUploadContact}/>
-      </Drawer>
-    )
+      <DrawerHeader>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
+      <List>
+        <ListItemButton selected={location.pathname === '/contacts'} component={Link} to='/contacts' key={'Contacts'}>
+          <ListItemIcon><PersonIcon /></ListItemIcon>
+          <ListItemText primary={'Contacts'} />
+        </ListItemButton>
+        <ListItemButton selected={location.pathname === '/newContact'} component={Link} to='/newContact' key={'New Contact'}>
+          <ListItemIcon><AddCircleIcon /></ListItemIcon>
+          <ListItemText primary={'New Contact'} />
+        </ListItemButton>
+        <ListItemButton selected={location.pathname === '/favrouites'} component={Link} to='/favrouites' key={'Favrouites'}>
+          <ListItemIcon><FavoriteIcon /></ListItemIcon>
+          <ListItemText primary={'Favrouites'} />
+        </ListItemButton>
+      </List>
+      <Divider />
+      <List>
+        <ListItemButton selected={location.pathname === '/import'} onClick={() => setOpenUploadContact(true)} key={'Import'}>
+          <ListItemIcon><PublishIcon /></ListItemIcon>
+          <ListItemText primary={'Import'} />
+        </ListItemButton>
+      </List>
+      <Divider />
+      <List>
+        <ListItemButton selected={location.pathname === '/bin'} component={Link} to='/bin' key={'Bin'}>
+          <ListItemIcon><DeleteIcon /></ListItemIcon>
+          <ListItemText primary={'Bin'} />
+        </ListItemButton>
+      </List>
+      <Divider />
+      <UploadContactComponent open={openUploadContact} setOpen={setOpenUploadContact} />
+    </Drawer>
+  )
 }
 

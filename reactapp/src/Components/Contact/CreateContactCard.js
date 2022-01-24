@@ -6,11 +6,13 @@ import { addContactAPI } from '../../Utils/APIs';
 import { useHomeConsumer } from '../../Utils/HomeContext/HomeContext';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 
 export default function CreateContactCard(){
   const {contactsContext , searchContext} = useHomeConsumer();
   const [contacts , setContacts] = contactsContext
   const [searchKey , setSearchKey] = searchContext
+  const {setAlertPop} = useAppConsumer();
   const [alertOpen, setAlertOpen] = useState(false);
     const [contactData , setContactData] = useState({
         name : '',
@@ -34,10 +36,13 @@ export default function CreateContactCard(){
                 if(contactData.name.startsWith(searchKey) || contactData.email.startsWith(searchKey))
                   setContacts(prevContacts=>[...prevContacts , contactData])
 
-                setAlertOpen(true);
+                // setAlertOpen(true);
+                setAlertPop({ open: true, severity: 'success', errorMessage: 'contact created successfully' })
               }
             })
-            .catch(error=>console.log(error))
+            .catch((error) => {
+              setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+          });
     }
 
     return(

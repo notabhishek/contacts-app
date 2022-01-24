@@ -7,6 +7,7 @@ import ContactControlBar from "./ContactControlBar";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutline";
 import { IconButton, Typography } from "@mui/material";
 import { Box } from '@mui/material'
+import { useAppConsumer } from "../../Utils/AppContext/AppContext";
 
 function EmptyContact() {
   return (
@@ -22,8 +23,9 @@ export default function ContactList() {
   const [contacts, setContacts] = contactsContext
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [checked, setChecked] = useState({})
+
+  const {setAlertPop} = useAppConsumer();
 
   function updateScore(payload) {
     updateScoreAPI(payload)
@@ -44,26 +46,23 @@ export default function ContactList() {
     deleteContactsAPI({ contactCid: contactsDelete })
       .then(response => {
         if (response.status === 200) {
-          setLoading(false)
           setModalOpen(false)
           const contactToDeleteSet = new Set(contactsDelete)
           setContacts(prevContacts => {
             const newContacts = prevContacts.filter(contact => !contactToDeleteSet.has(contact.cid))
             return newContacts
           })
-
+          setAlertPop({ open: true, severity: 'success', errorMessage: 'contacts successfully deleted' })
           setContactsDelete([])
         }
         else {
-          setLoading(false)
           setModalOpen(false)
-          alert("error while deleting contacts")
         }
       })
-      .catch(error => {
-        alert("there was some error while deleting contacts")
-        console.log(error)
-      })
+      .catch((error) => {
+        setModalOpen(false)
+        setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+    });
 
   }
 

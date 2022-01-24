@@ -1,26 +1,26 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
 import LoginView from './LoginView'
 import { createTheme } from '@mui/material/styles';
 import {
     loginUserAPI
-  } from "../../Utils/APIs";
+} from "../../Utils/APIs";
 
-import {Navigate, useNavigate} from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 import { loginHandler } from '../../Utils/loginHandler';
 
 const theme = createTheme();
 const darkTheme = createTheme({
-    palette:{
-        mode : 'dark',
+    palette: {
+        mode: 'dark',
     }
 }
 )
 
-export default function  Login(){
+export default function Login() {
     const navigate = useNavigate();
 
-    const {userContext , setAlertPop} = useAppConsumer();
+    const { userContext, setAlertPop } = useAppConsumer();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -32,22 +32,23 @@ export default function  Login(){
         };
 
         loginUserAPI(user)
-        .then((response) => {
-            if (response.status === 200) {
-                if(response.data['Error'] === undefined) {
+            .then((response) => {
+                if (response.status === 200) {
                     localStorage.setItem('jwt-token', response.data['jwt-token']);
                     loginHandler(userContext)
                     navigate('/contacts')
-                    setAlertPop({open : true , severity : 'success', errorMessage : 'Logged in successfully'})
-                } else {
-                    setAlertPop({open : true , severity : 'error', errorMessage : response.data['Error']})
+                    setAlertPop({ open: true, severity: 'success', errorMessage: 'Logged in successfully' })
                 }
-            } else console.log("server error");
-          })
-          .catch((error) => console.log(error));
+                else{
+                    console.log(response)
+                }
+            })
+            .catch((error) => {
+                setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     };
 
     return (
-        <LoginView handleSubmit = {handleSubmit} currentTheme={darkTheme} />
+        <LoginView handleSubmit={handleSubmit} currentTheme={darkTheme} />
     )
 }

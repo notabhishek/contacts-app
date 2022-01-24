@@ -16,7 +16,8 @@ function EmptyFav() {
 
 export default function FavContactList() {
 
-  const [favContacts, setFavContacts] = useState([])
+  const {favContactsContext} = useHomeConsumer();
+  const [favContacts , setFavContacts] = favContactsContext
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -64,7 +65,6 @@ export default function FavContactList() {
           checked={{}}
           key={contact.cid}
           contact={contact}
-          setFavContacts={setFavContacts}
           contactsDelete={contactsDelete}
           setContactsDelete={setContactsDelete}
           updateScore={updateScore}
