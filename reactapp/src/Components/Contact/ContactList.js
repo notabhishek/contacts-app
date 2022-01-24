@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import ContactCard from "./ContactCard";
-
-import Dexie from "dexie";
-import { useLiveQuery } from "dexie-react-hooks";
-import { Box, IconButton } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import RefreshIcon from '@mui/icons-material/Refresh'
 import { ModalComponent } from "../ModalComponent";
 import { deleteContactsAPI, updateScoreAPI } from "../../Utils/APIs";
 import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import ContactControlBar from "./ContactControlBar";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutline";
+import { IconButton, Typography } from "@mui/material";
+import {Box} from '@mui/material'
+
+function EmptyContact(){
+  return(
+    <Box display={'flex'} sx={{mt : 10, alignItems : 'center' , justifyContent : 'center'}}>
+      <Typography>Such a void, Create some contacts to fill it</Typography>
+    </Box>
+  )
+}
 
 export default function ContactList() {
 
@@ -22,7 +23,6 @@ export default function ContactList() {
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-
 
 
   function updateScore(payload) {
@@ -67,16 +67,6 @@ export default function ContactList() {
 
   }
 
-  const db = new Dexie("contacts");
-  db.version(1).stores({
-    contacts: "cid, uid, name, email, phone, address, score",
-  });
-
-  const allContacts = useLiveQuery(() => db.contacts.toArray(), []);
-  if (!allContacts) return null;
-
-  // console.log("all contacts", allContacts);
-
 
   return (
     <ul className="list-unstyled" style = {{marginTop : 0}}>
@@ -88,7 +78,7 @@ export default function ContactList() {
         noHandler={() => setModalOpen(false)}
       />
       <ContactControlBar contactsDelete={contactsDelete} setModalOpen ={setModalOpen}/>
-      {contacts.map((contact) => {
+      {contacts.length >0 ? contacts.map((contact) => {
         // console.log(contact)
         return <ContactCard
           key={contact.cid}
@@ -98,7 +88,7 @@ export default function ContactList() {
           setContactsDelete={setContactsDelete}
           updateScore={updateScore}
         />
-      })}
+      }) : <EmptyContact/>}
     </ul>
   );
 }

@@ -40,44 +40,49 @@ export default function CreateContactCard(){
             .catch(error=>console.log(error))
     }
 
-    useEffect(()=>{
-        console.log(contactData)
-    },[contactData])
-
     return(
         <Box
+          >
+            <Box
             component="form"
             sx={{
               "& > :not(style)": { m: 1 },
             }}
             noValidate
-            autoComplete="off"
-          >
+            autoComplete="off">
             <TextField
-              id="outlined-name"
+              id="standard-basic"
+              variant="standard"
+              sx = {{width : '50%'}}
               label="Name"
-              fullWidth
               onChange={(e)=>inputHandler(e , 'name')}
             />
             <TextField
+              id="standard-basic"
+              variant="standard"
+              sx = {{width : '50%'}}
               id="outlined-name"
               label="Email"
-              fullWidth
               onChange={(e)=>inputHandler(e , 'email')}
             />
             <TextField
+              id="standard-basic"
+              variant="standard"
+              sx = {{width : '50%'}}
               id="outlined-name"
               label="Phone"
-              fullWidth
               onChange={(e)=>inputHandler(e , 'phone')}
             />
             <TextField
+              id="standard-basic"
+              variant="standard"
+              sx = {{width : '50%'}}
               id="outlined-name"
               label="Address"
-              fullWidth
               onChange={(e)=>inputHandler(e , 'address')}
             />
-            <Button variant="contained" color="success" onClick={createContact}>
+            </Box>
+            <Button sx={{ mt: 5, ml: 1 }} variant="contained" color="success" onClick={createContact}>
               Create
             </Button>
 

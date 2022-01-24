@@ -11,17 +11,6 @@ export default function Home() {
   const [contacts , setContacts] = contactsContext;
   const [searchKey ,setSearchKey] = searchContext
 
-  // function fetchContacts() {
-  //   const payload= { prefix: searchKey, orderby: orderby, desc: desc }
-  //   fetchContactsAPI(payload)
-  //     .then((response) => {
-  //       if (response.status === 200) setContacts(response.data);
-  //       else console.log("server error");
-  //     })
-  //     .catch((error) => console.log(error));
-  // }
-
-
   useEffect(() => {
     fetchContacts();
   }, [searchKey]);

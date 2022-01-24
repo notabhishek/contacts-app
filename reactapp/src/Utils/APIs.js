@@ -99,3 +99,7 @@ export function genResetTokenAPI(payload) {
 export function resetPasswordAPI(payload) {
     return makePostRequest('/auth/resetPassword', payload);
 }
+
+export function fetchFavContactsAPI(){
+    return makeGetRequest('/contacts/favourites' , {} , true)
+}
