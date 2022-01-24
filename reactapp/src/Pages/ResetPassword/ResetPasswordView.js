@@ -16,9 +16,6 @@ import Snackbar from "@mui/material/Snackbar";
 export default function ResetPasswordView({
   handleSubmit,
   currentTheme,
-  alertOpen,
-  setAlertOpen,
-  errorMessage,
   handleGenResetToken,
 }) {
   return (
@@ -128,19 +125,6 @@ export default function ResetPasswordView({
             </Grid>
           </Box>
         </Box>
-        <Snackbar
-          open={alertOpen}
-          autoHideDuration={6000}
-          onClose={() => setAlertOpen(false)}
-        >
-          <Alert
-            onClose={() => setAlertOpen(false)}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            {errorMessage}
-          </Alert>
-        </Snackbar>
       </Container>
     </ThemeProvider>
   );

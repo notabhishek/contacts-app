@@ -4,47 +4,44 @@ import { createTheme } from '@mui/material/styles';
 import {
     genResetTokenAPI,
     resetPasswordAPI
-  } from "../../Utils/APIs";
+} from "../../Utils/APIs";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 import { loginHandler } from '../../Utils/loginHandler';
 
 const theme = createTheme();
 const darkTheme = createTheme({
-    palette:{
-        mode : 'dark',
+    palette: {
+        mode: 'dark',
     }
 }
 )
 
-export default function ResetPassword(){
+export default function ResetPassword() {
     const navigate = useNavigate();
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const {userContext} = useAppConsumer();
-    
+    const { setAlertPop } = useAppConsumer();
+
     const handleGenResetToken = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log(data.get('email'));
         const payload = {
-            email : data.get('email')
+            email: data.get('email')
         }
 
-        genResetTokenAPI(payload) 
-        .then((response) => {
-            if (response.status === 200) {
-                console.log(response.data);
-                if(response.data['Error'] === undefined) {
-                    alert(response.data.Success);
+        genResetTokenAPI(payload)
+            .then((response) => {
+                if (response.status === 200) {
                     console.log(response.data);
-                } else {
-                    setErrorMessage(response.data['Error']);
-                    setAlertOpen(true);
-                }
-            } else console.log("server error");
-          })
-          .catch((error) => console.log(error));
+                    console.log(response.data);
+                    setAlertPop({ open: true, severity: 'success', errorMessage: response.data.success })
+                } else console.log("server error");
+            })
+            .catch((error) => {
+                setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     }
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -56,29 +53,21 @@ export default function ResetPassword(){
         };
         console.log(payload);
         resetPasswordAPI(payload)
-        .then((response) => {
-            if (response.status === 200) {
-                console.log(response.data);
-                if(response.data['Error'] === undefined) {
-                    alert(response.data.Success + "\nPress OK to go to login page");
+            .then((response) => {
+                if (response.status === 200) {
                     navigate('/login')
-                    console.log(response.data);
-                } else {
-                    setErrorMessage(response.data['Error']);
-                    setAlertOpen(true);
-                }
+                    setAlertPop({ open: true, severity: 'success', errorMessage: 'password changed successfully' })
 
-            } else console.log("server error");
-          })
-          .catch((error) => console.log(error));
+                } else console.log("server error");
+            })
+            .catch((error) => {
+                setAlertPop({ open: true, severity: 'error', errorMessage: error?.response?.data?.message })
+            });
     };
 
     return (
-        <ResetPasswordView handleSubmit = {handleSubmit} currentTheme={darkTheme}
-        alertOpen={alertOpen}
-        setAlertOpen={setAlertOpen}
-        errorMessage={errorMessage}
-        handleGenResetToken = {handleGenResetToken}
+        <ResetPasswordView handleSubmit={handleSubmit} currentTheme={darkTheme}
+            handleGenResetToken={handleGenResetToken}
         />
     )
 }
