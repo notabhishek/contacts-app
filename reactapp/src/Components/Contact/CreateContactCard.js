@@ -40,10 +40,6 @@ export default function CreateContactCard(){
             .catch(error=>console.log(error))
     }
 
-    useEffect(()=>{
-        console.log(contactData)
-    },[contactData])
-
     return(
         <Box
           >

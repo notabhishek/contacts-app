@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ContactCard(props) {
   
-  const PROFILE_COLOR = COLORS[Math.abs(hashCode(JSON.stringify(props.contact))) % COLORS.length];
+  const PROFILE_COLOR = COLORS[Math.abs(hashCode(props.contact.cid)) % COLORS.length];
 
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);

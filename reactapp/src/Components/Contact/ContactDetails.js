@@ -30,7 +30,7 @@ export default function ContactDetails() {
         address: '',
         fav: false,
     })
-    const PROFILE_COLOR = contactData ? COLORS[Math.abs(hashCode(JSON.stringify({cid : contactData.cid, name : contactData.name , email : contactData.email , phone : contactData.phone, fav : contactData.fav}))) % COLORS.length] : null
+    const PROFILE_COLOR = contactData ? COLORS[Math.abs(hashCode(contactData.cid)) % COLORS.length] : null
 
     const getContactDetails = () => {
         contactDetailsAPI({ cid: cid })
