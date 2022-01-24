@@ -16,7 +16,8 @@ function EmptyDel(){
 
 export default function DelContactList() {
 
-  const [delContacts, setDelContacts] = useState([])
+  const {delContactsContext} = useHomeConsumer();
+  const [delContacts, setDelContacts] = delContactsContext
   const [contactsDelete, setContactsDelete] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)

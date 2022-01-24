@@ -20,10 +20,11 @@ export default function DelContactDetails() {
     const navigate = useNavigate();
     console.log(cid)
     // const 
-    const { contactsContext } = useHomeConsumer();
-    const [contacts, setContacts] = contactsContext;
+    const { contactsContext, delContactsContext } = useHomeConsumer();
     const {setAlertPop} = useAppConsumer();
     
+    const [delContacts , setDelContacts] = delContactsContext
+
     const [contactData, setContactData] = useState(null)
     const [updateContactData, setUpdateContactData] = useState({
         name: '',
@@ -60,14 +61,11 @@ export default function DelContactDetails() {
         restoreContactAPI(payload)
             .then((response) => {
                 if (response.status === 200) {
-                    setContactData(updateContactData)
-                    setContacts((prevContacts) => {
-                        let temp = prevContacts.map((contact) => {
-                            if (contact.cid === contactData.cid) {
-                                return updateContactData;
-                            } else return contact;
-                        });
-                        return temp;
+                    setDelContacts((prevContacts) => {
+                        let newContacts = prevContacts.filter(
+                            (contact) => contact.cid !== cid
+                          );
+                          return newContacts;
                     });
 
                     setAlertPop({ open: true, severity: 'success', errorMessage: "contact restored successfully" })
@@ -85,7 +83,7 @@ export default function DelContactDetails() {
 
     return (
         <Box sx={{ m: 4 }}>
-            <IconButton sx={{ mb: 3 }} onClick={() => navigate('/contacts')}>
+            <IconButton sx={{ mb: 3 }} onClick={() => navigate('/bin')}>
                 <KeyboardBackspaceIcon />
             </IconButton>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>

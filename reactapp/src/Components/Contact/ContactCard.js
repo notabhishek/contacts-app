@@ -19,9 +19,10 @@ import { useHomeConsumer } from "../../Utils/HomeContext/HomeContext";
 export default function ContactCard(props) {
 
   const { setAlertPop } = useAppConsumer();
-  const { favContactsContext , contactsContext } = useHomeConsumer();
+  const { favContactsContext , contactsContext , delContactsContext } = useHomeConsumer();
   const [favContacts, setFavContacts] = favContactsContext
   const [contactsData , setContactsData] = contactsContext
+  const [delContacts , setDelContacts] = delContactsContext
 
   const PROFILE_COLOR = COLORS[Math.abs(hashCode(props.contact.cid)) % COLORS.length];
 
@@ -68,12 +69,14 @@ export default function ContactCard(props) {
     } else {
       deleteFromBinAPI({ cid: props.contact.cid })
         .then((response) => {
+          console.log(response)
           if (response.status === 200) {
             removeContactFromChecklist();
-            props.setContacts((prevContact) => {
+            setDelContacts((prevContact) => {
               let newContacts = prevContact.filter(
                 (contact) => contact.cid !== props.contact.cid
               );
+              console.log(newContacts)
               return newContacts;
             });
             console.log(response);
