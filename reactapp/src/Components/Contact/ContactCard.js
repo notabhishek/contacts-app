@@ -101,6 +101,13 @@ export default function ContactCard(props) {
       .catch((error) => console.log(error));
   };
 
+  const handleContactOpen = () =>{
+    props.updateScore({
+      cid: props.contact.cid,
+    });
+    navigate(`/contacts/${props.contact.cid}`)
+  }
+
   return (
     <Card
       sx={{
@@ -134,7 +141,7 @@ export default function ContactCard(props) {
           sx={{ display: !checkBoxVisible && !checked && "none" }}
         />
 
-        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {()=>navigate(`/contacts/${props.contact.cid}`)}>
+        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {handleContactOpen}>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>

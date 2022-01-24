@@ -11,9 +11,6 @@ import {Box} from '@mui/material'
 function EmptyContact(){
   return(
     <Box display={'flex'} sx={{mt : 10, alignItems : 'center' , justifyContent : 'center'}}>
-      {/* <IconButton>
-        <AddCircleOutlinedIcon sx = {{height : '100px' , width : '100px'}}/>
-      </IconButton> */}
       <Typography>Such a void, Create some contacts to fill it</Typography>
     </Box>
   )
