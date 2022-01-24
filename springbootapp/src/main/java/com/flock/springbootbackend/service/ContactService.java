@@ -1,6 +1,7 @@
 package com.flock.springbootbackend.service;
 
 import com.flock.springbootbackend.exception.InvalidContact;
+import com.flock.springbootbackend.model.DeletedContact;
 import com.flock.springbootbackend.utils.Constants;
 import com.flock.springbootbackend.model.User;
 import com.flock.springbootbackend.requestObjects.ContactBulkReq;
@@ -22,6 +23,9 @@ public class ContactService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BinService binService;
 
     public void validateContact(Contact contact) {
         if(!validName(contact.getName()))
@@ -100,13 +104,22 @@ public class ContactService {
     }
 
     public String deleteContact(int cid) {
+        User user = userService.getCurrentUser();
+        Contact c = null;
         try {
-            int uid = userService.getCurrentUser().getUid();
-            contactRepository.deleteContact(uid, cid);
-            return Constants.ContactMsgConstants.CONTACT_DELETED;
+            c = contactRepository.getContactDetails(user.getUid(), cid);
         } catch (Exception e) {
             throw new InvalidContact("Delete contact failed! " + e.getMessage());
         }
+
+        DeletedContact deletedContact = new DeletedContact(c.getUid(), c.getCid(),
+                c.getName(), c.getEmail(), c.getPhone(), c.getFav(), c.getAddress(), c.getScore());
+
+        System.out.println(deletedContact);
+        binService.saveDeletedContact(deletedContact);
+        contactRepository.deleteContact(user.getUid(), cid);
+
+        return Constants.ContactMsgConstants.CONTACT_DELETED;
     }
 
     public String deleteContacts(ContactBulkReq contactBulkReq) {
@@ -135,7 +148,11 @@ public class ContactService {
     }
 
     public Contact getContactDetails(int cid) {
-        int uid = userService.getCurrentUser().getUid();
-        return contactRepository.getContactDetails(uid , cid);
+        try {
+            int uid = userService.getCurrentUser().getUid();
+            return contactRepository.getContactDetails(uid, cid);
+        } catch (Exception e) {
+            throw new InvalidContact("Could not get details for contact! " + e.getMessage());
+        }
     }
 }

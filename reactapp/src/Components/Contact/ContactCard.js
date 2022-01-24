@@ -7,7 +7,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import { ModalComponent } from "../ModalComponent";
-import { deleteContactAPI, updateFavAPI } from "../../Utils/APIs";
+import { deleteContactAPI, updateFavAPI, deleteFromBinAPI } from "../../Utils/APIs";
 import { Avatar, Checkbox } from "@mui/material";
 import { COLORS } from "../../Utils/themes";
 import { hashCode } from "../../Utils/utilities";
@@ -23,7 +23,7 @@ export default function ContactCard(props) {
   const [contactData, setContactData] = useState(props.contact);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const [checked, setChecked] = useState(false);
-
+  const [isDeleted, setIsDeleted] = useState(props.isDeleted === true);
   const removeContactFromChecklist = () => {
     const index = props.contactsDelete.indexOf(props.contact.cid);
     if (index > -1) {
@@ -38,6 +38,7 @@ export default function ContactCard(props) {
 
   const DeleteContact = () => {
     setModalOpen(false);
+    if(isDeleted == false) {
     deleteContactAPI({ cid: props.contact.cid })
       .then((response) => {
         if (response.status === 200) {
@@ -54,6 +55,24 @@ export default function ContactCard(props) {
         }
       })
       .catch((error) => console.log(error));
+    } else {
+      deleteFromBinAPI({ cid: props.contact.cid })
+      .then((response) => {
+        if (response.status === 200) {
+          removeContactFromChecklist();
+          props.setContacts((prevContact) => {
+            let newContacts = prevContact.filter(
+              (contact) => contact.cid !== props.contact.cid
+            );
+            return newContacts;
+          });
+          console.log(response);
+        } else {
+          console.log("error from server while deleting contact");
+        }
+      })
+      .catch((error) => console.log(error));
+    }
   };
 
 
@@ -105,6 +124,11 @@ export default function ContactCard(props) {
     props.updateScore({
       cid: props.contact.cid,
     });
+    console.log(props.contact);
+    console.log("isDeleted " + isDeleted);
+    if(isDeleted)
+    navigate(`/bin/get/${props.contact.cid}`)
+    else   
     navigate(`/contacts/${props.contact.cid}`)
   }
 
@@ -116,13 +140,26 @@ export default function ContactCard(props) {
       onMouseEnter={() => setCheckBoxVisible(true)}
       onMouseLeave={() => setCheckBoxVisible(false)}
     >
-      <ModalComponent
-        open={modalOpen}
-        title={"Confirm Delete"}
-        text={"Delete this contact are you damn sure!!"}
-        yesHandler={DeleteContact}
-        noHandler={() => setModalOpen(false)}
-      />
+      {
+        isDeleted ? (<ModalComponent
+          open={modalOpen}
+          title={"Confirm Delete"}
+          text={
+            "Do you want to permanently delete this contact?"
+          }
+          yesHandler={DeleteContact}
+          noHandler={() => setModalOpen(false)}
+        />) : (<ModalComponent
+          open={modalOpen}
+          title={"Confirm Delete"}
+          text={
+            "Delete this contact are you damn sure!!"
+          }
+          yesHandler={DeleteContact}
+          noHandler={() => setModalOpen(false)}
+        />)
+      
+}
       <CardActions disableSpacing>
         <Avatar
           sx={{
@@ -154,7 +191,13 @@ export default function ContactCard(props) {
         </Box>
         </Box>
         <Box sx={{ ml: "auto" }}>
-          <IconButton aria-label="add to favorites" onClick={() => toggleFav()}>
+          <IconButton aria-label="add to favorites" 
+          onClick={() => {
+            if(isDeleted == false)
+              toggleFav()
+          }
+        }
+          >
             {contactData.fav ? (
               <FavoriteIcon/>
             ) : (

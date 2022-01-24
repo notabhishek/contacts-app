@@ -103,3 +103,19 @@ export function resetPasswordAPI(payload) {
 export function fetchFavContactsAPI(){
     return makeGetRequest('/contacts/favourites' , {} , true)
 }
+
+export function fetchDelContactsAPI(){
+    return makeGetRequest('/bin/getAll' , {} , true)
+}
+
+export function delContactDetailsAPI(payload){
+    return makeGetRequest('/bin/get' , payload , true);
+}
+
+export function restoreContactAPI(payload){
+    return makePostRequest('/bin/restore', payload , true)
+}
+
+export function deleteFromBinAPI(payload){
+    return makePostRequest('/bin/delete', payload , true)
+}

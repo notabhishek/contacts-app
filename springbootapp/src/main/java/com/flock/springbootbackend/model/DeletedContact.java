@@ -2,46 +2,38 @@ package com.flock.springbootbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import java.util.Date;
 
 @Entity
 @IdClass(UidCidKey.class)
-public class Contact {
+public class DeletedContact {
+    public static final long EXPIRATION = 30L * 24L * 60L * 60L * 1000L;
 
     @Id
-    private int uid;
+    public int uid;
     @Id
-    @JsonView(View.ContactSummary.class)
-    private int cid;
+    public int cid;
 
-    @JsonView(View.ContactSummary.class)
     private String name;
-    @JsonView(View.ContactSummary.class)
+
     private String email;
-    @JsonView(View.ContactSummary.class)
+
     private String phone;
-    @JsonView(View.ContactSummary.class)
+
     private boolean fav;
 
     private String address;
     private int score;
+    private Date expirydate;
 
-    public Contact() {
-        this.fav = false;
+    public DeletedContact() {
+        this.expirydate = new Date(System.currentTimeMillis() + EXPIRATION);
     }
 
-    public Contact(int cid, int uid, String name, String email, String phone, String address) {
-        this.cid = cid;
-        this.uid = uid;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-        this.score = 0;
-        this.fav = false;
-    }
-
-    public Contact(int uid, int cid, String name, String email, String phone, boolean fav, String address, int score) {
+    public DeletedContact(int uid, int cid, String name, String email, String phone, boolean fav, String address, int score) {
         this.uid = uid;
         this.cid = cid;
         this.name = name;
@@ -50,10 +42,32 @@ public class Contact {
         this.fav = fav;
         this.address = address;
         this.score = score;
+        this.expirydate = new Date(System.currentTimeMillis() + EXPIRATION);
     }
 
-    public Contact(int cid) {
+    public DeletedContact(int uid, int cid, String name, String email, String phone, boolean fav, String address, int score, Date expirydate) {
+        this.uid = uid;
         this.cid = cid;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.fav = fav;
+        this.address = address;
+        this.score = score;
+        this.expirydate = expirydate;
+    }
+
+    public Contact getAsContact() {
+        return new Contact(
+                uid,
+                cid,
+                name,
+                email,
+                phone,
+                fav,
+                address,
+                score
+        );
     }
 
     public int getUid() {
@@ -96,6 +110,14 @@ public class Contact {
         this.phone = phone;
     }
 
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -112,17 +134,17 @@ public class Contact {
         this.score = score;
     }
 
-    public boolean getFav() {
-        return fav;
+    public Date getExpirydate() {
+        return expirydate;
     }
 
-    public void setFav(boolean fav) {
-        this.fav = fav;
+    public void setExpirydate(Date expirydate) {
+        this.expirydate = expirydate;
     }
 
     @Override
     public String toString() {
-        return "Contact{" +
+        return "DeletedContact{" +
                 "uid=" + uid +
                 ", cid=" + cid +
                 ", name='" + name + '\'' +
@@ -131,6 +153,7 @@ public class Contact {
                 ", fav=" + fav +
                 ", address='" + address + '\'' +
                 ", score=" + score +
+                ", expirydate=" + expirydate +
                 '}';
     }
 }

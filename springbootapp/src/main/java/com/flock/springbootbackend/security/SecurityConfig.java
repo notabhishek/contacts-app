@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(Constants.UrlConstants.CONTACTS_URL).hasRole(Constants.UserConstants.USER)
                 .antMatchers(Constants.UrlConstants.USER_URL).hasRole(Constants.UserConstants.USER)
                 .antMatchers(Constants.UrlConstants.CSV_URL).hasRole(Constants.UserConstants.USER)
+                .antMatchers(Constants.UrlConstants.BIN_URL).hasRole(Constants.UserConstants.USER)
                 .and()
                 .userDetailsService(uds)
                 .exceptionHandling()

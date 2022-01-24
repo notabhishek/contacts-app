@@ -90,6 +90,10 @@ export default function DrawerPanel({theme , open , handleDrawerClose}){
             <ListItemIcon><FavoriteIcon/></ListItemIcon>
             <ListItemText primary = {'Favrouites'}/>
           </ListItemButton>
+          <ListItemButton selected = {location.pathname === '/bin/getAll'} component = {Link} to='/bin' key={'Bin'}>
+            <ListItemIcon><FavoriteIcon/></ListItemIcon>
+            <ListItemText primary = {'Bin'}/>
+          </ListItemButton>
         </List>
         <Divider />
       </Drawer>

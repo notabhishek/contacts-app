@@ -19,6 +19,8 @@ import ProtectedRoute from './HOC/ProtectedRoute';
 import { HomeProvider } from './Utils/HomeContext/HomeContext';
 import ContactDetails from './Components/Contact/ContactDetails';
 import FavContactList from './Components/Contact/FavContactLisk';
+import DelContactList from './Components/Contact/DeletedContactList';
+import DelContactDetails from './Components/Contact/DelContactDetails';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
               <Route path='/newContact' element={<CreateContactCard />} />
               <Route path='/updateProfile' element={<UpdateProfileComponent />} />
               <Route path='/favrouites' element={<FavContactList />} />
+              <Route path='/bin' element={<DelContactList />} />
+              <Route path='/bin/get/:cid' element={<DelContactDetails />} />
             </Route>
           </Route>
         </Routes>

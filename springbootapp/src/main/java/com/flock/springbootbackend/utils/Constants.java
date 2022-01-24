@@ -13,6 +13,7 @@ public interface Constants {
         String CONTACTS_URL = "/contacts/**";
         String USER_URL = "/user/**";
         String CSV_URL = "/csv/**";
+        String BIN_URL = "/bin/**";
     }
     interface CommonConstants {
 
