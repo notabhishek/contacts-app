@@ -10,6 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import PersonIcon from '@mui/icons-material/Person'
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Link } from 'react-router-dom';
 import { ListItemButton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
@@ -84,6 +85,10 @@ export default function DrawerPanel({theme , open , handleDrawerClose}){
           <ListItemButton selected = {location.pathname === '/newContact'} component = {Link} to='/newContact' key={'New Contact'}>
             <ListItemIcon><AddCircleIcon/></ListItemIcon>
             <ListItemText primary = {'New Contact'}/>
+          </ListItemButton>
+          <ListItemButton selected = {location.pathname === '/favrouites'} component = {Link} to='/favrouites' key={'Favrouites'}>
+            <ListItemIcon><FavoriteIcon/></ListItemIcon>
+            <ListItemText primary = {'Favrouites'}/>
           </ListItemButton>
         </List>
         <Divider />

@@ -134,7 +134,7 @@ export default function ContactCard(props) {
           sx={{ display: !checkBoxVisible && !checked && "none" }}
         />
 
-        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {()=>navigate(`/contact/${props.contact.cid}`)}>
+        <Box sx = {{display : 'flex' , flexDirection : 'row' , flex : 1 , cursor : 'pointer'}} onClick = {()=>navigate(`/contacts/${props.contact.cid}`)}>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", m: 2 }}>
           <div>{props.contact.name}</div>
