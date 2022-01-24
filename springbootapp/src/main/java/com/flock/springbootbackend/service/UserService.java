@@ -81,6 +81,7 @@ public class UserService {
         curUser.setName(user.getName());
         curUser.setPhone(user.getPhone());
         curUser.setAddress(user.getAddress());
+        validateUser(curUser);
         userRepo.save(curUser);
 
         user.setEmail(curUser.getEmail());

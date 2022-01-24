@@ -1,5 +1,6 @@
 package com.flock.springbootbackend.controller;
 
+import com.flock.springbootbackend.exception.FileException;
 import com.flock.springbootbackend.service.CSVService;
 import com.flock.springbootbackend.requestObjects.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class CSVController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            throw new FileException("Could not upload the file: " + file.getOriginalFilename());
         }
     }
 }

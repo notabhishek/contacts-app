@@ -56,6 +56,11 @@ public class GlobalExceptionHandler {
         ErrorDetails errorResponse = new ErrorDetails(new Date(), e.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(FileException.class)
+    public ResponseEntity<?> fileExceptionHandling(FileException e, WebRequest req) {
+        ErrorDetails errorResponse = new ErrorDetails(new Date(), e.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> invalidUserExceptionHandling(AuthenticationException e, WebRequest req) {
