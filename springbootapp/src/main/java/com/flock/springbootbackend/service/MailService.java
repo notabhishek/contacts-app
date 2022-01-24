@@ -29,6 +29,7 @@ public class MailService {
         try {
             mailSender.send(message);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new MailError("Couldn't send reset token to " + to);
         }
     }
