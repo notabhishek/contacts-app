@@ -8,6 +8,7 @@ import {
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAppConsumer } from '../../Utils/AppContext/AppContext';
 import { loginHandler } from '../../Utils/loginHandler';
+import { validateEmail } from '../../Utils/utilities';
 
 const theme = createTheme();
 const darkTheme = createTheme({
@@ -25,9 +26,14 @@ export default function ResetPassword() {
     const handleGenResetToken = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log(data.get('email'));
+        console.log(data.get('email token'));
         const payload = {
-            email: data.get('email')
+            email: data.get('email token')
+        }
+        
+        if(!validateEmail(data.get('email token'))){
+            setAlertPop({open : true , severity : 'error' , errorMessage: "Email address not valid"})
+            return;
         }
 
         setGenTokenLoading(true)
@@ -46,6 +52,15 @@ export default function ResetPassword() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        if(data.get('password') === '' || data.get('password') !== data.get('confirm password')){
+            setAlertPop({open : true , severity : 'error' , errorMessage: "please check your password"})
+            return
+        }
+        
+        if(!validateEmail(data.get('email'))){
+            setAlertPop({open : true , severity : 'error' , errorMessage: "Email address not valid"})
+            return;
+        }
         const payload = {
             email: data.get('email'),
             password: data.get('password'),

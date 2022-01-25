@@ -48,9 +48,9 @@ export default function ResetPasswordView({
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="email token"
               label="Email Address"
-              name="email"
+              name="email token"
               autoComplete="email"
             />
             <LoadingButton
